@@ -7,10 +7,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# Build output
 dist
 dist-ssr
-*.local
+.vite
+
+# Node.js modules
+node_modules
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +25,37 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environmental Variables
+.env
+.env.local
+.env.*.local  # for environment-specific files
+.env.development
+.env.production
+
+# Temporary files and caches
+*.bak
+*.tmp
+*.swp
+*.swo
+*.patch
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# npm package-lock
+package-lock.json
+# If you are using Yarn, uncomment the following line to ignore the Yarn lock file
+# yarn.lock
+
+# Next.js build output (if applicable)
+.next
+
+# Misc
+*.sublime-workspace
+*.sublime-project
+
+# MacOS
+*.AppleDouble
+*.LSOverride
