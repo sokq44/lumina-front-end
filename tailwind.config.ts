@@ -5,8 +5,7 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: ['IBM Plex Mono"', "sans-serif"],
-  			'funnel': ['Funnel Sans"', "sans-serif"]
+  			'funnel': ['"Funnel Sans"', "sans-serif"]
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
