@@ -2,62 +2,64 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useLoggedIn } from "@/hooks/user";
+import { useGetUser, useLoggedIn } from "@/hooks/user";
 import { useEffect, useState } from "react";
 import { modifyUserFormSchema } from "@/lib/schemas";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
-import { ImageUp } from "lucide-react";
+import { ImageUp, LoaderCircle } from "lucide-react";
 
 const ProfilePage = () => {
   const loggedIn = useLoggedIn();
+  const getUser = useGetUser();
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const [modifying, setModifying] = useState<boolean>(false);
 
+  const modifyUserForm = useForm<z.infer<typeof modifyUserFormSchema>>({
+    resolver: zodResolver(modifyUserFormSchema),
+  });
+
   useEffect(() => {
     if (loggedIn.error) navigate("/login");
   }, [loggedIn.isLoggedIn, loggedIn.error, navigate]);
 
-  const modifyUserForm = useForm<z.infer<typeof modifyUserFormSchema>>({
-    resolver: zodResolver(modifyUserFormSchema),
-    defaultValues: {
-      username: "test",
-      email: "test",
-    },
-  });
+  useEffect(() => {
+    if (getUser.user) {
+      modifyUserForm.setValue("username", getUser.user.username);
+      modifyUserForm.setValue("email", getUser.user.email);
+    }
+  }, [getUser.user, modifyUserForm]);
 
-  const modifyUserFormOnSubmit = async (
-    values: z.infer<typeof modifyUserFormSchema>
-  ) => {
-    try {
-      const response = await axios.patch("/api/user/modify-user", {
-        username: values.username,
-        email: values.email,
-      });
-
-      if (response.status == 200) {
-        navigate("/user-page");
-      }
-    } catch (err) {
+  useEffect(() => {
+    if (getUser.error) {
       toast({
         variant: "destructive",
-        title: "Problem with modifyUsering",
-        description: (err as AxiosError).message,
+        title: "Problem With Signing In",
+        description: getUser.error,
       });
     }
-  };
+  }, [getUser.error, toast]);
+
+  const modifyUserFormOnSubmit = async () => {};
+
+  if (getUser.isLoading) {
+    return (
+      <div className="flex flex-col gap-4 items-center justify-center h-screen w-full">
+        <LoaderCircle size={24} className="animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center h-screen w-full">
-      <span className="text-3xl font-bold">My Profile</span>
+      <span className="text-2xl font-bold">My Profile</span>
       <Card className="w-full h-auto p-8 transition-all duration-300">
         <div className="w-full flex flex-col items-center gap-y-4">
           <Avatar className="w-32 h-auto">

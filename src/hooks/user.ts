@@ -11,6 +11,12 @@ client.interceptors.response.use(
   (error) => Promise.reject(error)
 );
 
+export type User = {
+  username: string;
+  email: string;
+  image: string;
+};
+
 export function useRegister() {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -187,4 +193,29 @@ export function useChangePassword() {
   };
 
   return { change, attempts, isLoading, error };
+}
+
+export function useGetUser() {
+  const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await client.get("user/get-user");
+        setUser(response.data as User);
+        setError(null);
+      } catch (err) {
+        const message = (err as AxiosError).response?.data as string;
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getUser();
+  }, []);
+
+  return { user, error, isLoading };
 }
