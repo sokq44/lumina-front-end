@@ -17,7 +17,12 @@ export type User = {
   image: string;
 };
 
-export function useRegister() {
+export function useRegister(): {
+  register: (username: string, email: string, password: string) => void;
+  attempts: number;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attempts, setAttempts] = useState<number>(0);
@@ -48,7 +53,12 @@ export function useRegister() {
   return { register, attempts, isLoading, error };
 }
 
-export function useLogin() {
+export function useLogin(): {
+  login: (email: string, password: string) => void;
+  attempts: number;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attempts, setAttempts] = useState<number>(0);
@@ -74,7 +84,11 @@ export function useLogin() {
   return { login, attempts, isLoading, error };
 }
 
-export function useLoggedIn() {
+export function useLoggedIn(): {
+  isLoggedIn: boolean | undefined;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -98,10 +112,14 @@ export function useLoggedIn() {
     checkLoggedIn();
   }, []);
 
-  return { isLoading, isLoggedIn, error };
+  return { isLoggedIn, isLoading, error };
 }
 
-export function useLogout() {
+export function useLogout(): {
+  logout: () => void;
+  isLoading: boolean;
+  error: string | undefined;
+} {
   const [error, setError] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -121,7 +139,11 @@ export function useLogout() {
   return { logout, isLoading, error };
 }
 
-export function useVerifyUser() {
+export function useVerifyUser(): {
+  verify: (token: string) => void;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -144,7 +166,12 @@ export function useVerifyUser() {
   return { verify, isLoading, error };
 }
 
-export function usePasswordChangeInit() {
+export function usePasswordChangeInit(): {
+  init: (token: string) => void;
+  attempts: number;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attempts, setAttempts] = useState<number>(0);
@@ -169,7 +196,12 @@ export function usePasswordChangeInit() {
   return { init, attempts, isLoading, error };
 }
 
-export function useChangePassword() {
+export function useChangePassword(): {
+  change: (token: string, password: string) => void;
+  attempts: number;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attempts, setAttempts] = useState<number>(0);
@@ -195,7 +227,11 @@ export function useChangePassword() {
   return { change, attempts, isLoading, error };
 }
 
-export function useGetUser() {
+export function useGetUser(): {
+  user: User | null;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -203,7 +239,7 @@ export function useGetUser() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await client.get("user/get-user");
+        const response = await client.get("/user/get-user");
         setUser(response.data as User);
         setError(null);
       } catch (err) {
@@ -218,4 +254,27 @@ export function useGetUser() {
   }, []);
 
   return { user, error, isLoading };
+}
+
+export function useModifyUser() {
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [attempts, setAttempts] = useState<number>(0);
+
+  const modify = async (user: User) => {
+    setIsLoading(true);
+
+    try {
+      const response = await client.patch("/user/modify-user", user);
+      if (response.status === 200) setError(null);
+    } catch (err) {
+      const message = (err as AxiosError).response?.data as string;
+      setError(message);
+    } finally {
+      setAttempts((last) => last + 1);
+      setIsLoading(false);
+    }
+  };
+
+  return { modify, attempts, isLoading, error };
 }

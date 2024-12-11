@@ -22,20 +22,17 @@ const ProfilePage = () => {
 
   const [modifying, setModifying] = useState<boolean>(false);
 
-  const modifyUserForm = useForm<z.infer<typeof modifyUserFormSchema>>({
+  const form = useForm<z.infer<typeof modifyUserFormSchema>>({
     resolver: zodResolver(modifyUserFormSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+    },
   });
 
   useEffect(() => {
     if (loggedIn.error) navigate("/login");
   }, [loggedIn.isLoggedIn, loggedIn.error, navigate]);
-
-  useEffect(() => {
-    if (getUser.user) {
-      modifyUserForm.setValue("username", getUser.user.username);
-      modifyUserForm.setValue("email", getUser.user.email);
-    }
-  }, [getUser.user, modifyUserForm]);
 
   useEffect(() => {
     if (getUser.error) {
@@ -47,7 +44,30 @@ const ProfilePage = () => {
     }
   }, [getUser.error, toast]);
 
-  const modifyUserFormOnSubmit = async () => {};
+  useEffect(() => {
+    if (getUser.user && !modifying) {
+      form.setValue("username", getUser.user.username);
+      form.setValue("email", getUser.user.email);
+    }
+  }, [getUser.user, form, modifying]);
+
+  useEffect(() => {
+    if (getUser.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Signing In",
+        description: getUser.error,
+      });
+    }
+  }, [getUser.error, toast]);
+
+  const onSubmit = async (values: z.infer<typeof modifyUserFormSchema>) => {
+    if (modifying) {
+      console.log(values);
+    }
+
+    setModifying((prev) => !prev);
+  };
 
   if (getUser.isLoading) {
     return (
@@ -80,13 +100,13 @@ const ProfilePage = () => {
             <span>Select Picture</span>
           </Button>
         </div>
-        <Form {...modifyUserForm}>
+        <Form {...form}>
           <form
-            onSubmit={modifyUserForm.handleSubmit(modifyUserFormOnSubmit)}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col items-center gap-y-4"
           >
             <FormField
-              control={modifyUserForm.control}
+              control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem className="w-full transition-all duration-300">
@@ -106,7 +126,7 @@ const ProfilePage = () => {
               )}
             />
             <FormField
-              control={modifyUserForm.control}
+              control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem className="w-full transition-all duration-300">
@@ -126,9 +146,9 @@ const ProfilePage = () => {
               )}
             />
             <Button
+              type="submit"
               variant={modifying ? "default" : "secondary"}
               className="w-full font-semibold"
-              onClick={() => setModifying((prev) => !prev)}
             >
               {modifying ? "Save Changes" : "Modify Your Data"}
             </Button>
