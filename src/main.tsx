@@ -7,17 +7,18 @@ import MainPage from "@/pages/main-page";
 import UserPage from "@/pages/user-page";
 import LoginPage from "@/pages/login-page";
 import RegisterPage from "@/pages/register-page";
-import ModifyUserPage from "@/pages/modify-user-page";
 import VerifyEmailPage from "@/pages/verify-email-page";
 import EmailVerifiedPage from "@/pages/email-verified-page";
 import ChangePasswordPage from "@/pages/change-password-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
-import "./index.css";
 import SettingsPage from "./pages/settings-page";
+import ProfilePage from "@/pages/profile-page";
+import "./index.css";
 
 // TODO: Logo design
 // TODO: Login process and api integration
 // TODO: User's panel page design & api integration
+// TODO: Logout the user from the user-page when there's no session
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "profile",
-        element: <div>Profile</div>,
+        element: <ProfilePage />,
       },
       {
         path: "account",
@@ -68,7 +69,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/user/modify",
-    element: <ModifyUserPage />,
+    element: <ProfilePage />,
   },
   {
     path: "/user/password",

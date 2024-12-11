@@ -4,7 +4,7 @@ const passwordRegex = new RegExp(
   "^(?=.*[A-Z])(?=.*\\d)(?=.*[!#$%&'()*+,-./:;<=>?@\\[\\]^_{|}~]).+$"
 );
 
-const loginFormSchema = z.object({
+export const loginFormSchema = z.object({
   email: z
     .string()
     .email({ message: "Invalid e-mail address." })
@@ -12,7 +12,7 @@ const loginFormSchema = z.object({
   password: z.string().min(1, { message: "Password is required." }),
 });
 
-const registerFormSchema = z
+export const registerFormSchema = z
   .object({
     username: z
       .string()
@@ -30,14 +30,14 @@ const registerFormSchema = z
     path: ["repeatPass"],
   });
 
-const passwordChangeInitSchema = z.object({
+export const passwordChangeInitSchema = z.object({
   email: z
     .string()
     .email({ message: "Invalid email address" })
     .min(1, { message: "This field is required" }),
 });
 
-const changePasswordFormSchema = z
+export const changePasswordFormSchema = z
   .object({
     password: z.string().regex(passwordRegex, {
       message:
@@ -50,9 +50,10 @@ const changePasswordFormSchema = z
     path: ["repeat"],
   });
 
-export {
-  loginFormSchema,
-  registerFormSchema,
-  passwordChangeInitSchema,
-  changePasswordFormSchema,
-};
+export const modifyUserFormSchema = z.object({
+  username: z
+    .string()
+    .min(5, { message: "Username must be at least 5 characters long." })
+    .max(50, { message: "Username can't be longer than 50 characters." }),
+  email: z.string().email({ message: "Invalid e-mail address." }),
+});

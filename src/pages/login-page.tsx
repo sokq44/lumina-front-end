@@ -91,7 +91,7 @@ const LoginPage = () => {
           <Circle strokeWidth="1px" fill="" size={84} />
 
           <span className="text-base text-center font-semibold text-muted-foreground mb-4 px-4">
-            Provide your credentials in order to create an account.
+            Provide your credentials in order to sign in.
           </span>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
