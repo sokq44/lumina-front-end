@@ -16,13 +16,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       case "register":
         finalClassName = cn(
           finalClassName,
-          "border-border shadow-md focus-visible:ring-offset-1 transition-all duration-300"
+          "border-border shadow-sm focus-visible:ring-offset-1 transition-all duration-300"
         );
         break;
       case "login":
         finalClassName = cn(
           finalClassName,
-          "border-border shadow-md focus-visible:ring-offset-1 transition-all duration-300"
+          "border-border shadow-sm focus-visible:ring-offset-1 transition-all duration-300"
         );
         break;
       default:

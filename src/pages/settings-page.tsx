@@ -44,7 +44,7 @@ const SettingsPage = () => {
         <ThemeSwitch position="top-right" />
         <GoBackArrow to="/user" />
         <div className="flex items-center gap-x-8 w-full h-auto p-8 md:w-[52rem] lg:w-[58rem] xl:w-[68rem]">
-          <div className="flex flex-col gap-y-4 w-1/4">
+          <div className="flex flex-col gap-y-4 w-1/5">
             {settingsMenuItems.map((item, index) => (
               <Button
                 key={index}
@@ -58,7 +58,7 @@ const SettingsPage = () => {
                     : undefined
                 }
                 className={
-                  "flex justify-start gap-x-4 h-12 w-full transition-bg duration-300" +
+                  "flex justify-start gap-x-2 h-12 w-full transition-bg duration-300" +
                   (selected === index ? " font-semibold" : "")
                 }
               >
@@ -67,8 +67,8 @@ const SettingsPage = () => {
               </Button>
             ))}
           </div>
-          <Separator orientation="vertical" className="h-48" />
-          <div className="w-auto h-full">
+          <Separator orientation="vertical" className="h-52" />
+          <div className="w-full h-full">
             <Outlet />
           </div>
         </div>
@@ -93,7 +93,7 @@ const SettingsPage = () => {
                 : undefined
             }
             className={
-              "flex items-center justify-center gap-x-4 h-12 w-full p-4 rounded-md transition-bg duration-300" +
+              "flex items-center justify-center gap-x-2 h-12 w-full p-4 rounded-md transition-bg duration-300" +
               (selected === index ? " bg-muted" : "")
             }
           >
@@ -103,7 +103,7 @@ const SettingsPage = () => {
         ))}
         <Button
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          className="flex items-center justify-center gap-x-4 h-12 w-full p-4 transition-bg duration-300"
+          className="flex items-center justify-center gap-x-2 h-12 w-full p-4 transition-bg duration-300"
         >
           <SunMoon size={24} />
           <p className="text-base">Toggle Theme</p>

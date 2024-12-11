@@ -2,7 +2,8 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState, useCallback } from "react";
 
 const client = axios.create({
-  baseURL: "/api",
+  baseURL: "http://localhost:3000/",
+  withCredentials: true,
 });
 
 client.interceptors.response.use(
