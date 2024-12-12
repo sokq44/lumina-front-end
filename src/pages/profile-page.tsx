@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useGetUser, useLoggedIn } from "@/hooks/user";
+import { useGetUser, useLoggedIn, useModifyUser } from "@/hooks/user";
 import { useEffect, useState } from "react";
 import { modifyUserFormSchema } from "@/lib/schemas";
 import { Card } from "@/components/ui/card";
@@ -16,7 +16,8 @@ import { ImageUp, LoaderCircle } from "lucide-react";
 
 const ProfilePage = () => {
   const loggedIn = useLoggedIn();
-  const getUser = useGetUser();
+  const userGetter = useGetUser();
+  const userModifier = useModifyUser();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -35,41 +36,69 @@ const ProfilePage = () => {
   }, [loggedIn.isLoggedIn, loggedIn.error, navigate]);
 
   useEffect(() => {
-    if (getUser.error) {
+    if (userGetter.error) {
       toast({
         variant: "destructive",
-        title: "Problem With Signing In",
-        description: getUser.error,
+        title: "Problem With Retrieving Data",
+        description: userGetter.error,
       });
     }
-  }, [getUser.error, toast]);
+  }, [userGetter.error, toast]);
 
   useEffect(() => {
-    if (getUser.user && !modifying) {
-      form.setValue("username", getUser.user.username);
-      form.setValue("email", getUser.user.email);
-    }
-  }, [getUser.user, form, modifying]);
-
-  useEffect(() => {
-    if (getUser.error) {
+    if (userModifier.error) {
       toast({
         variant: "destructive",
-        title: "Problem With Signing In",
-        description: getUser.error,
+        title: "Problem With Modifying Data",
+        description: userModifier.error,
+      });
+    } else if (userModifier.error === null) {
+      toast({
+        variant: "default",
+        title: "Modifications Applied",
+        description: "Changes have been saved.",
       });
     }
-  }, [getUser.error, toast]);
+  }, [userModifier.attempts, userModifier.error, toast]);
+
+  useEffect(() => {
+    if (userGetter.user && !modifying) {
+      form.setValue("username", userGetter.user.username);
+      form.setValue("email", userGetter.user.email);
+    }
+  }, [userGetter.user, form, modifying]);
 
   const onSubmit = async (values: z.infer<typeof modifyUserFormSchema>) => {
     if (modifying) {
-      console.log(values);
+      await userModifier.modify({
+        username: values.username,
+        email: values.email,
+        image: "",
+      });
+
+      await userGetter.getUser();
     }
 
     setModifying((prev) => !prev);
   };
 
-  if (getUser.isLoading) {
+  const onError = async (
+    errors: FieldErrors<z.infer<typeof modifyUserFormSchema>>
+  ) => {
+    const message: string = Object.entries(errors).map(
+      (entry) => (entry[1].message as string) ?? entry
+    )[0];
+
+    if (message) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Modfying Data",
+        description: message,
+      });
+    }
+  };
+
+  if (userGetter.isLoading) {
     return (
       <div className="flex flex-col gap-4 items-center justify-center h-screen w-full">
         <LoaderCircle size={24} className="animate-spin" />
@@ -102,7 +131,7 @@ const ProfilePage = () => {
         </div>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit, onError)}
             className="flex flex-col items-center gap-y-4"
           >
             <FormField
@@ -145,13 +174,34 @@ const ProfilePage = () => {
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              variant={modifying ? "default" : "secondary"}
-              className="w-full font-semibold"
-            >
-              {modifying ? "Save Changes" : "Modify Your Data"}
-            </Button>
+            <div className="flex w-full space-x-2">
+              {modifying && (
+                <Button
+                  type="button"
+                  className="w-full font-semibold"
+                  variant="secondary"
+                  onClick={() => setModifying(false)}
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button
+                disabled={userModifier.isLoading}
+                type="submit"
+                variant={modifying ? "default" : "secondary"}
+                className="w-full font-semibold"
+              >
+                {modifying ? (
+                  userModifier.isLoading ? (
+                    <LoaderCircle size={24} className="animate-spin" />
+                  ) : (
+                    "Save Changes"
+                  )
+                ) : (
+                  "Modify Your Data"
+                )}
+              </Button>
+            </div>
           </form>
         </Form>
       </Card>

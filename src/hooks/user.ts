@@ -229,6 +229,7 @@ export function useChangePassword(): {
 
 export function useGetUser(): {
   user: User | null;
+  getUser: () => void;
   isLoading: boolean;
   error: string | undefined | null;
 } {
@@ -236,24 +237,24 @@ export function useGetUser(): {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await client.get("/user/get-user");
-        setUser(response.data as User);
-        setError(null);
-      } catch (err) {
-        const message = (err as AxiosError).response?.data as string;
-        setError(message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const getUser = async () => {
+    try {
+      const response = await client.get("/user/get-user");
+      setUser(response.data as User);
+      setError(null);
+    } catch (err) {
+      const message = (err as AxiosError).response?.data as string;
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     getUser();
   }, []);
 
-  return { user, error, isLoading };
+  return { user, getUser, isLoading, error };
 }
 
 export function useModifyUser() {
@@ -265,7 +266,10 @@ export function useModifyUser() {
     setIsLoading(true);
 
     try {
-      const response = await client.patch("/user/modify-user", user);
+      const response = await client.patch("/user/modify-user", {
+        username: user.username,
+        email: user.email,
+      });
       if (response.status === 200) setError(null);
     } catch (err) {
       const message = (err as AxiosError).response?.data as string;
@@ -277,4 +281,8 @@ export function useModifyUser() {
   };
 
   return { modify, attempts, isLoading, error };
+}
+
+export function dummyTimeout(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
