@@ -107,9 +107,8 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 items-center justify-center h-screen w-full">
-      <span className="text-2xl font-bold">My Profile</span>
-      <Card className="w-full h-auto p-8 transition-all duration-300">
+    <div className="flex flex-col gap-4 items-center md:justify-center h-screen w-full">
+      <Card className="w-full h-auto p-8 border-none shadow-none">
         <div className="w-full flex flex-col items-center gap-y-4">
           <Avatar className="w-32 h-auto">
             <AvatarImage src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
