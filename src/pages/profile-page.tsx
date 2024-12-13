@@ -1,90 +1,174 @@
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useLoggedIn } from "@/hooks/user";
-import { useEffect, useState } from "react";
+import {
+  useGetUser,
+  useLoggedIn,
+  useModifyUser,
+  useUploadImage,
+} from "@/hooks/user";
+import { useEffect, useRef, useState } from "react";
 import { modifyUserFormSchema } from "@/lib/schemas";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
-import { ImageUp } from "lucide-react";
+import { ImageUp, LoaderCircle } from "lucide-react";
 
 const ProfilePage = () => {
   const loggedIn = useLoggedIn();
+  const userGetter = useGetUser();
+  const userModifier = useModifyUser();
+  const imageUploader = useUploadImage();
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const [modifying, setModifying] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const pictureInputRef = useRef<HTMLInputElement>(null);
+
+  const form = useForm<z.infer<typeof modifyUserFormSchema>>({
+    resolver: zodResolver(modifyUserFormSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+    },
+  });
 
   useEffect(() => {
     if (loggedIn.error) navigate("/login");
   }, [loggedIn.isLoggedIn, loggedIn.error, navigate]);
 
-  const modifyUserForm = useForm<z.infer<typeof modifyUserFormSchema>>({
-    resolver: zodResolver(modifyUserFormSchema),
-    defaultValues: {
-      username: "test",
-      email: "test",
-    },
-  });
-
-  const modifyUserFormOnSubmit = async (
-    values: z.infer<typeof modifyUserFormSchema>
-  ) => {
-    try {
-      const response = await axios.patch("/api/user/modify-user", {
-        username: values.username,
-        email: values.email,
-      });
-
-      if (response.status == 200) {
-        navigate("/user-page");
-      }
-    } catch (err) {
+  useEffect(() => {
+    if (userGetter.error) {
       toast({
         variant: "destructive",
-        title: "Problem with modifyUsering",
-        description: (err as AxiosError).message,
+        title: "Problem With Retrieving Data",
+        description: userGetter.error,
+      });
+    }
+  }, [userGetter.error, toast]);
+
+  useEffect(() => {
+    if (userModifier.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Modifying Data",
+        description: userModifier.error,
+      });
+    } else if (userModifier.error === null) {
+      toast({
+        variant: "default",
+        title: "Modifications Applied",
+        description: "Changes have been saved.",
+      });
+    }
+  }, [userModifier.attempts, userModifier.error, toast]);
+
+  useEffect(() => {
+    if (userGetter.user && !modifying) {
+      setImageUrl(userGetter.user.image);
+      form.setValue("username", userGetter.user.username);
+      form.setValue("email", userGetter.user.email);
+    }
+  }, [userGetter.user, form, modifying]);
+
+  useEffect(() => {
+    if (imageUploader.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Uploading Image",
+        description: imageUploader.error,
+      });
+    }
+  }, [imageUploader.attempts, imageUploader.error, toast]);
+
+  useEffect(() => {
+    if (imageUploader.url) {
+      toast({
+        variant: "default",
+        title: "Image Uploaded",
+        description:
+          "The image may not be visible straightaway. Try refreshing the page after saving changes",
+      });
+      setImageUrl(imageUploader.url);
+    }
+  }, [imageUploader.url, toast]);
+
+  const onSubmit = async (values: z.infer<typeof modifyUserFormSchema>) => {
+    if (modifying) {
+      await userModifier.modify({
+        username: values.username,
+        email: values.email,
+        image: imageUrl,
+      });
+    }
+
+    setModifying((prev) => !prev);
+  };
+
+  const onError = async (
+    errors: FieldErrors<z.infer<typeof modifyUserFormSchema>>
+  ) => {
+    const message: string = Object.entries(errors).map(
+      (entry) => (entry[1].message as string) ?? entry
+    )[0];
+
+    if (message) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Modfying Data",
+        description: message,
       });
     }
   };
 
+  const onPictureChange = async () => {
+    const file = pictureInputRef.current?.files?.[0];
+
+    if (file) {
+      await imageUploader.upload(file);
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-4 items-center justify-center h-screen w-full">
-      <span className="text-3xl font-bold">My Profile</span>
-      <Card className="w-full h-auto p-8 transition-all duration-300">
+    <div className="h-screen w-full flex flex-col gap-4 items-center lg:justify-center">
+      <Card className="w-full h-auto p-8 border-none shadow-none mt-8 lg:mt-0">
         <div className="w-full flex flex-col items-center gap-y-4">
           <Avatar className="w-32 h-auto">
-            <AvatarImage src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src={userGetter.user?.image} />
+            <AvatarFallback className="w-32 h-32 bg-muted">
+              <LoaderCircle size={24} className="animate-spin" />
+            </AvatarFallback>
           </Avatar>
           <Button
             variant="secondary"
             className={`${modifying ? "visible" : "hidden"} gap-2 p-3`}
+            onClick={() => pictureInputRef.current?.click()}
           >
             <Input
-              type="hidden"
+              type="file"
               accept="image/*"
-              className="text-sm"
+              className="hidden"
               disabled={!modifying}
+              onChange={onPictureChange}
+              ref={pictureInputRef}
             />
             <ImageUp />
             <span>Select Picture</span>
           </Button>
         </div>
-        <Form {...modifyUserForm}>
+        <Form {...form}>
           <form
-            onSubmit={modifyUserForm.handleSubmit(modifyUserFormOnSubmit)}
+            onSubmit={form.handleSubmit(onSubmit, onError)}
             className="flex flex-col items-center gap-y-4"
           >
             <FormField
-              control={modifyUserForm.control}
+              control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem className="w-full transition-all duration-300">
@@ -94,7 +178,7 @@ const ProfilePage = () => {
                       id="username"
                       variant="login"
                       type="text"
-                      placeholder="Username"
+                      placeholder="..."
                       autoComplete="off"
                       disabled={!modifying}
                       {...field}
@@ -104,7 +188,7 @@ const ProfilePage = () => {
               )}
             />
             <FormField
-              control={modifyUserForm.control}
+              control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem className="w-full transition-all duration-300">
@@ -114,7 +198,7 @@ const ProfilePage = () => {
                       id="email"
                       variant="login"
                       type="text"
-                      placeholder="Email"
+                      placeholder="..."
                       autoComplete="off"
                       disabled={!modifying}
                       {...field}
@@ -123,13 +207,34 @@ const ProfilePage = () => {
                 </FormItem>
               )}
             />
-            <Button
-              variant={modifying ? "default" : "secondary"}
-              className="w-full font-semibold"
-              onClick={() => setModifying((prev) => !prev)}
-            >
-              {modifying ? "Save Changes" : "Modify Your Data"}
-            </Button>
+            <div className="flex w-full space-x-2">
+              {modifying && (
+                <Button
+                  type="button"
+                  className="w-full font-semibold"
+                  variant="secondary"
+                  onClick={() => setModifying(false)}
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button
+                disabled={userModifier.isLoading}
+                type="submit"
+                variant={modifying ? "default" : "secondary"}
+                className="w-full font-semibold"
+              >
+                {modifying ? (
+                  userModifier.isLoading ? (
+                    <LoaderCircle size={24} className="animate-spin" />
+                  ) : (
+                    "Save Changes"
+                  )
+                ) : (
+                  "Modify Your Data"
+                )}
+              </Button>
+            </div>
           </form>
         </Form>
       </Card>
