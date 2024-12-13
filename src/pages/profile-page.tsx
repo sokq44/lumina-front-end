@@ -6,8 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useGetUser, useLoggedIn, useModifyUser } from "@/hooks/user";
-import { useEffect, useState } from "react";
+import {
+  useGetUser,
+  useLoggedIn,
+  useModifyUser,
+  useUploadImage,
+} from "@/hooks/user";
+import { useEffect, useRef, useState } from "react";
 import { modifyUserFormSchema } from "@/lib/schemas";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,10 +23,13 @@ const ProfilePage = () => {
   const loggedIn = useLoggedIn();
   const userGetter = useGetUser();
   const userModifier = useModifyUser();
+  const imageUploader = useUploadImage();
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const [modifying, setModifying] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const pictureInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof modifyUserFormSchema>>({
     resolver: zodResolver(modifyUserFormSchema),
@@ -63,20 +71,41 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (userGetter.user && !modifying) {
+      setImageUrl(userGetter.user.image);
       form.setValue("username", userGetter.user.username);
       form.setValue("email", userGetter.user.email);
     }
   }, [userGetter.user, form, modifying]);
+
+  useEffect(() => {
+    if (imageUploader.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Uploading Image",
+        description: imageUploader.error,
+      });
+    }
+  }, [imageUploader.attempts, imageUploader.error, toast]);
+
+  useEffect(() => {
+    if (imageUploader.url) {
+      toast({
+        variant: "default",
+        title: "Image Uploaded",
+        description:
+          "The image may not be visible straightaway. Try refreshing the page after saving changes",
+      });
+      setImageUrl(imageUploader.url);
+    }
+  }, [imageUploader.url, toast]);
 
   const onSubmit = async (values: z.infer<typeof modifyUserFormSchema>) => {
     if (modifying) {
       await userModifier.modify({
         username: values.username,
         email: values.email,
-        image: "",
+        image: imageUrl,
       });
-
-      await userGetter.getUser();
     }
 
     setModifying((prev) => !prev);
@@ -98,31 +127,36 @@ const ProfilePage = () => {
     }
   };
 
-  if (userGetter.isLoading) {
-    return (
-      <div className="flex flex-col gap-4 items-center justify-center h-screen w-full">
-        <LoaderCircle size={24} className="animate-spin" />
-      </div>
-    );
-  }
+  const onPictureChange = async () => {
+    const file = pictureInputRef.current?.files?.[0];
+
+    if (file) {
+      await imageUploader.upload(file);
+    }
+  };
 
   return (
-    <div className="flex flex-col gap-4 items-center md:justify-center h-screen w-full">
-      <Card className="w-full h-auto p-8 border-none shadow-none">
+    <div className="h-screen w-full flex flex-col gap-4 items-center lg:justify-center">
+      <Card className="w-full h-auto p-8 border-none shadow-none mt-8 lg:mt-0">
         <div className="w-full flex flex-col items-center gap-y-4">
           <Avatar className="w-32 h-auto">
-            <AvatarImage src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src={userGetter.user?.image} />
+            <AvatarFallback className="w-32 h-32 bg-muted">
+              <LoaderCircle size={24} className="animate-spin" />
+            </AvatarFallback>
           </Avatar>
           <Button
             variant="secondary"
             className={`${modifying ? "visible" : "hidden"} gap-2 p-3`}
+            onClick={() => pictureInputRef.current?.click()}
           >
             <Input
-              type="hidden"
+              type="file"
               accept="image/*"
-              className="text-sm"
+              className="hidden"
               disabled={!modifying}
+              onChange={onPictureChange}
+              ref={pictureInputRef}
             />
             <ImageUp />
             <span>Select Picture</span>
@@ -144,7 +178,7 @@ const ProfilePage = () => {
                       id="username"
                       variant="login"
                       type="text"
-                      placeholder="Username"
+                      placeholder="..."
                       autoComplete="off"
                       disabled={!modifying}
                       {...field}
@@ -164,7 +198,7 @@ const ProfilePage = () => {
                       id="email"
                       variant="login"
                       type="text"
-                      placeholder="Email"
+                      placeholder="..."
                       autoComplete="off"
                       disabled={!modifying}
                       {...field}

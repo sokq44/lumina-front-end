@@ -30,11 +30,10 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (loggedIn.isLoggedIn) navigate("/user");
-  }, [loggedIn.isLoggedIn, loggedIn.error, navigate]);
+  }, [loggedIn.isLoggedIn, navigate]);
 
   useEffect(() => {
     if (login.error) {
-      form.reset();
       toast({
         variant: "destructive",
         title: "Problem With Signing In",
@@ -43,7 +42,7 @@ const LoginPage = () => {
     } else if (login.error === null) {
       navigate("/user");
     }
-  }, [login.attempts, login.error, navigate, toast, form]);
+  }, [login.error, navigate, toast]);
 
   const onSubmit = (v: z.infer<typeof loginFormSchema>) =>
     login.login(v.email, v.password);
