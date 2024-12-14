@@ -112,6 +112,7 @@ const UserPage = () => {
       <DrawerContent className="flex flex-col gap-y-10 px-4 items-center justify-center my-8">
         {updatedMenuItems.map((item) => (
           <Link
+            key={item.title}
             to={item.url ? item.url : ""}
             className="flex"
             onClick={item.action ? item.action : undefined}

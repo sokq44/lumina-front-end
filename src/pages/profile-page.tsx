@@ -1,23 +1,19 @@
+import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useUploadImage } from "@/hooks/assets";
+import { useGetUser, useLoggedIn, useModifyUser } from "@/hooks/user";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  useGetUser,
-  useLoggedIn,
-  useModifyUser,
-  useUploadImage,
-} from "@/hooks/user";
-import { useEffect, useRef, useState } from "react";
 import { modifyUserFormSchema } from "@/lib/schemas";
-import { Card } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Label } from "@/components/ui/label";
 import { ImageUp, LoaderCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ProfilePage = () => {
   const loggedIn = useLoggedIn();

@@ -1,21 +1,6 @@
-import axios, { AxiosError } from "axios";
-import { useEffect, useState, useCallback } from "react";
-
-const client = axios.create({
-  baseURL: "http://localhost:3000/",
-  withCredentials: true,
-});
-
-client.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject(error)
-);
-
-export type User = {
-  username: string;
-  email: string;
-  image: string;
-};
+import { useEffect, useRef, useState } from "react";
+import { AxiosError } from "axios";
+import { client, User } from "@/lib/api";
 
 export function useRegister(): {
   register: (username: string, email: string, password: string) => void;
@@ -87,6 +72,7 @@ export function useLoggedIn(): {
   isLoading: boolean;
   error: string | undefined | null;
 } {
+  const canFetch = useRef<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -107,7 +93,10 @@ export function useLoggedIn(): {
       }
     };
 
-    checkLoggedIn();
+    if (canFetch.current) {
+      checkLoggedIn();
+      canFetch.current = false;
+    }
   }, []);
 
   return { isLoggedIn, isLoading, error };
@@ -137,31 +126,38 @@ export function useLogout(): {
   return { logout, isLoading, error };
 }
 
-export function useVerifyUser(): {
-  verify: (token: string) => void;
+export function useVerifyUser(token: string | undefined): {
   isLoading: boolean;
   error: string | undefined | null;
 } {
+  const canFetch = useRef<boolean>(true);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const verify = useCallback(async (token: string) => {
-    setIsLoading(true);
+  const verify = async (token: string | undefined) => {
+    if (token) {
+      setIsLoading(true);
 
-    try {
-      const response = await client.patch("/user/verify-email", {
-        token: token,
-      });
-      if (response.status === 204) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
-      setError(message);
-    } finally {
-      setIsLoading(false);
+      try {
+        const response = await client.patch("/user/verify-email", { token });
+        if (response.status === 204) setError(null);
+      } catch (err) {
+        const message = (err as AxiosError).response?.data as string;
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, []);
+  };
 
-  return { verify, isLoading, error };
+  useEffect(() => {
+    if (canFetch.current) {
+      canFetch.current = false;
+      verify(token);
+    }
+  }, [token]);
+
+  return { isLoading, error };
 }
 
 export function usePasswordChangeInit(): {
@@ -255,7 +251,12 @@ export function useGetUser(): {
   return { user, getUser, isLoading, error };
 }
 
-export function useModifyUser() {
+export function useModifyUser(): {
+  modify: (user: User) => void;
+  attempts: number;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attempts, setAttempts] = useState<number>(0);
@@ -276,46 +277,4 @@ export function useModifyUser() {
   };
 
   return { modify, attempts, isLoading, error };
-}
-
-export function dummyTimeout(milliseconds: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
-
-export function useUploadImage() {
-  const [url, setUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | undefined | null>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [attempts, setAttempts] = useState<number>(0);
-
-  const upload = async (file: File) => {
-    if (!file) {
-      setAttempts((prev) => prev + 1);
-      setError("There seems to be a problem with this image.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("filename", file.name);
-    formData.append("image", file);
-
-    try {
-      const response = await client.post("/assets/add-image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      setUrl(response.data as string);
-      setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
-      setError(message);
-    } finally {
-      setAttempts((last) => last + 1);
-      setIsLoading(false);
-    }
-  };
-
-  return { upload, url, attempts, isLoading, error };
 }

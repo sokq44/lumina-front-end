@@ -10,15 +10,11 @@ import { useVerifyUser } from "@/hooks/user";
 const EmailVerifiedPage = () => {
   const { token } = useParams();
   const { toast } = useToast();
-  const { verify, error, isLoading } = useVerifyUser();
+  const { error, isLoading } = useVerifyUser(token);
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-
-  useEffect(() => {
-    if (token) verify(token);
-  }, [token, verify]);
 
   useEffect(() => {
     if (error) {
