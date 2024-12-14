@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 const client = axios.create({
   baseURL: "http://localhost:3000",
   withCredentials: true,
-  fetchOptions: {},
 });
 
 client.interceptors.response.use(
@@ -267,7 +266,12 @@ export function useGetUser(): {
   return { user, getUser, isLoading, error };
 }
 
-export function useModifyUser() {
+export function useModifyUser(): {
+  modify: (user: User) => void;
+  attempts: number;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attempts, setAttempts] = useState<number>(0);
@@ -290,7 +294,13 @@ export function useModifyUser() {
   return { modify, attempts, isLoading, error };
 }
 
-export function useUploadImage() {
+export function useUploadImage(): {
+  url: string | null;
+  upload: (file: File) => void;
+  attempts: number;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -325,7 +335,7 @@ export function useUploadImage() {
     }
   };
 
-  return { upload, url, attempts, isLoading, error };
+  return { url, upload, attempts, isLoading, error };
 }
 
 export function dummyTimeout(milliseconds: number): Promise<void> {
