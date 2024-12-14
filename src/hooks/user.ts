@@ -1,9 +1,10 @@
 import axios, { AxiosError } from "axios";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const client = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "http://localhost:3000",
   withCredentials: true,
+  fetchOptions: {},
 });
 
 client.interceptors.response.use(
@@ -87,6 +88,7 @@ export function useLoggedIn(): {
   isLoading: boolean;
   error: string | undefined | null;
 } {
+  const canFetch = useRef<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -107,7 +109,10 @@ export function useLoggedIn(): {
       }
     };
 
-    checkLoggedIn();
+    if (canFetch.current) {
+      checkLoggedIn();
+      canFetch.current = false;
+    }
   }, []);
 
   return { isLoggedIn, isLoading, error };
@@ -137,31 +142,38 @@ export function useLogout(): {
   return { logout, isLoading, error };
 }
 
-export function useVerifyUser(): {
-  verify: (token: string) => void;
+export function useVerifyUser(token: string | undefined): {
   isLoading: boolean;
   error: string | undefined | null;
 } {
+  const canFetch = useRef<boolean>(true);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const verify = useCallback(async (token: string) => {
-    setIsLoading(true);
+  const verify = async (token: string | undefined) => {
+    if (token) {
+      setIsLoading(true);
 
-    try {
-      const response = await client.patch("/user/verify-email", {
-        token: token,
-      });
-      if (response.status === 204) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
-      setError(message);
-    } finally {
-      setIsLoading(false);
+      try {
+        const response = await client.patch("/user/verify-email", { token });
+        if (response.status === 204) setError(null);
+      } catch (err) {
+        const message = (err as AxiosError).response?.data as string;
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, []);
+  };
 
-  return { verify, isLoading, error };
+  useEffect(() => {
+    if (canFetch.current) {
+      canFetch.current = false;
+      verify(token);
+    }
+  }, [token]);
+
+  return { isLoading, error };
 }
 
 export function usePasswordChangeInit(): {
@@ -278,10 +290,6 @@ export function useModifyUser() {
   return { modify, attempts, isLoading, error };
 }
 
-export function dummyTimeout(milliseconds: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
-
 export function useUploadImage() {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | undefined | null>(undefined);
@@ -318,4 +326,8 @@ export function useUploadImage() {
   };
 
   return { upload, url, attempts, isLoading, error };
+}
+
+export function dummyTimeout(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
