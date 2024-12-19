@@ -14,6 +14,8 @@ import PasswordChangeInitPage from "@/pages/password-change-init-page";
 import SettingsPage from "./pages/settings-page";
 import ProfilePage from "@/pages/profile-page";
 import "./index.css";
+import ArticlesPage from "./pages/articles-page";
+import WritingPage from "./pages/writing-page";
 
 // TODO: Logo design
 // TODO: Login process and api integration
@@ -68,8 +70,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/user/modify",
-    element: <ProfilePage />,
+    path: "user/articles",
+    element: <ArticlesPage />,
+  },
+  {
+    path: "user/writing",
+    element: <WritingPage />,
   },
   {
     path: "/user/password",

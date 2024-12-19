@@ -26,7 +26,7 @@ export function useUploadImage(): {
     formData.append("image", file);
 
     try {
-      const response = await client.post("/assets/add-image", formData, {
+      const response = await client.post("/assets/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -13,12 +13,12 @@ export type MenuItem = {
 export const userMenuItems: MenuItem[] = [
   {
     title: "Articles",
-    url: "#",
+    url: "articles",
     icon: FileText,
   },
   {
     title: "Settings",
-    url: "/user/settings",
+    url: "settings",
     icon: Settings,
   },
 ];
