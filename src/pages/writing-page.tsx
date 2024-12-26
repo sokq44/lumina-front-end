@@ -1,4 +1,5 @@
 import GoBackArrow from "@/components/go-back-arrow";
+import TextEditor from "@/components/text-editor";
 import ThemeSwitch from "@/components/theme-switch";
 import { useLoggedIn } from "@/hooks/user";
 import { LoaderCircle } from "lucide-react";
@@ -25,7 +26,7 @@ const WritingPage = () => {
     <div className="flex items-center justify-center h-screen w-screen">
       <ThemeSwitch position="top-right" />
       <GoBackArrow to="/user/articles" />
-      Writing
+      <TextEditor />
     </div>
   );
 };
