@@ -1,4 +1,3 @@
-import GoBackArrow from "@/components/go-back-arrow";
 import TextEditor from "@/components/text-editor";
 import ThemeSwitch from "@/components/theme-switch";
 import { useLoggedIn } from "@/hooks/user";
@@ -25,7 +24,6 @@ const WritingPage = () => {
   return (
     <div className="flex items-center justify-center h-screen w-screen">
       <ThemeSwitch position="top-right" />
-      <GoBackArrow to="/user/articles" />
       <TextEditor />
     </div>
   );

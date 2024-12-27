@@ -80,8 +80,17 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  pre {
+    @apply bg-zinc-800 rounded-lg p-4 font-mono text-xs text-white;
+  }
+  
+  .ProseMirror:focus {
+    @apply outline-none;
   }
 }
 
@@ -99,8 +108,4 @@
 .sliding-link:focus,
 .sliding-link:active {
   background-size: 100% 0.1em;
-}
-
-.ProseMirror:focus {
-  outline: none;
 }

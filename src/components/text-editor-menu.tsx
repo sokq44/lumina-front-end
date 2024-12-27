@@ -14,6 +14,7 @@ const TextEditorMenu: FC<TextEditorMenuProps> = ({ className, editor }) => {
       <TextEditorMenuItem variant="bold" editor={editor} />
       <TextEditorMenuItem variant="underline" editor={editor} />
       <TextEditorMenuItem variant="italic" editor={editor} />
+      <TextEditorMenuItem variant="code-block" editor={editor} />
     </div>
   );
 };

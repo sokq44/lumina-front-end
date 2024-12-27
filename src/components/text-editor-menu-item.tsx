@@ -4,7 +4,7 @@ import { Editor } from "@tiptap/react";
 import { getMenuItem } from "@/lib/text-editor";
 
 interface TextEditorMenuItemProps {
-  variant: "bold" | "underline" | "italic";
+  variant: "bold" | "underline" | "italic" | "code-block";
   editor: Editor;
 }
 

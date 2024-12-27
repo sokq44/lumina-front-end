@@ -1,5 +1,5 @@
 import { Editor } from "@tiptap/react";
-import { Bold, Italic, LucideIcon, Underline } from "lucide-react";
+import { Bold, CodeXml, Italic, LucideIcon, Underline } from "lucide-react";
 
 abstract class MenuItem {
   public icon: LucideIcon;
@@ -45,6 +45,16 @@ class ItalicMenuItem extends MenuItem {
   }
 }
 
+class CodeBlockMenuItem extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, CodeXml, "Code Block");
+  }
+
+  public toggle() {
+    toggleCodeBlock(this.editor);
+  }
+}
+
 export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
   switch (variant) {
     case "bold":
@@ -53,6 +63,8 @@ export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
       return new UnderlineMenuItem(editor);
     case "italic":
       return new ItalicMenuItem(editor);
+    case "code-block":
+      return new CodeBlockMenuItem(editor);
     default:
       return null;
   }
@@ -68,4 +80,8 @@ export function toggleUnderline(editor: Editor) {
 
 export function toggleItalic(editor: Editor) {
   editor.chain().focus().toggleItalic().run();
+}
+
+export function toggleCodeBlock(editor: Editor) {
+  editor.chain().focus().toggleCodeBlock().run();
 }
