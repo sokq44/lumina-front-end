@@ -100,3 +100,7 @@
 .sliding-link:active {
   background-size: 100% 0.1em;
 }
+
+.ProseMirror:focus {
+  outline: none;
+}

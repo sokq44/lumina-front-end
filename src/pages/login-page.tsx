@@ -125,9 +125,7 @@ const LoginPage = () => {
           </form>
           <div className="flex flex-col gap-y-2 mt-4 md:flex-row md:gap-x-4">
             <SlidingLink to="/register">Don't Have an Account?</SlidingLink>
-            <SlidingLink to="/password-change-init">
-              Forgot Your Password?
-            </SlidingLink>
+            <SlidingLink to="/user/password">Forgot Your Password?</SlidingLink>
           </div>
         </div>
         <div className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">

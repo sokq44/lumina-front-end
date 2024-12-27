@@ -12,11 +12,7 @@ import Separator from "./separator";
 const TextEditor = () => {
   const editor = useEditor({
     extensions: [Document, Paragraph, Text, Underline, Bold, Italic],
-    content: `
-        <p>There is no underline here.</p>
-        <p><u>This is underlined though.</u></p>
-        <p style="text-decoration: underline">And this as well.</p>
-      `,
+    content: `<p>Contents of your article<p>`,
   });
 
   if (!editor) {
@@ -27,8 +23,11 @@ const TextEditor = () => {
     <div className="h-full flex">
       <Separator orientation="vertical" />
       <div className="flex flex-col h-full mx-4 w-[42rem]">
-        <TextEditorMenu editor={editor} className="h-24 flex items-center" />
-        <TextEditorContent editor={editor} className="h-4/5" />
+        <TextEditorMenu
+          editor={editor}
+          className="h-14 my-4 px-2 border border-gray-200 rounded-md sticky"
+        />
+        <TextEditorContent editor={editor} />
       </div>
       <Separator orientation="vertical" />
     </div>
