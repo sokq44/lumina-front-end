@@ -86,7 +86,7 @@
   }
 
   pre {
-    @apply bg-zinc-800 rounded-lg p-4 font-mono text-xs text-white;
+    @apply bg-zinc-800 rounded-lg p-4 font-mono text-xs text-white my-4;
   }
   
   .ProseMirror:focus {

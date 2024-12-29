@@ -1,16 +1,20 @@
 import { client } from "@/lib/api";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type Article = {
   id: string;
   title: string;
   content: string;
-  userId: string;
   createdAt: Date;
+  user: string;
 };
 
-export function useAddArticle() {
+export function useAddArticle(): {
+  add: (title: string, content: string) => Promise<void>;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -19,7 +23,10 @@ export function useAddArticle() {
     setError(undefined);
 
     try {
-      const response = await client.post("/articles/add", { title, content });
+      const response = await client.post("/articles/create", {
+        title,
+        content,
+      });
       if (response.status === 200) setError(null);
     } catch (err) {
       const message = (err as AxiosError).response?.data as string;
@@ -32,7 +39,11 @@ export function useAddArticle() {
   return { add, isLoading, error };
 }
 
-export function useGetArticles() {
+export function useGetArticles(): {
+  articles: Article[] | null;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const [articles, setArticles] = useState<Article[] | null>(null);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -42,7 +53,7 @@ export function useGetArticles() {
     setError(undefined);
 
     try {
-      const response = await client.get("/articles");
+      const response = await client.get("/articles/get-all");
       if (response.status === 200) {
         setArticles(response.data as Article[]);
         setError(null);
@@ -60,4 +71,42 @@ export function useGetArticles() {
   }, []);
 
   return { articles, isLoading, error };
+}
+
+export function useGetArticle(articleId: string): {
+  article: Article | null;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const canFetch = useRef<boolean>(true);
+  const [article, setArticle] = useState<Article | null>(null);
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const get = async () => {
+      setIsLoading(true);
+      setError(undefined);
+
+      try {
+        const response = await client.get(`/articles/get?article=${articleId}`);
+        if (response.status === 200) {
+          setArticle(response.data as Article);
+          setError(null);
+        }
+      } catch (err) {
+        const message = (err as AxiosError).response?.data as string;
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (articleId && canFetch.current) {
+      get();
+      canFetch.current = false;
+    }
+  }, [articleId]);
+
+  return { article, isLoading, error };
 }

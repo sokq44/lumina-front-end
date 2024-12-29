@@ -20,7 +20,7 @@ import { useLoggedIn, useLogout } from "@/hooks/user";
 import { userMenuItems } from "@/lib/menu-items";
 import { LoaderCircle, LogOut, PanelBottom, SunMoon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "usehooks-ts";
 
 const UserPage = () => {
@@ -81,7 +81,7 @@ const UserPage = () => {
           </div>
           <Separator orientation="horizontal" />
           <div className="flex w-full bg-background h-full">
-            {/* Place For The Articles */}
+            <Outlet />
           </div>
           <Separator orientation="horizontal" />
           <div className="w-full h-20 flex items-center justify-center">

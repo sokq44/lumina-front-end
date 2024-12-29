@@ -55,7 +55,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
           type="text"
           maxLength={25}
           placeholder="Title"
-          className="text-4xl bg-transparent w-full ProseMirror"
+          className="text-4xl font-semibold bg-transparent w-full ProseMirror"
         />
         <SaveButton
           editor={editor}

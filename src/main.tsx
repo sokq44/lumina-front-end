@@ -16,11 +16,15 @@ import ProfilePage from "@/pages/profile-page";
 import "./index.css";
 import ArticlesPage from "./pages/articles-page";
 import WritingPage from "./pages/writing-page";
+import ArticlePage from "./pages/article-page";
 
 // TODO: Logo design
-// TODO: Login process and api integration
-// TODO: User's panel page design & api integration
-// TODO: Logout the user from the user-page when there's no session
+// TODO: Add a modal which asks whether the user is sure he wants to save the article.
+// TODO: Mobile layouts for the article writing and reading pages.
+// TODO: Viewing a particular article. Will be done by sending a get request to the back-end with the id.
+// TODO: Deleting a particular article. Will be done by sending a DELETE request to the back-end with the id.
+// TODO: Add "brief description" and "background image" to the article model.
+// TODO: 404 Page
 
 const router = createBrowserRouter([
   {
@@ -46,6 +50,12 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <UserPage />,
+    children: [
+      {
+        path: "articles",
+        element: <ArticlesPage />,
+      },
+    ],
   },
   {
     path: "/user/settings",
@@ -70,10 +80,6 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "user/articles",
-    element: <ArticlesPage />,
-  },
-  {
     path: "user/writing",
     element: <WritingPage />,
   },
@@ -84,6 +90,10 @@ const router = createBrowserRouter([
   {
     path: "/user/password/:token",
     element: <ChangePasswordPage />,
+  },
+  {
+    path: "/article",
+    element: <ArticlePage />,
   },
 ]);
 
