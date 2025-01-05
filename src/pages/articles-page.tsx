@@ -46,7 +46,7 @@ const ArticlesPage = () => {
         <span className="text-4xl font-semibold">My Articles</span>
         {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
           <div className="grid grid-cols-5 gap-4 place-items-center">
-            <Link to={"/user/writing"}>
+            <Link to={"/user/writing"} state={{ article: "" }}>
               <Card className="w-60 bg-card-foreground text-card border-0 transition-all duration-300 hover:cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
                 <CardHeader className="text-inherit">
                   <CardTitle>Create</CardTitle>
@@ -59,7 +59,7 @@ const ArticlesPage = () => {
             </Link>
             {articlesGetter.articles.map((article, index) => (
               <Link
-                to={"/article"}
+                to={"/user/writing"}
                 state={{ article: article.id }}
                 key={`article ${index}`}
               >

@@ -4,40 +4,63 @@ import Separator from "./separator";
 import SaveButton from "./save-button";
 import { ScrollArea } from "./ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { useSaveArticle } from "@/hooks/articles";
+import { useGetArticle, useSaveArticle } from "@/hooks/articles";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { LoaderCircle } from "lucide-react";
 
 interface TextEditorContentProps {
   editor: Editor;
+  articleId: string;
   className?: string;
 }
 
 const TextEditorContent: FC<TextEditorContentProps> = ({
   editor,
+  articleId,
   className,
 }) => {
-  const { save, isLoading, error } = useSaveArticle("");
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const articleGetter = useGetArticle(articleId);
+  const articleSaver = useSaveArticle(articleId);
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (error) {
+    console.log(articleGetter.article);
+  }, [articleGetter.article]);
+
+  useEffect(() => {
+    if (articleSaver.error) {
       toast({
         variant: "destructive",
         title: "Problem With Saving",
-        description: error,
+        description: articleSaver.error,
       });
     }
-  }, [error, toast, navigate]);
+  }, [articleSaver.error, toast]);
+
+  useEffect(() => {
+    if (articleGetter.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Rertieving",
+        description: articleGetter.error,
+      });
+    }
+  }, [articleGetter.error, toast]);
+
+  useEffect(() => {
+    if (articleGetter.article && titleRef.current) {
+      titleRef.current.value = articleGetter.article.title;
+      editor.commands.setContent(articleGetter.article.content);
+    }
+  }, [articleGetter.article]);
 
   const saveChanges = () => {
     const title = titleRef.current?.value;
     const content = editor.getHTML();
 
     if (title) {
-      save(title, content);
+      articleSaver.save(title, content);
     } else {
       toast({
         variant: "destructive",
@@ -46,6 +69,14 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
       });
     }
   };
+
+  if (articleGetter.isLoading) {
+    return (
+      <div className="bg-background flex items-center justify-center h-screen">
+        <LoaderCircle size={24} className="animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className={cn("flex flex-col mt-4", className)}>
@@ -57,7 +88,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
           placeholder="Title"
           className="text-4xl font-semibold bg-transparent w-full ProseMirror"
         />
-        <SaveButton onClick={saveChanges} isLoading={isLoading} />
+        <SaveButton onClick={saveChanges} isLoading={articleSaver.isLoading} />
       </div>
       <Separator orientation="horizontal" className="mt-2 mb-4" />
       <ScrollArea

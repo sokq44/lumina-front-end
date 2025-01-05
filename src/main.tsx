@@ -24,6 +24,7 @@ import "./index.css";
 // TODO: Deleting a particular article. Will be done by sending a DELETE request to the back-end with the id.
 // TODO: Add "brief description" and "background image" to the article model.
 // TODO: 404 Page
+// TODO: Modify the text editor components so that they use some kinf of context in orfer to avoid props drilling
 
 const router = createBrowserRouter([
   {

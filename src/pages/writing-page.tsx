@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLoggedIn } from "@/hooks/user";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CornerUpLeft, LoaderCircle } from "lucide-react";
 import TextEditor from "@/components/text-editor";
 import ThemeSwitch from "@/components/theme-switch";
@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const WritingPage = () => {
+  const { state } = useLocation();
   const loggedIn = useLoggedIn();
   const navigate = useNavigate();
 
@@ -61,7 +62,7 @@ const WritingPage = () => {
         </DialogContent>
       </Dialog>
       <ThemeSwitch position="top-right" />
-      <TextEditor />
+      <TextEditor articleId={state.article as string} />
     </div>
   );
 };

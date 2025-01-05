@@ -9,8 +9,13 @@ import CodeBlock from "@tiptap/extension-code-block";
 import Separator from "./separator";
 import TextEditorMenu from "./text-editor-menu";
 import TextEditorContent from "./text-editor-content";
+import { FC } from "react";
 
-const TextEditor = () => {
+interface TextEditorProps {
+  articleId: string;
+}
+
+const TextEditor: FC<TextEditorProps> = ({ articleId }) => {
   const editor = useEditor({
     extensions: [Document, Paragraph, Text, Underline, Bold, Italic, CodeBlock],
     content: `<p>Contents of your article...<p>`,
@@ -28,7 +33,7 @@ const TextEditor = () => {
           editor={editor}
           className="h-14 my-4 px-2 border border-gray-200 rounded-md sticky"
         />
-        <TextEditorContent editor={editor} />
+        <TextEditorContent editor={editor} articleId={articleId} />
       </div>
       <Separator orientation="vertical" />
     </div>
