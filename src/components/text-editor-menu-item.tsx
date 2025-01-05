@@ -1,19 +1,19 @@
 import { FC, useRef } from "react";
 import { Button } from "./ui/button";
-import { Editor } from "@tiptap/react";
 import { getMenuItem } from "@/lib/text-editor";
+import { useTextEditor } from "./text-editor-provider";
 
 interface TextEditorMenuItemProps {
   variant: "bold" | "underline" | "italic" | "code-block";
-  editor: Editor;
 }
 
-const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({
-  variant,
-  editor,
-}) => {
+const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {
+  const textEditor = useTextEditor();
+
   const renderRef = useRef(0);
-  const item = getMenuItem(variant, editor);
+  const item = textEditor.editor
+    ? getMenuItem(variant, textEditor.editor)
+    : null;
 
   if (!item) {
     return <div>Wrong Variant</div>;
@@ -25,7 +25,7 @@ const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({
 
   return (
     <Button
-      variant={editor.isActive(variant) ? "default" : "ghost"}
+      variant={textEditor.editor?.isActive(variant) ? "default" : "ghost"}
       onClick={() => {
         item.toggle();
         forceUpdate();

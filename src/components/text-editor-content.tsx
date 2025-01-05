@@ -1,4 +1,4 @@
-import { Editor, EditorContent } from "@tiptap/react";
+import { EditorContent } from "@tiptap/react";
 import { FC, useEffect, useRef } from "react";
 import Separator from "./separator";
 import SaveButton from "./save-button";
@@ -7,26 +7,18 @@ import { cn } from "@/lib/utils";
 import { useGetArticle, useSaveArticle } from "@/hooks/articles";
 import { useToast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
+import { useTextEditor } from "./text-editor-provider";
 
 interface TextEditorContentProps {
-  editor: Editor;
-  articleId: string;
   className?: string;
 }
 
-const TextEditorContent: FC<TextEditorContentProps> = ({
-  editor,
-  articleId,
-  className,
-}) => {
+const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
+  const { editor, article } = useTextEditor();
   const { toast } = useToast();
-  const articleGetter = useGetArticle(articleId);
-  const articleSaver = useSaveArticle(articleId);
+  const articleGetter = useGetArticle(article?.id);
+  const articleSaver = useSaveArticle(article?.id);
   const titleRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    console.log(articleGetter.article);
-  }, [articleGetter.article]);
 
   useEffect(() => {
     if (articleSaver.error) {
@@ -51,15 +43,15 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
   useEffect(() => {
     if (articleGetter.article && titleRef.current) {
       titleRef.current.value = articleGetter.article.title;
-      editor.commands.setContent(articleGetter.article.content);
+      editor?.commands.setContent(articleGetter.article.content);
     }
   }, [articleGetter.article]);
 
   const saveChanges = () => {
     const title = titleRef.current?.value;
-    const content = editor.getHTML();
+    const content = editor?.getHTML();
 
-    if (title) {
+    if (title && content) {
       articleSaver.save(title, content);
     } else {
       toast({
@@ -93,7 +85,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
       <Separator orientation="horizontal" className="mt-2 mb-4" />
       <ScrollArea
         className="h-[48rem] hover:cursor-text"
-        onClick={() => editor.commands.focus()}
+        onClick={() => editor?.commands.focus()}
       >
         <EditorContent
           editor={editor}

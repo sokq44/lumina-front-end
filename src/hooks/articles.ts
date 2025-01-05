@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { AxiosError } from "axios";
 import { Article, client } from "@/lib/api";
 
-export function useSaveArticle(articleId: string): {
+export function useSaveArticle(articleId?: string): {
   save: (title: string, content: string) => Promise<void>;
   isLoading: boolean;
   error: string | undefined | null;
 } {
-  const [id, setId] = useState<string>(articleId);
+  const [id, setId] = useState<string>(articleId ?? "");
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -70,7 +70,7 @@ export function useGetArticles(): {
   return { articles, isLoading, error };
 }
 
-export function useGetArticle(articleId: string): {
+export function useGetArticle(articleId?: string): {
   article: Article | null;
   isLoading: boolean;
   error: string | undefined | null;

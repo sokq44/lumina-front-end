@@ -62,7 +62,7 @@ const WritingPage = () => {
         </DialogContent>
       </Dialog>
       <ThemeSwitch position="top-right" />
-      <TextEditor articleId={state.article as string} />
+      <TextEditor article={state.article} />
     </div>
   );
 };
