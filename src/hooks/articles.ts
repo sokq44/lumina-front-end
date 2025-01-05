@@ -1,33 +1,30 @@
-import { client } from "@/lib/api";
-import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
+import { AxiosError } from "axios";
+import { Article, client } from "@/lib/api";
 
-export type Article = {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: Date;
-  user: string;
-};
-
-export function useAddArticle(): {
-  add: (title: string, content: string) => Promise<void>;
+export function useSaveArticle(articleId: string): {
+  save: (title: string, content: string) => Promise<void>;
   isLoading: boolean;
   error: string | undefined | null;
 } {
+  const [id, setId] = useState<string>(articleId);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const add = async (title: string, content: string) => {
+  const save = async (title: string, content: string) => {
     setIsLoading(true);
     setError(undefined);
 
     try {
-      const response = await client.post("/articles/create", {
+      const response = await client.put("/articles/save", {
+        id,
         title,
         content,
       });
-      if (response.status === 200) setError(null);
+      if (response.status === 200) {
+        setError(null);
+        setId(response.data);
+      }
     } catch (err) {
       const message = (err as AxiosError).response?.data as string;
       setError(message);
@@ -36,7 +33,7 @@ export function useAddArticle(): {
     }
   };
 
-  return { add, isLoading, error };
+  return { save, isLoading, error };
 }
 
 export function useGetArticles(): {

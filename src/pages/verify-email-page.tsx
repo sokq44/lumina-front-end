@@ -1,10 +1,10 @@
+import { motion } from "motion/react";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Mail } from "lucide-react";
 import GoBackArrow from "@/components/go-back-arrow";
 import SlidingLink from "@/components/sliding-link";
 import ThemeSwitch from "@/components/theme-switch";
-import { Mail } from "lucide-react";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { motion } from "motion/react";
 
 const VerifyEmailPage = () => {
   const location = useLocation();

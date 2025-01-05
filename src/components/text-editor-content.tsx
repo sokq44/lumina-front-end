@@ -4,7 +4,7 @@ import Separator from "./separator";
 import SaveButton from "./save-button";
 import { ScrollArea } from "./ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { useAddArticle } from "@/hooks/articles";
+import { useSaveArticle } from "@/hooks/articles";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +17,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
   editor,
   className,
 }) => {
-  const { add, isLoading, error } = useAddArticle();
+  const { save, isLoading, error } = useSaveArticle("");
   const { toast } = useToast();
   const navigate = useNavigate();
   const titleRef = useRef<HTMLInputElement>(null);
@@ -29,7 +29,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
         title: "Problem With Saving",
         description: error,
       });
-    } else if (error === null) navigate("/user/articles");
+    }
   }, [error, toast, navigate]);
 
   const saveChanges = () => {
@@ -37,7 +37,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
     const content = editor.getHTML();
 
     if (title) {
-      add(title, content);
+      save(title, content);
     } else {
       toast({
         variant: "destructive",
@@ -57,11 +57,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({
           placeholder="Title"
           className="text-4xl font-semibold bg-transparent w-full ProseMirror"
         />
-        <SaveButton
-          editor={editor}
-          onClick={saveChanges}
-          isLoading={isLoading}
-        />
+        <SaveButton onClick={saveChanges} isLoading={isLoading} />
       </div>
       <Separator orientation="horizontal" className="mt-2 mb-4" />
       <ScrollArea

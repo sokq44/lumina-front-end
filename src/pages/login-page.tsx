@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "motion/react";
+import { loginFormSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { useLoggedIn, useLogin } from "@/hooks/user";
 import { useNavigate } from "react-router-dom";
-import { Circle, LoaderCircle, LogIn } from "lucide-react";
+import { useLoggedIn, useLogin } from "@/hooks/user";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
+import { Circle, LoaderCircle, LogIn } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { loginFormSchema } from "@/lib/schemas";
-import GoBackArrow from "@/components/go-back-arrow";
 import ThemeSwitch from "@/components/theme-switch";
 import SlidingLink from "@/components/sliding-link";
-import { motion } from "motion/react";
+import GoBackArrow from "@/components/go-back-arrow";
 
 const LoginPage = () => {
   const login = useLogin();

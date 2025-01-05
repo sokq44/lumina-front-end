@@ -1,20 +1,21 @@
+import { useEffect, useState } from "react";
 import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldErrors, useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import GoBackArrow from "@/components/go-back-arrow";
-import ThemeSwitch from "@/components/theme-switch";
 import { motion } from "motion/react";
 import { passwordChangeInitSchema } from "@/lib/schemas";
+import { useToast } from "@/hooks/use-toast";
 import { usePasswordChangeInit } from "@/hooks/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldErrors, useForm } from "react-hook-form";
 import { LoaderCircle, MailQuestion } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import ThemeSwitch from "@/components/theme-switch";
+import GoBackArrow from "@/components/go-back-arrow";
 
 const PasswordChangeInitPage = () => {
   const { init, attempts, isLoading, error } = usePasswordChangeInit();
   const { toast } = useToast();
+
   const [sentMessage, setSentMessage] = useState<string>("");
 
   const form = useForm<z.infer<typeof passwordChangeInitSchema>>({

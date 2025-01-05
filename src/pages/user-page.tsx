@@ -1,8 +1,17 @@
-import SearchBar from "@/components/search-bar";
-import Separator from "@/components/separator";
+import { useEffect, useState } from "react";
+import { userMenuItems } from "@/lib/menu-items";
+import { useMediaQuery } from "usehooks-ts";
+import { useToast } from "@/hooks/use-toast";
+import { useLoggedIn, useLogout } from "@/hooks/user";
 import { useTheme } from "@/components/theme-provider";
-import ThemeSwitch from "@/components/theme-switch";
+import Separator from "@/components/separator";
+import SearchBar from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
+import ThemeSwitch from "@/components/theme-switch";
+import UserSidebar from "@/components/user-sidebar";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { LoaderCircle, LogOut, PanelBottom, SunMoon } from "lucide-react";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import {
   Pagination,
@@ -13,24 +22,16 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import UserSidebar from "@/components/user-sidebar";
-import { useToast } from "@/hooks/use-toast";
-import { useLoggedIn, useLogout } from "@/hooks/user";
-import { userMenuItems } from "@/lib/menu-items";
-import { LoaderCircle, LogOut, PanelBottom, SunMoon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useMediaQuery } from "usehooks-ts";
 
 const UserPage = () => {
   const logout = useLogout();
   const loggedIn = useLoggedIn();
   const navigate = useNavigate();
+  const matches = useMediaQuery("(min-width:1024px)");
   const { toast } = useToast();
   const { theme, setTheme } = useTheme();
+
   const [search, setSearch] = useState<string>("");
-  const matches = useMediaQuery("(min-width:1024px)");
 
   const updatedMenuItems = userMenuItems.concat([
     {

@@ -29,7 +29,7 @@ const UserSidebar: FC<UserSidebarProps> = ({ items }) => {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
-                        className="w-32 p-4 text-base transition-all duration-300"
+                        className="w-32 p-2 text-base transition-all duration-300"
                       >
                         <Link
                           to={item.url ? item.url : ""}

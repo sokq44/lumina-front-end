@@ -1,11 +1,11 @@
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
+import { useToast } from "@/hooks/use-toast";
+import { useParams } from "react-router-dom";
+import { useVerifyUser } from "@/hooks/user";
+import { LoaderCircle, MailCheck, MailX } from "lucide-react";
 import SlidingLink from "@/components/sliding-link";
 import ThemeSwitch from "@/components/theme-switch";
-import { useToast } from "@/hooks/use-toast";
-import { LoaderCircle, MailCheck, MailX } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { motion } from "motion/react";
-import { useVerifyUser } from "@/hooks/user";
 
 const EmailVerifiedPage = () => {
   const { token } = useParams();

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AxiosError } from "axios";
 import { client } from "@/lib/api";
 
-export function useUploadImage(): {
+export function useUploadAsset(): {
   url: string | null;
   upload: (file: File) => void;
   attempts: number;

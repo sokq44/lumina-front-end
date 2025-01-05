@@ -1,20 +1,21 @@
+import { useEffect } from "react";
+import { useLoggedIn } from "@/hooks/user";
+import { useToast } from "@/hooks/use-toast";
+import { useGetArticles } from "@/hooks/articles";
+import { Link, useNavigate } from "react-router-dom";
+import { LoaderCircle, PenLine } from "lucide-react";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useGetArticles } from "@/hooks/articles";
-import { useToast } from "@/hooks/use-toast";
-import { useLoggedIn } from "@/hooks/user";
-import { LoaderCircle, PenLine } from "lucide-react";
-import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import ArticleCard from "@/components/article-card";
 
 const ArticlesPage = () => {
-  const articlesGetter = useGetArticles();
-  const loggedIn = useLoggedIn();
   const navigate = useNavigate();
+  const loggedIn = useLoggedIn();
+  const articlesGetter = useGetArticles();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -31,10 +32,6 @@ const ArticlesPage = () => {
     }
   }, [articlesGetter.error, toast, navigate]);
 
-  useEffect(() => {
-    console.log(articlesGetter.articles);
-  }, [articlesGetter.articles]);
-
   if (loggedIn.isLoading || articlesGetter.isLoading) {
     return (
       <div className="flex items-center justify-center h-full w-full">
@@ -45,9 +42,10 @@ const ArticlesPage = () => {
 
   return (
     <div className="flex items-center justify-center h-full w-full">
-      <div className="flex flex-col items-center gap-y-4">
+      <div className="flex flex-col items-center justify-center gap-y-8 h-full">
+        <span className="text-4xl font-semibold">My Articles</span>
         {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-5 gap-4 place-items-center">
             <Link to={"/user/writing"}>
               <Card className="w-60 bg-card-foreground text-card border-0 transition-all duration-300 hover:cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
                 <CardHeader className="text-inherit">
@@ -59,30 +57,26 @@ const ArticlesPage = () => {
                 </CardHeader>
               </Card>
             </Link>
-            {articlesGetter.articles.map((article, index) => {
-              return (
-                <Link
-                  to={"/article"}
-                  state={{ article: article.id }}
-                  key={`article ${index}`}
-                >
-                  <Card className="w-60 transition-all duration-300 hover:cursor-pointer hover:bg-muted">
-                    <CardHeader>
-                      <CardTitle>{article.title}</CardTitle>
-                      <CardDescription>
-                        Written by{" "}
-                        @{article.user}
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              );
-            })}
+            {articlesGetter.articles.map((article, index) => (
+              <Link
+                to={"/article"}
+                state={{ article: article.id }}
+                key={`article ${index}`}
+              >
+                <ArticleCard article={article} />
+              </Link>
+            ))}
           </div>
         ) : (
-          <p className="font-semibold text-muted-foreground text-lg">
-            You haven't written anything yet.
-          </p>
+          <div className="flex flex-col items-center font-semibold text-muted-foreground text-lg">
+            <span>You haven't written anything yet.</span>
+            <Link to={"/user/writing"} className="w-auto">
+              <div className="flex items-center gap-1 sliding-link w-auto">
+                <span>Let's change that</span>
+                <PenLine size={16} className="mt-1" />
+              </div>
+            </Link>
+          </div>
         )}
       </div>
     </div>

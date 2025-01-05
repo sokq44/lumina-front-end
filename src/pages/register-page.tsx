@@ -1,24 +1,25 @@
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FieldErrors } from "react-hook-form";
+import { registerFormSchema } from "@/lib/schemas";
+import { useRegister } from "@/hooks/user";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { useForm, FieldErrors } from "react-hook-form";
 import { Circle, LoaderCircle, UserPlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { registerFormSchema } from "@/lib/schemas";
-import GoBackArrow from "@/components/go-back-arrow";
-import ThemeSwitch from "@/components/theme-switch";
-import { useNavigate } from "react-router-dom";
-import { motion } from "motion/react";
 import SlidingLink from "@/components/sliding-link";
-import { useRegister } from "@/hooks/user";
-import { useEffect, useState } from "react";
+import ThemeSwitch from "@/components/theme-switch";
+import GoBackArrow from "@/components/go-back-arrow";
 
 const RegisterPage = () => {
-  const { register, attempts, isLoading, error } = useRegister();
-  const [email, setEmail] = useState<string>("");
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { register, attempts, isLoading, error } = useRegister();
+
+  const [email, setEmail] = useState<string>("");
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),

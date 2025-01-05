@@ -1,16 +1,16 @@
-import ThemeSwitch from "@/components/theme-switch";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { changePasswordFormSchema } from "@/lib/schemas";
+import { useToast } from "@/hooks/use-toast";
+import { useChangePassword } from "@/hooks/user";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { z } from "zod";
 import { motion } from "motion/react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import ThemeSwitch from "@/components/theme-switch";
 import { KeyRound, LoaderCircle } from "lucide-react";
-import { changePasswordFormSchema } from "@/lib/schemas";
-import { useChangePassword } from "@/hooks/user";
-import { useEffect, useState } from "react";
 
 const ChangePasswordPage = () => {
   const { change, attempts, isLoading, error } = useChangePassword();

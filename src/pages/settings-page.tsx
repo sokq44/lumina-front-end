@@ -1,37 +1,19 @@
 import { useEffect, useState } from "react";
-import Separator from "@/components/separator";
-import GoBackArrow from "@/components/go-back-arrow";
-import ThemeSwitch from "@/components/theme-switch";
-import { Button } from "@/components/ui/button";
-import { MenuItem } from "@/lib/menu-items";
-import { PanelBottom, ShieldCheck, SunMoon, User, UserCog } from "lucide-react";
-import { Link, Outlet, To, useNavigate } from "react-router-dom";
+import { settingsMenuItems } from "@/lib/menu-items";
 import { useMediaQuery } from "usehooks-ts";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { useTheme } from "@/components/theme-provider";
-
-const settingsMenuItems: MenuItem[] = [
-  {
-    title: "Profile",
-    url: "profile",
-    icon: User,
-  },
-  {
-    title: "Account",
-    url: "account",
-    icon: UserCog,
-  },
-  {
-    title: "Security",
-    url: "security",
-    icon: ShieldCheck,
-  },
-];
+import Separator from "@/components/separator";
+import ThemeSwitch from "@/components/theme-switch";
+import GoBackArrow from "@/components/go-back-arrow";
+import { Button } from "@/components/ui/button";
+import { PanelBottom, SunMoon } from "lucide-react";
+import { Link, Outlet, To, useNavigate } from "react-router-dom";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 const SettingsPage = () => {
   const { theme, setTheme } = useTheme();
-  const matches = useMediaQuery("(min-width:1024px)");
   const navigate = useNavigate();
+  const matches = useMediaQuery("(min-width:1024px)");
   const [selected, setSelected] = useState<number>(0);
 
   useEffect(() => {

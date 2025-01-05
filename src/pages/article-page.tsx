@@ -1,18 +1,17 @@
-import GoBackArrow from "@/components/go-back-arrow";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { useGetArticle } from "@/hooks/articles";
+import { useLocation } from "react-router-dom";
+import { LoaderCircle } from "lucide-react";
 import SlidingLink from "@/components/sliding-link";
 import ThemeSwitch from "@/components/theme-switch";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useGetArticle } from "@/hooks/articles";
-import { useToast } from "@/hooks/use-toast";
-import { AvatarFallback } from "@radix-ui/react-avatar";
-import { Separator } from "@radix-ui/react-separator";
-import { LoaderCircle } from "lucide-react";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import GoBackArrow from "@/components/go-back-arrow";
+import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const ArticlePage = () => {
-  const { state } = useLocation();
   const { toast } = useToast();
+  const { state } = useLocation();
   const articleGetter = useGetArticle(state.article);
 
   useEffect(() => {
@@ -37,9 +36,9 @@ const ArticlePage = () => {
     <div className="w-screen h-screen flex justify-center">
       <ThemeSwitch position="top-right" />
       <GoBackArrow />
-      <Separator className="bg-gray-200 w-[1px] h-full" />
+      <Separator orientation="vertical" />
       <div className="w-[42rem] h-full flex flex-col p-4">
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-2 mt-4">
           <Avatar className="w-12 h-auto">
             <AvatarImage src="https://cdn2.vectorstock.com/i/1000x1000/44/01/default-avatar-photo-placeholder-icon-grey-vector-38594401.jpg" />
             <AvatarFallback>U</AvatarFallback>
@@ -49,18 +48,18 @@ const ArticlePage = () => {
             <SlidingLink to="#">@{articleGetter.article?.user}</SlidingLink>
           </span>
         </div>
-        <span className="text-4xl font-semibold mt-4">
+        <span className="text-4xl font-semibold mt-6 mb-4">
           {articleGetter.article?.title}
         </span>
+        <Separator orientation="horizontal" />
         <div
           className="mt-4"
           dangerouslySetInnerHTML={{
             __html: articleGetter.article?.content || "",
           }}
         />
-        <Separator orientation="horizontal" />
       </div>
-      <Separator className="bg-gray-200 w-[1px] h-full" />
+      <Separator orientation="vertical" />
     </div>
   );
 };

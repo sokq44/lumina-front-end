@@ -1,6 +1,6 @@
-import ThemeSwitch from "@/components/theme-switch";
 import { FC } from "react";
 import { motion } from "motion/react";
+import ThemeSwitch from "@/components/theme-switch";
 import SlidingLink from "@/components/sliding-link";
 
 const MainPage: FC = () => {

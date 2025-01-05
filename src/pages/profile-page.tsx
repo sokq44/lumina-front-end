@@ -1,27 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
-import { FieldErrors, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { modifyUserFormSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { useUploadImage } from "@/hooks/assets";
+import { useNavigate } from "react-router-dom";
+import { useUploadAsset } from "@/hooks/assets";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useGetUser, useLoggedIn, useModifyUser } from "@/hooks/user";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { modifyUserFormSchema } from "@/lib/schemas";
 import { ImageUp, LoaderCircle } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
   const loggedIn = useLoggedIn();
   const userGetter = useGetUser();
   const userModifier = useModifyUser();
-  const imageUploader = useUploadImage();
+  const assetUploader = useUploadAsset();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const [modifying, setModifying] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -74,26 +74,26 @@ const ProfilePage = () => {
   }, [userGetter.user, form, modifying]);
 
   useEffect(() => {
-    if (imageUploader.error) {
+    if (assetUploader.error) {
       toast({
         variant: "destructive",
         title: "Problem With Uploading Image",
-        description: imageUploader.error,
+        description: assetUploader.error,
       });
     }
-  }, [imageUploader.attempts, imageUploader.error, toast]);
+  }, [assetUploader.attempts, assetUploader.error, toast]);
 
   useEffect(() => {
-    if (imageUploader.url) {
+    if (assetUploader.url) {
       toast({
         variant: "default",
         title: "Image Uploaded",
         description:
           "The image may not be visible straightaway. Try refreshing the page after saving changes",
       });
-      setImageUrl(imageUploader.url);
+      setImageUrl(assetUploader.url);
     }
-  }, [imageUploader.url, toast]);
+  }, [assetUploader.url, toast]);
 
   const onSubmit = async (values: z.infer<typeof modifyUserFormSchema>) => {
     if (modifying) {
@@ -127,7 +127,7 @@ const ProfilePage = () => {
     const file = pictureInputRef.current?.files?.[0];
 
     if (file) {
-      await imageUploader.upload(file);
+      await assetUploader.upload(file);
     }
   };
 

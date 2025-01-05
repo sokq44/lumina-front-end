@@ -6,22 +6,21 @@ import { ThemeProvider } from "@/components/theme-provider";
 import MainPage from "@/pages/main-page";
 import UserPage from "@/pages/user-page";
 import LoginPage from "@/pages/login-page";
+import ArticlePage from "@/pages/article-page";
+import ProfilePage from "@/pages/profile-page";
+import WritingPage from "@/pages/writing-page";
+import SettingsPage from "@/pages/settings-page";
 import RegisterPage from "@/pages/register-page";
+import ArticlesPage from "@/pages/articles-page";
 import VerifyEmailPage from "@/pages/verify-email-page";
 import EmailVerifiedPage from "@/pages/email-verified-page";
 import ChangePasswordPage from "@/pages/change-password-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
-import SettingsPage from "./pages/settings-page";
-import ProfilePage from "@/pages/profile-page";
 import "./index.css";
-import ArticlesPage from "./pages/articles-page";
-import WritingPage from "./pages/writing-page";
-import ArticlePage from "./pages/article-page";
 
 // TODO: Logo design
 // TODO: Add a modal which asks whether the user is sure he wants to save the article.
-// TODO: Mobile layouts for the article writing and reading pages.
-// TODO: Viewing a particular article. Will be done by sending a get request to the back-end with the id.
+// TODO: Mobile layouts for article writing and reading pages.
 // TODO: Deleting a particular article. Will be done by sending a DELETE request to the back-end with the id.
 // TODO: Add "brief description" and "background image" to the article model.
 // TODO: 404 Page

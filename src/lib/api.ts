@@ -15,3 +15,11 @@ export type User = {
   email: string;
   image: string;
 };
+
+export type Article = {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  user: string;
+};
