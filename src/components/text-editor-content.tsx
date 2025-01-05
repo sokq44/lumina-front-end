@@ -1,12 +1,12 @@
-import { EditorContent } from "@tiptap/react";
 import { FC, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { EditorContent } from "@tiptap/react";
+import { useGetArticle, useSaveArticle } from "@/hooks/articles";
 import Separator from "./separator";
 import SaveButton from "./save-button";
-import { ScrollArea } from "./ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { useGetArticle, useSaveArticle } from "@/hooks/articles";
-import { useToast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
+import { ScrollArea } from "./ui/scroll-area";
 import { useTextEditor } from "./text-editor-provider";
 
 interface TextEditorContentProps {

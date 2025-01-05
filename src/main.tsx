@@ -17,13 +17,12 @@ import EmailVerifiedPage from "@/pages/email-verified-page";
 import ChangePasswordPage from "@/pages/change-password-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
 import "./index.css";
+import NotFoundPage from "./pages/not-found-page";
 
 // TODO: Logo design
-// TODO: Add a modal which asks whether the user is sure he wants to save the article.
-// TODO: Mobile layouts for article writing and reading pages.
+// TODO: Mobile layouts for 404, article writing and reading pages.
 // TODO: Deleting a particular article. Will be done by sending a DELETE request to the back-end with the id.
 // TODO: Add "brief description" and "background image" to the article model.
-// TODO: 404 Page
 
 const router = createBrowserRouter([
   {
@@ -93,6 +92,10 @@ const router = createBrowserRouter([
   {
     path: "/article",
     element: <ArticlePage />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 
