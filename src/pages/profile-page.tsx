@@ -132,7 +132,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col gap-4 items-center lg:justify-center">
+    <div className="h-full w-full flex flex-col gap-4 items-center lg:justify-center">
       <Card className="w-full h-auto p-8 border-none shadow-none mt-8 lg:mt-0">
         <div className="w-full flex flex-col items-center gap-y-4">
           <Avatar className="w-32 h-auto">

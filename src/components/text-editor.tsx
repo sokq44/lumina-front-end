@@ -3,9 +3,15 @@ import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
 import Document from "@tiptap/extension-document";
+import TaskList from "@tiptap/extension-task-list";
 import Paragraph from "@tiptap/extension-paragraph";
 import Underline from "@tiptap/extension-underline";
 import CodeBlock from "@tiptap/extension-code-block";
+import BlockQuote from "@tiptap/extension-blockquote";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import TaskItem from "@tiptap/extension-task-item";
+import ListItem from "@tiptap/extension-list-item";
 import Separator from "./separator";
 import TextEditorMenu from "./text-editor-menu";
 import TextEditorContent from "./text-editor-content";
@@ -19,7 +25,21 @@ interface TextEditorProps {
 
 const TextEditor: FC<TextEditorProps> = ({ article }) => {
   const editor = useEditor({
-    extensions: [Document, Paragraph, Text, Underline, Bold, Italic, CodeBlock],
+    extensions: [
+      Document,
+      Paragraph,
+      Text,
+      Underline,
+      Bold,
+      Italic,
+      CodeBlock,
+      BlockQuote,
+      BulletList,
+      OrderedList,
+      TaskList,
+      TaskItem,
+      ListItem,
+    ],
     content: `<p>Contents of your article...<p>`,
   });
 

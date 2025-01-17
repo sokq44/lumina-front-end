@@ -1,5 +1,15 @@
 import { Editor } from "@tiptap/react";
-import { Bold, CodeXml, Italic, LucideIcon, Underline } from "lucide-react";
+import {
+  Bold,
+  CodeXml,
+  Italic,
+  List,
+  ListChecks,
+  ListOrdered,
+  LucideIcon,
+  TextQuote,
+  Underline,
+} from "lucide-react";
 
 abstract class MenuItem {
   public icon: LucideIcon;
@@ -20,8 +30,8 @@ class BoldMenuItem extends MenuItem {
     super(editor, Bold, "Bold");
   }
 
-  public toggle() {
-    toggleBold(this.editor);
+  public override toggle() {
+    this.editor.chain().focus().toggleBold().run();
   }
 }
 
@@ -30,8 +40,8 @@ class UnderlineMenuItem extends MenuItem {
     super(editor, Underline, "Underline");
   }
 
-  public toggle() {
-    toggleUnderline(this.editor);
+  public override toggle() {
+    this.editor.chain().focus().toggleUnderline().run();
   }
 }
 
@@ -40,8 +50,8 @@ class ItalicMenuItem extends MenuItem {
     super(editor, Italic, "Italic");
   }
 
-  public toggle() {
-    toggleItalic(this.editor);
+  public override toggle() {
+    this.editor.chain().focus().toggleItalic().run();
   }
 }
 
@@ -50,8 +60,48 @@ class CodeBlockMenuItem extends MenuItem {
     super(editor, CodeXml, "Code Block");
   }
 
-  public toggle() {
-    toggleCodeBlock(this.editor);
+  public override toggle() {
+    this.editor.chain().focus().toggleCodeBlock().run();
+  }
+}
+
+class BlockQuote extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, TextQuote, "Block Quote");
+  }
+
+  public override toggle() {
+    this.editor.chain().focus().toggleBlockquote().run();
+  }
+}
+
+class BulletList extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, List, "Bullet List");
+  }
+
+  public override toggle() {
+    this.editor.chain().focus().toggleBulletList().run();
+  }
+}
+
+class OrderedList extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, ListOrdered, "Ordered List");
+  }
+
+  public override toggle() {
+    this.editor.chain().focus().toggleOrderedList().run();
+  }
+}
+
+class TaskList extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, ListChecks, "Task List");
+  }
+
+  public override toggle() {
+    this.editor.chain().focus().toggleTaskList().run();
   }
 }
 
@@ -65,23 +115,15 @@ export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
       return new ItalicMenuItem(editor);
     case "code-block":
       return new CodeBlockMenuItem(editor);
+    case "block-quote":
+      return new BlockQuote(editor);
+    case "bullet-list":
+      return new BulletList(editor);
+    case "ordered-list":
+      return new OrderedList(editor);
+    case "task-list":
+      return new TaskList(editor);
     default:
       return null;
   }
-}
-
-export function toggleBold(editor: Editor) {
-  editor.chain().focus().toggleBold().run();
-}
-
-export function toggleUnderline(editor: Editor) {
-  editor.chain().focus().toggleUnderline().run();
-}
-
-export function toggleItalic(editor: Editor) {
-  editor.chain().focus().toggleItalic().run();
-}
-
-export function toggleCodeBlock(editor: Editor) {
-  editor.chain().focus().toggleCodeBlock().run();
 }

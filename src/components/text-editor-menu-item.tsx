@@ -4,7 +4,15 @@ import { getMenuItem } from "@/lib/text-editor";
 import { useTextEditor } from "./text-editor-provider";
 
 interface TextEditorMenuItemProps {
-  variant: "bold" | "underline" | "italic" | "code-block";
+  variant:
+    | "bold"
+    | "underline"
+    | "italic"
+    | "code-block"
+    | "block-quote"
+    | "bullet-list"
+    | "ordered-list"
+    | "task-list";
 }
 
 const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {
