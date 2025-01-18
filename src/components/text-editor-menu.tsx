@@ -2,6 +2,7 @@ import { FC } from "react";
 import TextEditorMenuItem from "./text-editor-menu-item";
 import { cn } from "@/lib/utils";
 import Separator from "./separator";
+import HeadingMenuItem from "./heading-menu-item";
 
 interface TextEditorMenuProps {
   className?: string;
@@ -20,6 +21,8 @@ const TextEditorMenu: FC<TextEditorMenuProps> = ({ className }) => {
       <Separator orientation="vertical" />
       <TextEditorMenuItem variant="code-block" />
       <TextEditorMenuItem variant="block-quote" />
+      <Separator orientation="vertical" />
+      <HeadingMenuItem />
     </div>
   );
 };

@@ -25,7 +25,7 @@ abstract class MenuItem {
   public abstract toggle(): void;
 }
 
-class BoldMenuItem extends MenuItem {
+export class BoldMenuItem extends MenuItem {
   constructor(editor: Editor) {
     super(editor, Bold, "Bold");
   }
@@ -35,7 +35,7 @@ class BoldMenuItem extends MenuItem {
   }
 }
 
-class UnderlineMenuItem extends MenuItem {
+export class UnderlineMenuItem extends MenuItem {
   constructor(editor: Editor) {
     super(editor, Underline, "Underline");
   }
@@ -45,7 +45,7 @@ class UnderlineMenuItem extends MenuItem {
   }
 }
 
-class ItalicMenuItem extends MenuItem {
+export class ItalicMenuItem extends MenuItem {
   constructor(editor: Editor) {
     super(editor, Italic, "Italic");
   }
@@ -55,7 +55,7 @@ class ItalicMenuItem extends MenuItem {
   }
 }
 
-class CodeBlockMenuItem extends MenuItem {
+export class CodeBlockMenuItem extends MenuItem {
   constructor(editor: Editor) {
     super(editor, CodeXml, "Code Block");
   }
@@ -65,7 +65,7 @@ class CodeBlockMenuItem extends MenuItem {
   }
 }
 
-class BlockQuote extends MenuItem {
+export class BlockQuote extends MenuItem {
   constructor(editor: Editor) {
     super(editor, TextQuote, "Block Quote");
   }
@@ -75,7 +75,7 @@ class BlockQuote extends MenuItem {
   }
 }
 
-class BulletList extends MenuItem {
+export class BulletList extends MenuItem {
   constructor(editor: Editor) {
     super(editor, List, "Bullet List");
   }
@@ -85,7 +85,7 @@ class BulletList extends MenuItem {
   }
 }
 
-class OrderedList extends MenuItem {
+export class OrderedList extends MenuItem {
   constructor(editor: Editor) {
     super(editor, ListOrdered, "Ordered List");
   }
@@ -95,7 +95,7 @@ class OrderedList extends MenuItem {
   }
 }
 
-class TaskList extends MenuItem {
+export class TaskList extends MenuItem {
   constructor(editor: Editor) {
     super(editor, ListChecks, "Task List");
   }

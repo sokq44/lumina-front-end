@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC } from "react";
 import { Button } from "./ui/button";
 import { getMenuItem } from "@/lib/text-editor";
 import { useTextEditor } from "./text-editor-provider";
@@ -18,25 +18,17 @@ interface TextEditorMenuItemProps {
 const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {
   const textEditor = useTextEditor();
 
-  const renderRef = useRef(0);
-  const item = textEditor.editor
-    ? getMenuItem(variant, textEditor.editor)
-    : null;
+  if (!textEditor.editor) return <div>No Text Editor Was Found.</div>;
 
-  if (!item) {
-    return <div>Wrong Variant</div>;
-  }
+  const item = getMenuItem(variant, textEditor.editor);
 
-  const forceUpdate = () => {
-    renderRef.current += 1;
-  };
+  if (!item) return <div>Wrong Variant</div>;
 
   return (
     <Button
       variant={textEditor.editor?.isActive(variant) ? "default" : "ghost"}
       onClick={() => {
         item.toggle();
-        forceUpdate();
       }}
       className="p-2 w-9 h-9"
     >

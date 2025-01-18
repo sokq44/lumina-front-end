@@ -1,17 +1,20 @@
 import { useEditor } from "@tiptap/react";
+
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
+import Heading from "@tiptap/extension-heading";
 import Document from "@tiptap/extension-document";
 import TaskList from "@tiptap/extension-task-list";
-import Paragraph from "@tiptap/extension-paragraph";
+import TaskItem from "@tiptap/extension-task-item";
+import ListItem from "@tiptap/extension-list-item";
 import Underline from "@tiptap/extension-underline";
+import Paragraph from "@tiptap/extension-paragraph";
 import CodeBlock from "@tiptap/extension-code-block";
 import BlockQuote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
-import TaskItem from "@tiptap/extension-task-item";
-import ListItem from "@tiptap/extension-list-item";
+
 import Separator from "./separator";
 import TextEditorMenu from "./text-editor-menu";
 import TextEditorContent from "./text-editor-content";
@@ -26,19 +29,20 @@ interface TextEditorProps {
 const TextEditor: FC<TextEditorProps> = ({ article }) => {
   const editor = useEditor({
     extensions: [
-      Document,
-      Paragraph,
       Text,
-      Underline,
       Bold,
       Italic,
+      TaskList,
+      TaskItem,
+      ListItem,
+      Document,
+      Paragraph,
+      Underline,
       CodeBlock,
       BlockQuote,
       BulletList,
       OrderedList,
-      TaskList,
-      TaskItem,
-      ListItem,
+      Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
     ],
     content: `<p>Contents of your article...<p>`,
   });

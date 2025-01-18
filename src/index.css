@@ -94,9 +94,6 @@
   }
 
   ul, ol {
-    padding: 0 1rem;
-    margin: 1.25rem 1rem 1.25rem 0.4rem;
-
     @apply px-4 mt-5 mb-5 mr-4 ml-1.5;
 
     li p {
@@ -110,6 +107,26 @@
 
   ol {
     @apply list-decimal;
+  }
+
+  ul[data-type="bulletList"] {
+    @apply list-disc;
+  }
+
+  ul[data-type="taskList"] {
+    @apply list-none p-0;
+
+    li {
+      @apply flex items-center;
+
+      > label {
+        @apply mr-2 select-none;
+      }
+    }
+  }
+
+  h1 {
+    @apply text-4xl
   }
 
   .ProseMirror:focus {

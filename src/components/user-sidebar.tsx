@@ -26,7 +26,7 @@ const UserSidebar: FC<UserSidebarProps> = ({ items }) => {
               <SidebarGroupContent>
                 <SidebarMenu className="flex flex-col gap-y-4 items-center">
                   {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
+                    <SidebarMenuItem className="list-none" key={item.title}>
                       <SidebarMenuButton
                         asChild
                         className="w-32 p-2 text-base transition-all duration-300"
