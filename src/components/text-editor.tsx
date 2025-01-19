@@ -56,7 +56,7 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
       <div className="h-full flex">
         <Separator orientation="vertical" />
         <div className="flex flex-col h-full mx-4 w-[42rem]">
-          <TextEditorMenu className="h-14 my-4 px-2 border border-gray-200 rounded-md sticky" />
+          <TextEditorMenu />
           <TextEditorContent />
         </div>
         <Separator orientation="vertical" />

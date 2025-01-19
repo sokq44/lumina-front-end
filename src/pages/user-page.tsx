@@ -84,25 +84,6 @@ const UserPage = () => {
           <div className="flex w-full bg-background h-full">
             <Outlet />
           </div>
-          <Separator orientation="horizontal" />
-          <div className="w-full h-20 flex items-center justify-center">
-            <Pagination className="text-muted-foreground w-auto font-semibold">
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
         </div>
       </SidebarProvider>
     );
