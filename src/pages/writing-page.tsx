@@ -22,6 +22,10 @@ const WritingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (state === null) navigate("/user/articles");
+  }, [state, navigate]);
+
+  useEffect(() => {
     if (loggedIn.error) navigate("/login");
   }, [loggedIn.error, navigate]);
 
@@ -62,7 +66,7 @@ const WritingPage = () => {
         </DialogContent>
       </Dialog>
       <ThemeSwitch position="top-right" />
-      <TextEditor article={state.article} />
+      <TextEditor article={state?.article} />
     </div>
   );
 };

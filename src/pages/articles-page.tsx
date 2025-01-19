@@ -46,7 +46,7 @@ const ArticlesPage = () => {
         <span className="text-4xl font-semibold">My Articles</span>
         {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
           <div className="grid grid-cols-5 gap-4 place-items-center">
-            <Link to={"/user/writing"} state={{ article: null }}>
+            <Link to={"/user/writing"} state={{ article: undefined }}>
               <Card className="w-60 bg-card-foreground text-card border-0 transition-all duration-300 hover:cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
                 <CardHeader className="text-inherit">
                   <CardTitle>Create</CardTitle>
@@ -70,7 +70,11 @@ const ArticlesPage = () => {
         ) : (
           <div className="flex flex-col items-center font-semibold text-muted-foreground text-lg">
             <span>You haven't written anything yet.</span>
-            <Link to={"/user/writing"} className="w-auto">
+            <Link
+              to={"/user/writing"}
+              state={{ article: undefined }}
+              className="w-auto"
+            >
               <div className="flex items-center gap-1 sliding-link w-auto">
                 <span>Let's change that</span>
                 <PenLine size={16} className="mt-1" />

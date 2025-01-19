@@ -88,7 +88,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
         onClick={() => editor?.commands.focus()}
       >
         <EditorContent
-          editor={editor}
+          editor={editor ?? null}
           className="h-full w-[42rem] mx-auto hover:cursor-text"
         />
       </ScrollArea>

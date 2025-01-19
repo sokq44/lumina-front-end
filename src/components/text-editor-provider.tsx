@@ -3,16 +3,16 @@ import { Editor } from "@tiptap/react";
 import { Article } from "@/lib/api";
 
 const TextEditorContext = createContext<{
-  editor: Editor | null;
-  article: Article | null;
+  editor: Editor | undefined;
+  article: Article | undefined;
 }>({
-  editor: null,
-  article: null,
+  editor: undefined,
+  article: undefined,
 });
 
 interface TextEditorProviderProps {
-  editor: Editor | null;
-  article: Article | null;
+  editor: Editor | undefined;
+  article: Article | undefined;
   children: React.ReactNode;
 }
 

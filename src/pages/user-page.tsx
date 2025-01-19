@@ -37,8 +37,8 @@ const UserPage = () => {
     {
       title: "Logout",
       icon: LogOut,
-      action: () => {
-        logout.logout();
+      action: async () => {
+        await logout.logout();
         navigate("/login");
       },
     },
