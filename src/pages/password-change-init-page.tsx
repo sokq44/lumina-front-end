@@ -61,7 +61,7 @@ const PasswordChangeInitPage = () => {
 
   return (
     <div className="bg-background flex items-center justify-center h-screen">
-      <GoBackArrow />
+      <GoBackArrow position="top-left" />
       <ThemeSwitch position="top-right" />
       <motion.div
         initial={{

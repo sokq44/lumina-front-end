@@ -73,7 +73,7 @@ const LoginPage = () => {
 
   return (
     <div className="bg-background flex items-center justify-center h-screen">
-      <GoBackArrow to="/" />
+      <GoBackArrow to="/" position="top-left" />
       <ThemeSwitch position="top-right" />
       <motion.div
         initial={{

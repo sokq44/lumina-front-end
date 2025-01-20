@@ -27,7 +27,7 @@ const VerifyEmailPage = () => {
       }}
       className="bg-background flex items-center justify-center h-screen"
     >
-      <GoBackArrow />
+      <GoBackArrow position="top-left" />
       <ThemeSwitch position="top-right" />
       <div className="flex w-full h-[24rem] md:w-[34rem] lg:w-[40rem] xl:w-[46rem]">
         <div className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">

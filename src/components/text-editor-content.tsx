@@ -7,6 +7,7 @@ import Separator from "./separator";
 import { LoaderCircle } from "lucide-react";
 import { useTextEditor } from "./text-editor-provider";
 import { Article } from "@/lib/api";
+import { Link } from "react-router-dom";
 
 interface TextEditorContentProps {
   className?: string;
@@ -61,7 +62,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
   return (
     <div className={cn("flex flex-col mt-4", className)}>
-      <div className="flex items-center">
+      <div className="flex flex-col">
         <input
           ref={titleRef}
           type="text"
@@ -70,6 +71,14 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           className="text-4xl font-semibold bg-transparent w-full ProseMirror"
           onInput={changeTitle}
         />
+        {textEditor.article?.user && (
+          <Link
+            to={`/user/${textEditor.article?.user}`}
+            className="w-min text-sm text-muted-foreground sliding-link"
+          >
+            By&nbsp;@{textEditor.article?.user}
+          </Link>
+        )}
       </div>
       <Separator orientation="horizontal" className="mt-2 mb-4" />
       <EditorContent

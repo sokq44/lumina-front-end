@@ -1,6 +1,7 @@
 import Separator from "@/components/separator";
 import ThemeSwitch from "@/components/theme-switch";
-import { Clover, CornerUpLeft, Frown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CornerUpLeft, Frown } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const NotFoundPage = () => {
@@ -9,26 +10,16 @@ const NotFoundPage = () => {
       <ThemeSwitch position="top-right" />
       <span className="text-6xl font-semibold">404</span>
       <Separator orientation="vertical" className="h-20 w-1" />
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-2">
         <span className="text-lg flex items-center gap-x-1">
           <Frown size={24} />
           Oops, seems like this page couldn't be found.
         </span>
-        <div className="flex gap-x-6">
-          <Link
-            to="/user"
-            className="flex items-center gap-x-1 text-muted-foreground sliding-link"
-          >
+        <Button className="w-full transition-all duration-300" asChild>
+          <Link to="/user" className="w-100 flex items-center gap-x-1">
             <CornerUpLeft size={18} /> Go back
           </Link>
-          <Link
-            to="https://www.youtube.com/watch?v=xvFZjo5PgG0"
-            className="flex items-center gap-x-1 text-muted-foreground sliding-link"
-            target="_blank"
-          >
-            <Clover size={18} /> Feeling Lucky?
-          </Link>
-        </div>
+        </Button>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ const SettingsPage = () => {
     return (
       <div className="w-screen h-screen flex items-center justify-center">
         <ThemeSwitch position="top-right" />
-        <GoBackArrow to="/user" />
+        <GoBackArrow to="/user" position="top-left" />
         <div className="flex items-center gap-x-8 w-full h-auto p-8 md:w-[52rem] lg:w-[58rem] xl:w-[68rem]">
           <div className="flex flex-col gap-y-4 w-1/5">
             {settingsMenuItems.map((item, index) => (
@@ -60,7 +60,7 @@ const SettingsPage = () => {
 
   return (
     <Drawer>
-      <GoBackArrow to="/user" />
+      <GoBackArrow to="/user" position="top-left" />
       <DrawerContent className="flex flex-col gap-y-4 px-4 items-center justify-center my-8">
         {settingsMenuItems.map((item, index) => (
           <Link

@@ -66,7 +66,7 @@ const RegisterPage = () => {
 
   return (
     <div className="bg-background flex items-center justify-center h-screen">
-      <GoBackArrow to="/" />
+      <GoBackArrow position="top-left" to="/" />
       <ThemeSwitch position="top-right" />
       <motion.div
         initial={{
