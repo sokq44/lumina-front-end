@@ -11,7 +11,7 @@ import {
 import { Button } from "./ui/button";
 import { useTextEditor } from "./text-editor-provider";
 import { useToast } from "@/hooks/use-toast";
-import { useSaveArticle } from "@/hooks/articles";
+import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
 import { useEffect } from "react";
 import {
   Collapsible,
@@ -29,11 +29,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 const TextEditorMenu = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const textEditor = useTextEditor();
   const articleSaver = useSaveArticle(textEditor.article?.id);
+  const articleRemover = useRemoveArticle();
 
   useEffect(() => {
     if (articleSaver.error) {
@@ -45,11 +48,32 @@ const TextEditorMenu = () => {
     }
   }, [articleSaver.error, toast]);
 
+  useEffect(() => {
+    if (articleRemover.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Deleting",
+        description: articleRemover.error,
+      });
+    } else if (articleRemover.error === null) {
+      textEditor.finishArticle();
+      navigate("/user/articles");
+    }
+  }, [articleRemover.error, toast, navigate]);
+
+  useEffect(() => {
+    if (articleSaver.id) {
+      const newArticle = {
+        ...textEditor.article,
+        id: articleSaver.id,
+      } as Article;
+      textEditor.setArticle(newArticle);
+    }
+  }, [articleSaver.id]);
+
   const saveChanges = async () => {
     const title = textEditor.article?.title;
     const content = textEditor.editor?.getHTML();
-
-    console.log(content);
 
     if (!title || title.length < 1 || title.length > 25) {
       toast({
@@ -69,21 +93,27 @@ const TextEditorMenu = () => {
         content: textEditor.editor?.getHTML(),
       } as Article;
 
-      if (newArticle) await articleSaver.save(newArticle);
-
-      toast({
-        variant: "default",
-        title: "Changes Applied",
-        description: (
-          <div className="text-md flex">
-            <span>
-              All the changes You've made have been applied to the article.
-            </span>
-            <Check className="text-green-500" />
-          </div>
-        ),
-      });
+      if (newArticle) {
+        await articleSaver.save(newArticle);
+        toast({
+          variant: "default",
+          title: "Changes Applied",
+          description: (
+            <div className="text-md flex">
+              <span>
+                All the changes You've made have been applied to the article.
+              </span>
+              <Check className="text-green-500" />
+            </div>
+          ),
+        });
+      }
     }
+  };
+
+  const removeArticle = async () => {
+    const id = textEditor.article?.id;
+    if (id) await articleRemover.remove(id);
   };
 
   return (
@@ -122,33 +152,45 @@ const TextEditorMenu = () => {
               <DialogTrigger asChild>
                 <Button
                   variant="destructive"
-                  disabled={articleSaver.isLoading}
+                  disabled={
+                    articleSaver.isLoading ||
+                    articleRemover.isLoading ||
+                    !textEditor.article?.id
+                  }
                   className="p-2 w-9 h-9 transition-all duration-300"
                 >
-                  {articleSaver.isLoading ? (
-                    <LoaderCircle className="animate-spin" />
-                  ) : (
-                    <Trash2 />
-                  )}
+                  <Trash2 />
                 </Button>
               </DialogTrigger>
               <DialogContent className="font-funnel">
                 <DialogHeader>
-                  <DialogTitle className="text-destructive">Are you sure?</DialogTitle>
+                  <DialogTitle className="text-destructive">
+                    Are you sure?
+                  </DialogTitle>
                   <DialogDescription>
                     Are you certain that you want to delete this article?
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
+                    <Button
+                      variant="outline"
+                      disabled={articleRemover.isLoading}
+                    >
+                      Cancel
+                    </Button>
                   </DialogClose>
                   <DialogClose asChild>
                     <Button
                       variant="destructive"
-                      onClick={() => console.log("yes")}
+                      disabled={articleRemover.isLoading}
+                      onClick={removeArticle}
                     >
-                      Delete
+                      {articleSaver.isLoading ? (
+                        <LoaderCircle className="animate-spin" />
+                      ) : (
+                        "Delete"
+                      )}
                     </Button>
                   </DialogClose>
                 </DialogFooter>

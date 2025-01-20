@@ -45,8 +45,6 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
       } as Article;
       if (newArticle) textEditor.setArticle(newArticle);
     }
-
-    console.log(textEditor.article?.title);
   };
 
   const focusEditor = () => {

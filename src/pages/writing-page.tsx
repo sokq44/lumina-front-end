@@ -29,6 +29,11 @@ const WritingPage = () => {
     if (loggedIn.error) navigate("/login");
   }, [loggedIn.error, navigate]);
 
+  const finishWriting = () => {
+    localStorage.removeItem("curr_article");
+    navigate("/user/articles");
+  };
+
   if (loggedIn.isLoading) {
     return (
       <div className="flex items-center justify-center h-screen w-screen">
@@ -60,7 +65,7 @@ const WritingPage = () => {
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button onClick={() => navigate(-1)}>Quit</Button>
+              <Button onClick={finishWriting}>Quit</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

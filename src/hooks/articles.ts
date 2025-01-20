@@ -4,10 +4,11 @@ import { Article, client } from "@/lib/api";
 
 export function useSaveArticle(articleId?: string): {
   save: (article: Article) => Promise<void>;
+  id: string;
   isLoading: boolean;
   error: string | undefined | null;
 } {
-  const [id, setId] = useState<string>(articleId ?? "");
+  const [id, setId] = useState<string>(articleId ? articleId : "");
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -33,7 +34,7 @@ export function useSaveArticle(articleId?: string): {
     }
   };
 
-  return { save, isLoading, error };
+  return { save, id, isLoading, error };
 }
 
 export function useGetArticles(): {
@@ -106,4 +107,33 @@ export function useGetArticle(articleId?: string): {
   }, [articleId]);
 
   return { article, isLoading, error };
+}
+
+export function useRemoveArticle(): {
+  remove: (id: string) => Promise<void>;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const remove = async (id: string) => {
+    setIsLoading(true);
+    setError(undefined);
+
+    try {
+      const response = await client.delete("/articles/delete", {
+        data: { id },
+      });
+
+      if (response.status === 200) setError(null);
+    } catch (err) {
+      const message = (err as AxiosError).response?.data as string;
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { remove, isLoading, error };
 }
