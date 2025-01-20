@@ -69,18 +69,17 @@ const UserPage = () => {
       <SidebarProvider>
         <UserSidebar items={updatedMenuItems} />
         <div className="flex flex-col h-screen w-screen">
-          <div className="flex items-center w-full bg-background h-20">
+          <div className="flex items-center w-full bg-background h-14">
             <SidebarTrigger className="ml-2 w-10 h-10 transition-all duration-300" />
-            <div className="flex justify-center w-full">
+            <div className="flex justify-end w-full">
               <SearchBar
-                onSearch={() => console.log(search)}
                 value={search}
+                onSearch={() => console.log(search)}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <ThemeSwitch className="mr-2" />
+            <ThemeSwitch className="relative" />
           </div>
-          <Separator orientation="horizontal" />
           <div className="flex w-full bg-background h-full">
             <Outlet />
           </div>

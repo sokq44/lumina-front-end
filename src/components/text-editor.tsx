@@ -15,7 +15,6 @@ import BlockQuote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 
-import Separator from "./separator";
 import TextEditorMenu from "./text-editor-menu";
 import TextEditorContent from "./text-editor-content";
 import { FC } from "react";
@@ -53,13 +52,9 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
 
   return (
     <TextEditorProvider editor={editor} article={article}>
-      <div className="h-full flex">
-        <Separator orientation="vertical" />
-        <div className="flex flex-col h-full mx-4 w-[42rem]">
-          <TextEditorMenu />
-          <TextEditorContent />
-        </div>
-        <Separator orientation="vertical" />
+      <div className="flex flex-col h-full mx-4 w-[50rem]">
+        <TextEditorMenu />
+        <TextEditorContent className="mt-28" />
       </div>
     </TextEditorProvider>
   );

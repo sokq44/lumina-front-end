@@ -1,13 +1,15 @@
-import { createContext, FC, useContext } from "react";
+import { createContext, FC, useContext, useState } from "react";
 import { Editor } from "@tiptap/react";
 import { Article } from "@/lib/api";
 
 const TextEditorContext = createContext<{
   editor: Editor | undefined;
   article: Article | undefined;
+  setArticle: (article: Article | undefined) => void;
 }>({
   editor: undefined,
   article: undefined,
+  setArticle: () => {},
 });
 
 interface TextEditorProviderProps {
@@ -17,12 +19,14 @@ interface TextEditorProviderProps {
 }
 
 const TextEditorProvider: FC<TextEditorProviderProps> = ({
+  article: initialArticle,
   editor,
-  article,
   children,
 }) => {
+  const [article, setArticle] = useState<Article | undefined>(initialArticle);
+
   return (
-    <TextEditorContext.Provider value={{ editor, article }}>
+    <TextEditorContext.Provider value={{ editor, article, setArticle }}>
       {children}
     </TextEditorContext.Provider>
   );

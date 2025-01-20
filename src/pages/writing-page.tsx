@@ -43,7 +43,7 @@ const WritingPage = () => {
         <DialogTrigger asChild>
           <Button
             variant="ghost"
-            className="absolute top-0 left-0 z-[100] m-2 p-2 rounded-md hover:cursor-pointer transition-all duration-300"
+            className="fixed top-0 left-0 z-[100] m-2 p-2 rounded-md hover:cursor-pointer transition-all duration-300"
           >
             <CornerUpLeft />
           </Button>
@@ -57,10 +57,10 @@ const WritingPage = () => {
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">No</Button>
+              <Button variant="outline">Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button onClick={() => navigate(-1)}>Yes</Button>
+              <Button onClick={() => navigate(-1)}>Quit</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

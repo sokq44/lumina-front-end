@@ -2,33 +2,22 @@ import { FC, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { EditorContent } from "@tiptap/react";
-import { useGetArticle, useSaveArticle } from "@/hooks/articles";
+import { useGetArticle } from "@/hooks/articles";
 import Separator from "./separator";
-import SaveButton from "./save-button";
 import { LoaderCircle } from "lucide-react";
-import { ScrollArea } from "./ui/scroll-area";
 import { useTextEditor } from "./text-editor-provider";
+import { Article } from "@/lib/api";
 
 interface TextEditorContentProps {
   className?: string;
 }
 
 const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
-  const { editor, article } = useTextEditor();
+  const textEditor = useTextEditor();
+  const articleGetter = useGetArticle(textEditor.article?.id);
   const { toast } = useToast();
-  const articleGetter = useGetArticle(article?.id);
-  const articleSaver = useSaveArticle(article?.id);
-  const titleRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (articleSaver.error) {
-      toast({
-        variant: "destructive",
-        title: "Problem With Saving",
-        description: articleSaver.error,
-      });
-    }
-  }, [articleSaver.error, toast]);
+  const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (articleGetter.error) {
@@ -43,23 +32,25 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
   useEffect(() => {
     if (articleGetter.article && titleRef.current) {
       titleRef.current.value = articleGetter.article.title;
-      editor?.commands.setContent(articleGetter.article.content);
+      textEditor.editor?.commands.setContent(articleGetter.article.content);
+      textEditor.setArticle(articleGetter.article);
     }
   }, [articleGetter.article]);
 
-  const saveChanges = () => {
-    const title = titleRef.current?.value;
-    const content = editor?.getHTML();
-
-    if (title && content) {
-      articleSaver.save(title, content);
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Problem With Saving",
-        description: "Title must be between 1 and 25 characters long.",
-      });
+  const changeTitle = () => {
+    if (titleRef.current) {
+      const newArticle = {
+        ...textEditor.article,
+        title: titleRef.current.value,
+      } as Article;
+      if (newArticle) textEditor.setArticle(newArticle);
     }
+
+    console.log(textEditor.article?.title);
+  };
+
+  const focusEditor = () => {
+    textEditor.editor?.commands.focus();
   };
 
   if (articleGetter.isLoading) {
@@ -79,19 +70,15 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           maxLength={25}
           placeholder="Title"
           className="text-4xl font-semibold bg-transparent w-full ProseMirror"
+          onInput={changeTitle}
         />
-        <SaveButton onClick={saveChanges} isLoading={articleSaver.isLoading} />
       </div>
       <Separator orientation="horizontal" className="mt-2 mb-4" />
-      <ScrollArea
-        className="h-[48rem] hover:cursor-text"
-        onClick={() => editor?.commands.focus()}
-      >
-        <EditorContent
-          editor={editor ?? null}
-          className="h-full w-[42rem] mx-auto hover:cursor-text"
-        />
-      </ScrollArea>
+      <EditorContent
+        onClick={focusEditor}
+        editor={textEditor.editor ?? null}
+        className="min-h-svh w-full mx-auto hover:cursor-text"
+      />
     </div>
   );
 };

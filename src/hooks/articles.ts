@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import { Article, client } from "@/lib/api";
 
 export function useSaveArticle(articleId?: string): {
-  save: (title: string, content: string) => Promise<void>;
+  save: (article: Article) => Promise<void>;
   isLoading: boolean;
   error: string | undefined | null;
 } {
@@ -11,15 +11,15 @@ export function useSaveArticle(articleId?: string): {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const save = async (title: string, content: string) => {
+  const save = async (article: Article) => {
     setIsLoading(true);
     setError(undefined);
 
     try {
       const response = await client.put("/articles/save", {
         id,
-        title,
-        content,
+        title: article.title,
+        content: article.content,
       });
       if (response.status === 200) {
         setError(null);
