@@ -1,39 +1,42 @@
-import { useState } from "react";
-import { BookCheck, BookLock } from "lucide-react";
+import { BookCheck, BookLock, LoaderCircle } from "lucide-react";
+import { useTextEditor } from "./text-editor-provider";
+import { FC } from "react";
 
-export const PrivatePublicSwitch = () => {
-  const [publicity, setPublicity] = useState<boolean>(false);
+interface PrivatePublicSwitchProps {
+  isLoading: boolean;
+}
 
-  const changePublicity = () => {
-    setPublicity((previous) => !previous);
-  };
-
+export const PrivatePublicSwitch: FC<PrivatePublicSwitchProps> = ({
+  isLoading,
+}) => {
+  const textEditor = useTextEditor();
   return (
-    <div
-      onClick={changePublicity}
-      className="flex items-center justify-between p-2 border rounded-md transition-all duration-300 hover:cursor-pointer hover:bg-gray-200"
-    >
-      <div>
-        <div className="flex items-center text-lg font-bold transition-all duration-300">
-          {publicity ? (
-            <>
-              <BookCheck size={22} />
-              <span>Public</span>
-            </>
-          ) : (
-            <>
-              <BookLock size={22} />
-              <span>Private</span>
-            </>
-          )}
+    <div className="flex items-center justify-between p-2 border-2 border-secondary-foreground bg-secondary-foreground text-secondary rounded-md transition-all duration-300 hover:cursor-pointer hover:bg-muted hover:text-primary">
+      {isLoading ? (
+        <LoaderCircle size={28} className="animate-spin" />
+      ) : (
+        <div>
+          <div className="flex items-center text-lg font-bold transition-all duration-300">
+            {textEditor.article?.public ? (
+              <>
+                <BookCheck size={22} />
+                <span>Public</span>
+              </>
+            ) : (
+              <>
+                <BookLock size={22} />
+                <span>Private</span>
+              </>
+            )}
+          </div>
+          <span className="text-sm text-muted-foreground">
+            {textEditor.article?.public
+              ? "This article is possible to view for every user."
+              : "You're the only one able to view this article"}{" "}
+            Click Here to change that.
+          </span>
         </div>
-        <span className="text-sm text-muted-foreground">
-          {publicity
-            ? "This article is possible to view for every user."
-            : "You're the only one able to view this article"}{" "}
-          Click Here to change that.
-        </span>
-      </div>
+      )}
     </div>
   );
 };

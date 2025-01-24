@@ -21,6 +21,7 @@ export function useSaveArticle(articleId?: string): {
         id,
         title: article.title,
         content: article.content,
+        public: article.public,
       });
       if (response.status === 200) {
         setError(null);

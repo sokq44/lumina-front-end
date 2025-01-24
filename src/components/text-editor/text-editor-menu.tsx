@@ -112,6 +112,18 @@ const TextEditorMenu = () => {
     }
   };
 
+  const changeVisibility = async () => {
+    const previousArticle = textEditor.article;
+    if (previousArticle) {
+      const newArticle = {
+        ...(previousArticle as Article),
+        public: !previousArticle.public,
+      };
+
+      textEditor.setArticle(newArticle);
+    }
+  };
+
   const removeArticle = async () => {
     const id = textEditor.article?.id;
     if (id) await articleRemover.remove(id);
@@ -199,7 +211,31 @@ const TextEditorMenu = () => {
             </Dialog>
           </div>
           <CollapsibleContent className="pl-1 pt-1">
-            <PrivatePublicSwitch />
+            <Dialog>
+              <DialogTrigger className="w-full">
+                <PrivatePublicSwitch isLoading={articleSaver.isLoading} />
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure?</DialogTitle>
+                  <DialogDescription>
+                    {textEditor.article?.public
+                      ? "After you confirm this article is possible to view for every user."
+                      : "After you confirm, You will the only one able to see this article"}
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="sm:justify-start">
+                  <DialogClose asChild>
+                    <Button type="button" variant="outline">
+                      Close
+                    </Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button onClick={changeVisibility}>Confirm</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </CollapsibleContent>
         </div>
       </div>

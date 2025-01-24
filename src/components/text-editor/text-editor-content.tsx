@@ -60,6 +60,14 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
     );
   }
 
+  const formattedDate = textEditor.article?.created_at
+    ? new Date(textEditor.article.created_at).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+    : "";
+
   return (
     <div className={cn("flex flex-col mt-4", className)}>
       <div className="flex flex-col">
@@ -72,12 +80,16 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           onInput={changeTitle}
         />
         {textEditor.article?.user && (
-          <Link
-            to={`/user/${textEditor.article?.user}`}
-            className="w-min text-sm text-muted-foreground sliding-link"
-          >
-            By&nbsp;@{textEditor.article?.user}
-          </Link>
+          <span className="text-sm text-muted-foreground ">
+            Written by&nbsp;
+            <Link
+              to={`/user/${textEditor.article?.user}`}
+              className="sliding-link font-semibold"
+            >
+              @{textEditor.article?.user}
+            </Link>{" "}
+            on the {formattedDate}
+          </span>
         )}
       </div>
       <Separator orientation="horizontal" className="mt-2 mb-4" />

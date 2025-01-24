@@ -21,6 +21,7 @@ export type Article = {
   id: string;
   title: string;
   content: string;
-  createdAt: Date;
+  created_at: Date;
   user: string;
+  public: boolean;
 };
