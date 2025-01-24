@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLoggedIn } from "@/hooks/user";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CornerUpLeft, LoaderCircle } from "lucide-react";
-import TextEditor from "@/components/text-editor";
+import TextEditor from "@/components/text-editor/text-editor";
 import ThemeSwitch from "@/components/theme-switch";
 import {
   Dialog,

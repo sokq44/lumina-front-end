@@ -1,5 +1,5 @@
 import TextEditorMenuItem from "./text-editor-menu-item";
-import Separator from "./separator";
+import { Separator } from "@/components/ui/separator";
 import HeadingMenuItem from "./heading-menu-item";
 import {
   Check,
@@ -8,7 +8,7 @@ import {
   Save,
   Trash2,
 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useTextEditor } from "./text-editor-provider";
 import { useToast } from "@/hooks/use-toast";
 import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
@@ -17,7 +17,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "./ui/collapsible";
+} from "@/components/ui/collapsible";
 import { Article } from "@/lib/api";
 import {
   Dialog,
@@ -28,8 +28,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
+import { PrivatePublicSwitch } from "./private-public-switch";
 
 const TextEditorMenu = () => {
   const { toast } = useToast();
@@ -124,7 +125,7 @@ const TextEditorMenu = () => {
             <ChevronsUpDown className="text-muted-foreground" />
           </Button>
         </CollapsibleTrigger>
-        <Separator orientation="vertical" className="h-10" />
+        <Separator orientation="vertical" className="h-100" />
         <div className="flex flex-col w-full">
           <div className="flex items-center gap-2">
             <TextEditorMenuItem variant="bold" />
@@ -197,7 +198,9 @@ const TextEditorMenu = () => {
               </DialogContent>
             </Dialog>
           </div>
-          <CollapsibleContent></CollapsibleContent>
+          <CollapsibleContent className="pl-1 pt-1">
+            <PrivatePublicSwitch />
+          </CollapsibleContent>
         </div>
       </div>
     </Collapsible>

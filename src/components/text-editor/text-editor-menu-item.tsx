@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { getMenuItem } from "@/lib/text-editor";
 import { useTextEditor } from "./text-editor-provider";
 

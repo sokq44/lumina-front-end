@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { EditorContent } from "@tiptap/react";
 import { useGetArticle } from "@/hooks/articles";
-import Separator from "./separator";
+import { Separator } from "@/components/ui/separator";
 import { LoaderCircle } from "lucide-react";
 import { useTextEditor } from "./text-editor-provider";
 import { Article } from "@/lib/api";

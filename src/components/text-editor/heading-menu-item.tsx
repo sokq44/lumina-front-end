@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "@/components/ui/select";
 import { useTextEditor } from "./text-editor-provider";
 import { useEffect, useState } from "react";
 
