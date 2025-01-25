@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import ArticleCard from "@/components/article-card";
 
-const ArticlesPage = () => {
+const MyArticlesPage = () => {
   const navigate = useNavigate();
   const loggedIn = useLoggedIn();
   const articlesGetter = useGetArticles();
@@ -87,4 +87,4 @@ const ArticlesPage = () => {
   );
 };
 
-export default ArticlesPage;
+export default MyArticlesPage;

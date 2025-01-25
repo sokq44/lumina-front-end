@@ -138,3 +138,38 @@ export function useRemoveArticle(): {
 
   return { remove, isLoading, error };
 }
+
+export function useGetSuggestedArticles() {
+  const canFetch = useRef<boolean>(true);
+  const [articles, setArticles] = useState<Article[] | null>(null);
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const get = async () => {
+    setIsLoading(true);
+    setError(undefined);
+
+    try {
+      const response = await client.get("/articles/get-suggested");
+
+      if (response.status === 200) {
+        setArticles(response.data as Article[]);
+        setError(null);
+      }
+    } catch (err) {
+      const message = (err as AxiosError).response?.data as string;
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (canFetch) {
+      canFetch.current = false;
+      get();
+    }
+  }, []);
+
+  return { articles, isLoading, error };
+}

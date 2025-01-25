@@ -1,5 +1,4 @@
 import Separator from "@/components/separator";
-import ThemeSwitch from "@/components/theme-switch";
 import { Button } from "@/components/ui/button";
 import { CornerUpLeft, Frown } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -7,7 +6,6 @@ import { Link } from "react-router-dom";
 const NotFoundPage = () => {
   return (
     <div className="h-screen w-screen flex items-center justify-center gap-x-4">
-      <ThemeSwitch position="top-right" />
       <span className="text-6xl font-semibold">404</span>
       <Separator orientation="vertical" className="h-20 w-1" />
       <div className="flex flex-col items-center gap-2">

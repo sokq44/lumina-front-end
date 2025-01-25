@@ -11,13 +11,14 @@ import ProfilePage from "@/pages/profile-page";
 import WritingPage from "@/pages/writing-page";
 import SettingsPage from "@/pages/settings-page";
 import RegisterPage from "@/pages/register-page";
-import ArticlesPage from "@/pages/articles-page";
+import NotFoundPage from "./pages/not-found-page";
+import MyArticlesPage from "./pages/my-articles-page";
 import VerifyEmailPage from "@/pages/verify-email-page";
 import EmailVerifiedPage from "@/pages/email-verified-page";
 import ChangePasswordPage from "@/pages/change-password-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
 import "./index.css";
-import NotFoundPage from "./pages/not-found-page";
+import SuggestedArticlesPage from "./pages/suggested-articles-page";
 
 // TODO: Logo design
 // TODO: Mobile layouts for 404, article writing and reading pages.
@@ -51,7 +52,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "articles",
-        element: <ArticlesPage />,
+        element: <SuggestedArticlesPage />,
+      },
+      {
+        path: "my-articles",
+        element: <MyArticlesPage />,
       },
     ],
   },

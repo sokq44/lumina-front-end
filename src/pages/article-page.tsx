@@ -35,7 +35,7 @@ const ArticlePage = () => {
   return (
     <div className="w-screen h-screen flex justify-center">
       <ThemeSwitch position="top-right" />
-      <GoBackArrow />
+      <GoBackArrow position="top-left" />
       <Separator orientation="vertical" />
       <div className="w-[42rem] h-full flex flex-col p-4">
         <div className="flex items-center gap-x-2 mt-4">
