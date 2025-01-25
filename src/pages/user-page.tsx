@@ -71,7 +71,7 @@ const UserPage = () => {
         <div className="flex flex-col h-screen w-screen">
           <div className="flex items-center w-full bg-background h-14">
             <SidebarTrigger className="ml-2 w-10 h-10 transition-all duration-300" />
-            <div className="flex justify-end w-full">
+            <div className="flex justify-center w-full">
               <SearchBar
                 value={search}
                 onSearch={() => console.log(search)}

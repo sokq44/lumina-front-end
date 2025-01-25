@@ -130,7 +130,7 @@ const TextEditorMenu = () => {
   };
 
   return (
-    <Collapsible className="my-4 p-2 border border-gray-200 fixed w-[50rem] z-50 bg-muted rounded-md transition-all duration-300">
+    <Collapsible className="my-4 p-2 border border-gray-200 fixed w-[50rem] z-50 bg-muted rounded-md transform transition-all duration-300">
       <div className="flex">
         <CollapsibleTrigger asChild>
           <Button variant="ghost" className="w-9 h-auto p-2 mr-2">
@@ -221,7 +221,7 @@ const TextEditorMenu = () => {
                   <DialogDescription>
                     {textEditor.article?.public
                       ? "After you confirm this article is possible to view for every user."
-                      : "After you confirm, You will the only one able to see this article"}
+                      : "After you confirm, You will be the only one able to see this article"}
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="sm:justify-start">

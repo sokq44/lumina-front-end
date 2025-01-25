@@ -76,7 +76,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           type="text"
           maxLength={25}
           placeholder="Title"
-          className="text-4xl font-semibold bg-transparent w-full ProseMirror"
+          className="text-5xl font-bold bg-transparent w-full ProseMirror"
           onInput={changeTitle}
         />
         {textEditor.article?.user && (

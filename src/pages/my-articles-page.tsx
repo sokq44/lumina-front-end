@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ArticleCard from "@/components/article-card";
+import { Button } from "@/components/ui/button";
 
 const MyArticlesPage = () => {
   const navigate = useNavigate();
@@ -43,13 +44,12 @@ const MyArticlesPage = () => {
   return (
     <div className="flex items-center justify-center h-full w-full">
       <div className="flex flex-col items-center justify-center gap-y-8 h-full">
-        <span className="text-4xl font-semibold">My Articles</span>
         {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
-          <div className="w-full grid grid-cols-5 gap-2 items-center">
+          <div className="grid grid-cols-5 gap-6 items-center px-4">
             <Link to={"/user/writing"} state={{ article: undefined }}>
-              <Card className="w-60 bg-card-foreground text-card border-0 transition-all duration-300 hover:cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
+              <Card className="bg-card-foreground text-card border-0 transition-all duration-300 hover:cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
                 <CardHeader className="text-inherit">
-                  <CardTitle>Create</CardTitle>
+                  <CardTitle className="text-xl font-bold">Create</CardTitle>
                   <CardDescription className="flex items-center text-inherit">
                     <PenLine size={12} className="mr-1" />
                     Write a new article
@@ -68,17 +68,19 @@ const MyArticlesPage = () => {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center font-semibold text-muted-foreground text-lg">
-            <span>You haven't written anything yet.</span>
+          <div className="flex flex-col gap-y-2">
+            <span className="font-semibold text-muted-foreground text-lg">
+              You haven't written anything yet.
+            </span>
             <Link
               to={"/user/writing"}
               state={{ article: undefined }}
               className="w-auto"
             >
-              <div className="flex items-center gap-1 sliding-link w-auto">
+              <Button className="flex items-center gap-1 w-full">
                 <span>Let's change that</span>
                 <PenLine size={16} className="mt-1" />
-              </div>
+              </Button>
             </Link>
           </div>
         )}

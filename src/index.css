@@ -152,6 +152,28 @@
   .ProseMirror:focus {
     @apply outline-none;
   }
+
+  .collapsible-content-animated[data-state="open"] {
+    animation: slide-down 300ms ease-out;
+  }
+  
+  .collapsible-content-animated[data-state="closed"] {
+    animation: slide-up 300ms ease-out;
+  }
+  
+  @keyframes slide-down {
+    from {
+      opacity: 10%;
+      transform: translateY(-1rem)
+    }
+  }
+  
+  @keyframes slide-up {
+    to {
+      opacity: 10%;
+      transform: translateY(-1rem)
+    }
+  }
 }
 
 .sliding-link {

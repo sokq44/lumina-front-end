@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import ArticleCard from "@/components/article-card";
 import { useGetSuggestedArticles } from "@/hooks/articles";
 import { useToast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
@@ -26,32 +21,17 @@ const SuggestedArticlesPage = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-background flex items-center justify-center h-screen">
+      <div className="w-full h-full bg-background flex items-center justify-center">
         <LoaderCircle size={24} className="animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="h-min grid grid-cols-5 gap-6 m-auto px-4">
       {articles?.map((article) => (
         <Link to="/article" state={{ article }}>
-          <Card className="w-60 whitespace-nowrap transform transition-all duration-300 hover:w-96 hover:whitespace-pre hover:cursor-pointer hover:bg-muted">
-            <CardHeader>
-              <CardTitle className="overflow-hidden text-ellipsis leading-tight">
-                {article.title}
-              </CardTitle>
-              <CardDescription>
-                Written By{" "}
-                <Link
-                  className="sliding-link font-semibold"
-                  to={`/user/${article.user}`}
-                >
-                  @{article.user}
-                </Link>
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <ArticleCard article={article} />
         </Link>
       ))}
     </div>
