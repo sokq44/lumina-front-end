@@ -29,8 +29,8 @@ const SuggestedArticlesPage = () => {
 
   return (
     <div className="h-min grid grid-cols-5 gap-6 m-auto px-4">
-      {articles?.map((article) => (
-        <Link to="/article" state={{ article }}>
+      {articles?.map((article, index) => (
+        <Link key={`article ${index}`} to="/article" state={{ article }}>
           <ArticleCard article={article} />
         </Link>
       ))}

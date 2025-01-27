@@ -19,9 +19,10 @@ export type User = {
 
 export type Article = {
   id: string;
-  title: string;
-  content: string;
-  created_at: Date;
   user: string;
+  title: string;
+  banner: string;
+  content: string;
   public: boolean;
+  created_at: Date;
 };

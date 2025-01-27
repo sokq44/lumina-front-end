@@ -22,6 +22,7 @@ export function useSaveArticle(articleId?: string): {
         title: article.title,
         content: article.content,
         public: article.public,
+        banner: article.banner,
       });
       if (response.status === 200) {
         setError(null);

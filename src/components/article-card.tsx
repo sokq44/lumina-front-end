@@ -1,7 +1,6 @@
 import { FC, HTMLAttributes } from "react";
 import { Article } from "@/lib/api";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Link } from "react-router-dom";
 
 interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
   article: Article;
@@ -16,12 +15,7 @@ const ArticleCard: FC<ArticleCardProps> = ({ article }) => {
         </CardTitle>
         <CardDescription>
           Written by{" "}
-          <Link
-            to={`/user/${article.user}`}
-            className="sliding-link font-semibold"
-          >
-            @{article.user}
-          </Link>
+          <span className="font-semibold">@{article.user}</span>
         </CardDescription>
       </CardHeader>
     </Card>

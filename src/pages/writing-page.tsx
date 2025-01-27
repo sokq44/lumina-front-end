@@ -31,7 +31,7 @@ const WritingPage = () => {
 
   const finishWriting = () => {
     localStorage.removeItem("curr_article");
-    navigate("/user/articles");
+    navigate("/user/my-articles");
   };
 
   if (loggedIn.isLoading) {

@@ -8,6 +8,9 @@ import { LoaderCircle } from "lucide-react";
 import { useTextEditor } from "./text-editor-provider";
 import { Article } from "@/lib/api";
 import { Link } from "react-router-dom";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { useUploadAsset } from "@/hooks/assets";
 
 interface TextEditorContentProps {
   className?: string;
@@ -16,9 +19,11 @@ interface TextEditorContentProps {
 const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
   const textEditor = useTextEditor();
   const articleGetter = useGetArticle(textEditor.article?.id);
+  const assetUploader = useUploadAsset();
   const { toast } = useToast();
 
   const titleRef = useRef<HTMLInputElement>(null);
+  const bannerRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (articleGetter.error) {
@@ -31,12 +36,35 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
   }, [articleGetter.error, toast]);
 
   useEffect(() => {
+    if (assetUploader.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Uploading An Asset",
+        description: assetUploader.error,
+      });
+    }
+  }, [assetUploader.error, toast]);
+
+  useEffect(() => {
     if (articleGetter.article && titleRef.current) {
       titleRef.current.value = articleGetter.article.title;
       textEditor.editor?.commands.setContent(articleGetter.article.content);
       textEditor.setArticle(articleGetter.article);
     }
   }, [articleGetter.article]);
+
+  useEffect(() => {
+    const url = assetUploader.url;
+    const prevUrl = textEditor.article?.banner;
+
+    if (url && url !== prevUrl) {
+      const newArticle = {
+        ...textEditor.article,
+        banner: assetUploader.url,
+      } as Article;
+      textEditor.setArticle(newArticle);
+    }
+  }, [assetUploader.url]);
 
   const changeTitle = () => {
     if (titleRef.current) {
@@ -50,6 +78,13 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
   const focusEditor = () => {
     textEditor.editor?.commands.focus();
+  };
+
+  const onBannerChange = async () => {
+    const banner = bannerRef.current?.files?.[0];
+    if (banner) {
+      await assetUploader.upload(banner);
+    }
   };
 
   if (articleGetter.isLoading) {
@@ -71,6 +106,29 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
   return (
     <div className={cn("flex flex-col mt-4", className)}>
       <div className="flex flex-col">
+        <div className="relative mb-8 group">
+          <img
+            src={
+              textEditor.article?.banner
+                ? textEditor.article?.banner
+                : "/default-banner.png"
+            }
+            className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 group-hover:brightness-[0.7] group-hover:blur-[1px]"
+          />
+          <Input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={onBannerChange}
+            ref={bannerRef}
+          />
+          <Button
+            onClick={() => bannerRef.current?.click()}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100"
+          >
+            Change
+          </Button>
+        </div>
         <input
           ref={titleRef}
           type="text"

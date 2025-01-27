@@ -44,8 +44,12 @@ const ArticlePage = () => {
       <ThemeSwitch position="top-right" />
       <GoBackArrow position="top-left" />
       <div className="w-[50rem] h-full flex flex-col p-4">
+        <img
+          src={articleGetter.article?.banner}
+          className="w-full h-auto aspect-7/4 my-8 rounded-lg brightness-90 shadow-md"
+        />
         <div className="flex items-center gap-x-2 my-6">
-          <Avatar className="w-16 h-auto">
+          <Avatar className="w-16 h-auto shadow-md">
             <AvatarImage src="https://cdn2.vectorstock.com/i/1000x1000/44/01/default-avatar-photo-placeholder-icon-grey-vector-38594401.jpg" />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
