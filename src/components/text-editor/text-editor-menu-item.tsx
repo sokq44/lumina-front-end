@@ -10,6 +10,7 @@ interface TextEditorMenuItemProps {
     | "task-list"
     | "underline"
     | "code-block"
+    | "hard-break"
     | "block-quote"
     | "bullet-list"
     | "ordered-list"

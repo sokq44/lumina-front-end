@@ -38,7 +38,7 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
       </CardHeader>
       <CardContent className="px-4">
         <img
-          src={article?.banner ? article?.banner : "/dummy-banner.webp"}
+          src={article?.banner ? article?.banner : "/default-banner.png"}
           className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-sm group-hover:brightness-[0.75] transition-all duration-300"
         />
       </CardContent>

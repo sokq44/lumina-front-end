@@ -151,6 +151,10 @@
 
   hr {
     @apply my-6;
+
+    &.ProseMirror-selectednode {
+      @apply border-t-purple-500;
+    }
   }
 
   .ProseMirror:focus {

@@ -10,6 +10,7 @@ import {
   Minus,
   TextQuote,
   Underline,
+  WrapText,
 } from "lucide-react";
 
 abstract class MenuItem {
@@ -116,6 +117,16 @@ export class HorizontalRule extends MenuItem {
   }
 }
 
+export class HardBreak extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, WrapText, "Hard Break");
+  }
+
+  toggle() {
+    this.editor.chain().setHardBreak().run();
+  }
+}
+
 export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
   switch (variant) {
     case "bold":
@@ -136,6 +147,8 @@ export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
       return new TaskList(editor);
     case "horizontal-rule":
       return new HorizontalRule(editor);
+    case "hard-break":
+      return new HardBreak(editor);
     default:
       return null;
   }

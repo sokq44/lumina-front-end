@@ -5,7 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import ThemeSwitch from "@/components/theme-switch";
 import GoBackArrow from "@/components/go-back-arrow";
-import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const ArticlePage = () => {

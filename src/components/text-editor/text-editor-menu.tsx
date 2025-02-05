@@ -213,6 +213,7 @@ const TextEditorMenu = () => {
           <CollapsibleContent className="pl-1 pt-1">
             <div className="flex mb-3">
               <TextEditorMenuItem variant="horizontal-rule" />
+              <TextEditorMenuItem variant="hard-break" />
             </div>
             <Dialog>
               <DialogTrigger className="w-full">

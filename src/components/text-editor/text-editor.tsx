@@ -11,6 +11,7 @@ import ListItem from "@tiptap/extension-list-item";
 import Underline from "@tiptap/extension-underline";
 import Paragraph from "@tiptap/extension-paragraph";
 import CodeBlock from "@tiptap/extension-code-block";
+import HardBreak from "@tiptap/extension-hard-break";
 import BlockQuote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
@@ -39,6 +40,7 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
       Paragraph,
       Underline,
       CodeBlock,
+      HardBreak,
       BlockQuote,
       BulletList,
       OrderedList,

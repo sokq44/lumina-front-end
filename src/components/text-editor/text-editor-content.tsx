@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { EditorContent } from "@tiptap/react";
 import { useGetArticle } from "@/hooks/articles";
-import { Separator } from "@/components/ui/separator";
 import { LoaderCircle } from "lucide-react";
 import { useTextEditor } from "./text-editor-provider";
 import { Article } from "@/lib/api";
@@ -105,7 +104,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
   return (
     <div className={cn("flex flex-col mt-4", className)}>
-      <div className="flex flex-col">
+      <div className="flex flex-col mb-10">
         <div className="relative mb-8 group">
           <img
             src={
@@ -150,7 +149,6 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           </span>
         )}
       </div>
-      <Separator orientation="horizontal" className="mt-2 mb-4" />
       <EditorContent
         onClick={focusEditor}
         editor={textEditor.editor ?? null}
