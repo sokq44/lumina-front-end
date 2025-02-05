@@ -14,6 +14,7 @@ import CodeBlock from "@tiptap/extension-code-block";
 import BlockQuote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
 
 import TextEditorMenu from "./text-editor-menu";
 import TextEditorContent from "./text-editor-content";
@@ -41,6 +42,7 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
       BlockQuote,
       BulletList,
       OrderedList,
+      HorizontalRule,
       Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
     ],
     content: `<p>Contents of your article...<p>`,

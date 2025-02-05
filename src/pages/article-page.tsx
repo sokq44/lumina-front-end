@@ -45,7 +45,11 @@ const ArticlePage = () => {
       <GoBackArrow position="top-left" />
       <div className="w-[50rem] h-full flex flex-col p-4">
         <img
-          src={articleGetter.article?.banner}
+          src={
+            articleGetter.article?.banner
+              ? articleGetter.article?.banner
+              : "/default-banner.png"
+          }
           className="w-full h-auto aspect-7/4 my-8 rounded-lg brightness-90 shadow-md"
         />
         <div className="flex items-center gap-x-2 my-6">
@@ -69,7 +73,6 @@ const ArticlePage = () => {
             </span>
           </div>
         </div>
-        <Separator orientation="horizontal" />
         <div
           className="mt-4"
           dangerouslySetInnerHTML={{

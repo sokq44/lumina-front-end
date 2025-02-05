@@ -6,13 +6,14 @@ import { useTextEditor } from "./text-editor-provider";
 interface TextEditorMenuItemProps {
   variant:
     | "bold"
-    | "underline"
     | "italic"
+    | "task-list"
+    | "underline"
     | "code-block"
     | "block-quote"
     | "bullet-list"
     | "ordered-list"
-    | "task-list";
+    | "horizontal-rule";
 }
 
 const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {
@@ -30,7 +31,7 @@ const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {
       onClick={() => {
         item.toggle();
       }}
-      className="p-2 w-9 h-9"
+      className="p-2 w-9 h-9 hover:bg-secondary hover:text-primary dark:hover:bg-black"
     >
       <item.icon />
     </Button>

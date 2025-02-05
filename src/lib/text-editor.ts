@@ -7,6 +7,7 @@ import {
   ListChecks,
   ListOrdered,
   LucideIcon,
+  Minus,
   TextQuote,
   Underline,
 } from "lucide-react";
@@ -105,6 +106,16 @@ export class TaskList extends MenuItem {
   }
 }
 
+export class HorizontalRule extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, Minus, "Horizontal Rule");
+  }
+
+  public override toggle() {
+    this.editor.chain().focus().setHorizontalRule().run();
+  }
+}
+
 export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
   switch (variant) {
     case "bold":
@@ -123,6 +134,8 @@ export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
       return new OrderedList(editor);
     case "task-list":
       return new TaskList(editor);
+    case "horizontal-rule":
+      return new HorizontalRule(editor);
     default:
       return null;
   }

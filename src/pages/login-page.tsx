@@ -29,7 +29,7 @@ const LoginPage = () => {
   });
 
   useEffect(() => {
-    if (loggedIn.isLoggedIn) navigate("/user");
+    if (loggedIn.isLoggedIn) navigate("/user/articles");
   }, [loggedIn.isLoggedIn, navigate]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const LoginPage = () => {
         description: login.error,
       });
     } else if (login.error === null) {
-      navigate("/user");
+      navigate("/user/articles");
     }
   }, [login.error, navigate, toast]);
 

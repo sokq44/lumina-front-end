@@ -139,7 +139,7 @@ const TextEditorMenu = () => {
         </CollapsibleTrigger>
         <Separator orientation="vertical" className="h-100" />
         <div className="flex flex-col w-full">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ml-1">
             <TextEditorMenuItem variant="bold" />
             <TextEditorMenuItem variant="underline" />
             <TextEditorMenuItem variant="italic" />
@@ -211,6 +211,9 @@ const TextEditorMenu = () => {
             </Dialog>
           </div>
           <CollapsibleContent className="pl-1 pt-1">
+            <div className="flex mb-3">
+              <TextEditorMenuItem variant="horizontal-rule" />
+            </div>
             <Dialog>
               <DialogTrigger className="w-full">
                 <PrivatePublicSwitch isLoading={articleSaver.isLoading} />
