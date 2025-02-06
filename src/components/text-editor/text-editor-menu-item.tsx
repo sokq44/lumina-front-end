@@ -29,7 +29,9 @@ interface TextEditorMenuItemProps {
     | "toggle-header-row"
     | "toggle-header-cell"
     | "go-to-next-cell"
-    | "go-to-previous-cell";
+    | "go-to-previous-cell"
+    | "set-link"
+    | "unset-link";
 }
 
 const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {

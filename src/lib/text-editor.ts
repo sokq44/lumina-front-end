@@ -11,6 +11,7 @@ import {
   Grid2X2Plus,
   Grid2x2X,
   Italic,
+  Link,
   List,
   ListChecks,
   ListOrdered,
@@ -25,6 +26,7 @@ import {
   TableRowsSplit,
   TextQuote,
   Underline,
+  Unlink,
   WrapText,
 } from "lucide-react";
 
@@ -296,6 +298,46 @@ export class GoToPreviousCell extends MenuItem {
   }
 }
 
+export class SetLink extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, Link, "Set Link");
+  }
+
+  public override toggle() {
+    const previousUrl = this.editor.getAttributes("link").href;
+    const url = window.prompt("URL for the link:", previousUrl);
+
+    if (url === null) return;
+
+    if (url === "") {
+      this.editor.chain().focus().extendMarkRange("link").unsetLink().run();
+    }
+
+    try {
+      this.editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url, target: "_blank" })
+        .run();
+    } catch (e) {
+      console.log(e);
+    }
+
+    this.editor.chain().focus().setLink({ href: "", target: "_blank" }).run();
+  }
+}
+
+export class UnsetLink extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, Unlink, "Unset Link");
+  }
+
+  public override toggle() {
+    this.editor.chain().focus().unsetLink().run();
+  }
+}
+
 export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
   switch (variant) {
     case "bold":
@@ -348,6 +390,10 @@ export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
       return new GoToNextCell(editor);
     case "go-to-previous-cell":
       return new GoToPreviousCell(editor);
+    case "set-link":
+      return new SetLink(editor);
+    case "unset-link":
+      return new UnsetLink(editor);
     default:
       return null;
   }

@@ -153,7 +153,6 @@ const TextEditorMenu = () => {
             <TextEditorMenuItem variant="horizontal-rule" />
             <TextEditorMenuItem variant="hard-break" />
             <HeadingMenuItem />
-            {/* <Separator orientation="vertical" className="h-10 w-[2px]" /> */}
             <Button
               onClick={saveChanges}
               disabled={articleSaver.isLoading}
@@ -214,82 +213,88 @@ const TextEditorMenu = () => {
               </DialogContent>
             </Dialog>
           </div>
-          <CollapsibleContent className="flex gap-2 pl-1 pt-1 pr-2">
-            <TextEditorMenuItem variant="insert-table" />
-            <TextEditorMenuItem variant="delete-table" />
-            <TextEditorMenuItem variant="insert-column-before" />
-            <TextEditorMenuItem variant="insert-column-after" />
-            <TextEditorMenuItem variant="delete-column" />
-            <TextEditorMenuItem variant="insert-row-before" />
-            <TextEditorMenuItem variant="insert-row-after" />
-            <TextEditorMenuItem variant="delete-row" />
-            <TextEditorMenuItem variant="merge-table-cells" />
-            <TextEditorMenuItem variant="split-table-cell" />
-            <TextEditorMenuItem variant="toggle-header-column" />
-            <TextEditorMenuItem variant="toggle-header-row" />
-            <TextEditorMenuItem variant="toggle-header-cell" />
-            <TextEditorMenuItem variant="go-to-next-cell" />
-            <Dialog>
-              <DialogTrigger className="ml-auto">
-                <Button
-                  disabled={
-                    articleSaver.isLoading ||
-                    articleRemover.isLoading ||
-                    !textEditor.article?.id
-                  }
-                  className="p-2 w-9 h-9 transition-all duration-300"
-                >
-                  {textEditor.article?.public ? (
-                    <BookCheck />
-                  ) : (
-                    <BookLock size={20} />
-                  )}
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="font-funnel">
-                <DialogHeader>
-                  <DialogTitle>Are you sure?</DialogTitle>
-                  <DialogDescription>
-                    {textEditor.article?.public
-                      ? "After you confirm and save, You will be the only one able to see this article."
-                      : "After you confirm and save, this article will be possible to view for every user."}
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="">
-                  <DialogClose asChild>
-                    <Button type="button" variant="outline">
-                      Cancel
-                    </Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button onClick={changeVisibility}>Confirm</Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  variant="secondary"
-                  disabled={
-                    articleSaver.isLoading ||
-                    articleRemover.isLoading ||
-                    !textEditor.article?.id
-                  }
-                  className="p-2 w-9 h-9 transition-all duration-300"
-                >
-                  <Info />
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>How to Write?</DialogTitle>
-                  <DialogDescription>
-                    Placeholder for a tutorial on how to write.
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
+          <CollapsibleContent className="flex flex-col pl-1 pt-1 pr-2">
+            <div className="flex gap-2">
+              <TextEditorMenuItem variant="insert-table" />
+              <TextEditorMenuItem variant="delete-table" />
+              <TextEditorMenuItem variant="insert-column-before" />
+              <TextEditorMenuItem variant="insert-column-after" />
+              <TextEditorMenuItem variant="delete-column" />
+              <TextEditorMenuItem variant="insert-row-before" />
+              <TextEditorMenuItem variant="insert-row-after" />
+              <TextEditorMenuItem variant="delete-row" />
+              <TextEditorMenuItem variant="merge-table-cells" />
+              <TextEditorMenuItem variant="split-table-cell" />
+              <TextEditorMenuItem variant="toggle-header-column" />
+              <TextEditorMenuItem variant="toggle-header-row" />
+              <TextEditorMenuItem variant="toggle-header-cell" />
+              <TextEditorMenuItem variant="go-to-next-cell" />
+              <Dialog>
+                <DialogTrigger className="ml-auto">
+                  <Button
+                    disabled={
+                      articleSaver.isLoading ||
+                      articleRemover.isLoading ||
+                      !textEditor.article?.id
+                    }
+                    className="p-2 w-9 h-9 transition-all duration-300"
+                  >
+                    {textEditor.article?.public ? (
+                      <BookCheck />
+                    ) : (
+                      <BookLock size={20} />
+                    )}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="font-funnel">
+                  <DialogHeader>
+                    <DialogTitle>Are you sure?</DialogTitle>
+                    <DialogDescription>
+                      {textEditor.article?.public
+                        ? "After you confirm and save, You will be the only one able to see this article."
+                        : "After you confirm and save, this article will be possible to view for every user."}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="">
+                    <DialogClose asChild>
+                      <Button type="button" variant="outline">
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                      <Button onClick={changeVisibility}>Confirm</Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    disabled={
+                      articleSaver.isLoading ||
+                      articleRemover.isLoading ||
+                      !textEditor.article?.id
+                    }
+                    className="p-2 w-9 h-9 transition-all duration-300"
+                  >
+                    <Info />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>How to Write?</DialogTitle>
+                    <DialogDescription>
+                      Placeholder for a tutorial on how to write.
+                    </DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+            </div>
+            <div className="flex gap-2">
+              <TextEditorMenuItem variant="set-link" />
+              <TextEditorMenuItem variant="unset-link" />
+            </div>
           </CollapsibleContent>
         </div>
       </div>

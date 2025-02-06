@@ -175,11 +175,8 @@
     
   }
 
-  .tiptap {
-    &.resize-cursor {
-      cursor: ew-resize;
-      cursor: col-resize;
-    }
+  .text-editor-link {
+    @apply text-blue-500 underline cursor-pointer;
   }
   
 

@@ -20,12 +20,15 @@ import BulletList from "@tiptap/extension-bullet-list";
 import TableHeader from "@tiptap/extension-table-header";
 import OrderedList from "@tiptap/extension-ordered-list";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import Link from "@tiptap/extension-link";
 
 import TextEditorMenu from "./text-editor-menu";
 import TextEditorContent from "./text-editor-content";
 import { FC } from "react";
 import { TextEditorProvider } from "./text-editor-provider";
 import { Article } from "@/lib/api";
+
+// TODO: define prohibited protocols and urls for the Link extension
 
 interface TextEditorProps {
   article: Article;
@@ -36,6 +39,11 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
     extensions: [
       Text,
       Bold,
+      Link.configure({
+        HTMLAttributes: {
+          class: "text-editor-link",
+        },
+      }),
       Italic,
       TaskList,
       TaskItem,

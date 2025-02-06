@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { LoaderCircle, PenLine } from "lucide-react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import ArticleCard from "@/components/article-card";
-import { Button } from "@/components/ui/button";
 
 const MyArticlesPage = () => {
   const navigate = useNavigate();
@@ -74,10 +73,10 @@ const MyArticlesPage = () => {
               state={{ article: undefined }}
               className="w-auto"
             >
-              <Button className="flex items-center gap-1 w-full">
+              <div className="flex items-center gap-1 w-full">
                 <span>Let's change that</span>
                 <PenLine size={16} className="mt-1" />
-              </Button>
+              </div>
             </Link>
           </div>
         )}
