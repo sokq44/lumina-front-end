@@ -305,26 +305,22 @@ export class SetLink extends MenuItem {
 
   public override toggle() {
     const previousUrl = this.editor.getAttributes("link").href;
+
     const url = window.prompt("URL for the link:", previousUrl);
 
     if (url === null) return;
 
     if (url === "") {
       this.editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
     }
 
-    try {
-      this.editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url, target: "_blank" })
-        .run();
-    } catch (e) {
-      console.log(e);
-    }
-
-    this.editor.chain().focus().setLink({ href: "", target: "_blank" }).run();
+    this.editor
+      .chain()
+      .focus()
+      .extendMarkRange("link")
+      .setLink({ href: url, target: "_blank" })
+      .run();
   }
 }
 

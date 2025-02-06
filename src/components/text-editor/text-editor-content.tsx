@@ -4,7 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { EditorContent } from "@tiptap/react";
 import { useGetArticle } from "@/hooks/articles";
 import { LoaderCircle } from "lucide-react";
-import { useTextEditor } from "./text-editor-provider";
+import { useTextEditor } from "@/hooks/text-editor";
 import { Article } from "@/lib/api";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";

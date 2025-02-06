@@ -1,6 +1,9 @@
-import TextEditorMenuItem from "./text-editor-menu-item";
-import { Separator } from "@/components/ui/separator";
-import HeadingMenuItem from "./heading-menu-item";
+import { useEffect } from "react";
+import { Article } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { useTextEditor } from "@/hooks/text-editor";
+import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
 import {
   BookCheck,
   BookLock,
@@ -11,17 +14,11 @@ import {
   Save,
   Trash2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useTextEditor } from "./text-editor-provider";
-import { useToast } from "@/hooks/use-toast";
-import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
-import { useEffect } from "react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Article } from "@/lib/api";
 import {
   Dialog,
   DialogClose,
@@ -32,7 +29,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import HeadingMenuItem from "@/components/text-editor/heading-menu-item";
+import TextEditorMenuItem from "@/components/text-editor/text-editor-menu-item";
+import { useInformBadge } from "@/hooks/inform-badge";
 
 const TextEditorMenu = () => {
   const { toast } = useToast();
@@ -40,6 +41,7 @@ const TextEditorMenu = () => {
   const textEditor = useTextEditor();
   const articleSaver = useSaveArticle(textEditor.article?.id);
   const articleRemover = useRemoveArticle();
+  const { showInformBadge, clearInformBadge } = useInformBadge();
 
   useEffect(() => {
     if (articleSaver.error) {
@@ -132,7 +134,7 @@ const TextEditorMenu = () => {
   };
 
   return (
-    <Collapsible className="my-4 p-2 border border-gray-200 fixed w-[50rem] z-50 bg-muted rounded-md transform transition-all duration-300">
+    <Collapsible className="my-4 p-2 border border-gray-200 fixed w-[50rem] z-10 bg-muted rounded-md transform transition-all duration-300">
       <div className="flex">
         <CollapsibleTrigger asChild>
           <Button variant="ghost" className="w-9 h-auto p-2 mr-2">
@@ -155,6 +157,8 @@ const TextEditorMenu = () => {
             <HeadingMenuItem />
             <Button
               onClick={saveChanges}
+              onMouseOver={() => showInformBadge("Save Article")}
+              onMouseLeave={() => clearInformBadge()}
               disabled={articleSaver.isLoading}
               className="p-2 w-9 h-9 transition-all duration-300"
             >
@@ -168,6 +172,8 @@ const TextEditorMenu = () => {
               <DialogTrigger asChild>
                 <Button
                   variant="destructive"
+                  onMouseOver={() => showInformBadge("Delete Article")}
+                  onMouseLeave={() => clearInformBadge()}
                   disabled={
                     articleSaver.isLoading ||
                     articleRemover.isLoading ||
@@ -230,14 +236,22 @@ const TextEditorMenu = () => {
               <TextEditorMenuItem variant="toggle-header-cell" />
               <TextEditorMenuItem variant="go-to-next-cell" />
               <Dialog>
-                <DialogTrigger className="ml-auto">
+                <DialogTrigger asChild>
                   <Button
+                    onMouseOver={() =>
+                      showInformBadge(
+                        `Change To ${
+                          textEditor.article?.public ? "Private" : "Public"
+                        }`
+                      )
+                    }
+                    onMouseLeave={() => clearInformBadge()}
                     disabled={
                       articleSaver.isLoading ||
                       articleRemover.isLoading ||
                       !textEditor.article?.id
                     }
-                    className="p-2 w-9 h-9 transition-all duration-300"
+                    className="ml-auto p-2 w-9 h-9 transition-all duration-300"
                   >
                     {textEditor.article?.public ? (
                       <BookCheck />
@@ -271,6 +285,8 @@ const TextEditorMenu = () => {
                 <DialogTrigger asChild>
                   <Button
                     variant="secondary"
+                    onMouseOver={() => showInformBadge("Help")}
+                    onMouseLeave={() => clearInformBadge()}
                     disabled={
                       articleSaver.isLoading ||
                       articleRemover.isLoading ||

@@ -1,18 +1,7 @@
-import { createContext, FC, useContext, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Editor } from "@tiptap/react";
 import { Article } from "@/lib/api";
-
-const TextEditorContext = createContext<{
-  editor: Editor | undefined;
-  article: Article | undefined;
-  setArticle: (article: Article | undefined) => void;
-  finishArticle: () => void;
-}>({
-  editor: undefined,
-  article: undefined,
-  setArticle: () => {},
-  finishArticle: () => {},
-});
+import { TextEditorContext } from "@/hooks/text-editor";
 
 interface TextEditorProviderProps {
   editor: Editor | undefined;
@@ -51,8 +40,4 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
   );
 };
 
-const useTextEditor = () => {
-  return useContext(TextEditorContext);
-};
-
-export { TextEditorProvider, useTextEditor };
+export default TextEditorProvider;

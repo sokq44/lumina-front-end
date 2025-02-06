@@ -1,7 +1,10 @@
+import { FC } from "react";
 import { useEditor } from "@tiptap/react";
+import { Article } from "@/lib/api";
 
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
+import Link from "@tiptap/extension-link";
 import Table from "@tiptap/extension-table";
 import Italic from "@tiptap/extension-italic";
 import Heading from "@tiptap/extension-heading";
@@ -20,13 +23,10 @@ import BulletList from "@tiptap/extension-bullet-list";
 import TableHeader from "@tiptap/extension-table-header";
 import OrderedList from "@tiptap/extension-ordered-list";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import Link from "@tiptap/extension-link";
 
-import TextEditorMenu from "./text-editor-menu";
-import TextEditorContent from "./text-editor-content";
-import { FC } from "react";
-import { TextEditorProvider } from "./text-editor-provider";
-import { Article } from "@/lib/api";
+import TextEditorMenu from "@/components/text-editor/text-editor-menu";
+import TextEditorContent from "@/components/text-editor/text-editor-content";
+import TextEditorProvider from "@/components/text-editor/text-editor-provider";
 
 // TODO: define prohibited protocols and urls for the Link extension
 
@@ -39,11 +39,6 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
     extensions: [
       Text,
       Bold,
-      Link.configure({
-        HTMLAttributes: {
-          class: "text-editor-link",
-        },
-      }),
       Italic,
       TaskList,
       TaskItem,
@@ -60,6 +55,12 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
       TableHeader,
       OrderedList,
       HorizontalRule,
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: "text-editor-link",
+        },
+      }),
       Table.configure({
         resizable: true,
       }),

@@ -1,5 +1,5 @@
 import { BookCheck, BookLock, LoaderCircle } from "lucide-react";
-import { useTextEditor } from "./text-editor-provider";
+import { useTextEditor } from "@/hooks/text-editor";
 import { FC } from "react";
 
 interface PrivatePublicSwitchProps {

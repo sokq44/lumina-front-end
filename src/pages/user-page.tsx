@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { userMenuItems } from "@/lib/menu-items";
 import { useMediaQuery } from "usehooks-ts";
 import { useToast } from "@/hooks/use-toast";
 import { useLoggedIn, useLogout } from "@/hooks/user";
 import { useTheme } from "@/components/theme-provider";
 import Separator from "@/components/separator";
-import SearchBar from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
 import ThemeSwitch from "@/components/theme-switch";
 import UserSidebar from "@/components/user-sidebar";
@@ -30,8 +29,6 @@ const UserPage = () => {
   const matches = useMediaQuery("(min-width:1024px)");
   const { toast } = useToast();
   const { theme, setTheme } = useTheme();
-
-  const [search, setSearch] = useState<string>("");
 
   const updatedMenuItems = userMenuItems.concat([
     {
@@ -69,15 +66,8 @@ const UserPage = () => {
       <SidebarProvider>
         <UserSidebar items={updatedMenuItems} />
         <div className="flex flex-col h-screen w-screen">
-          <div className="flex items-center w-full bg-background h-14">
+          <div className="flex items-center w-full bg-background h-14 justify-between">
             <SidebarTrigger className="ml-2 w-10 h-10 transition-all duration-300" />
-            <div className="flex justify-center w-full">
-              <SearchBar
-                value={search}
-                onSearch={() => console.log(search)}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
             <ThemeSwitch className="relative" />
           </div>
           <div className="flex w-full bg-background h-full">
@@ -112,13 +102,6 @@ const UserPage = () => {
       </DrawerContent>
       <div className="flex flex-col items-center p-2 gap-y-2 h-screen w-screen">
         <div className="flex items-center justify-between w-full mb-2 gap-x-2">
-          <div className="flex justify-center w-full">
-            <SearchBar
-              onSearch={() => console.log(search)}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
           <DrawerTrigger className="w-12 h-12 flex">
             <PanelBottom
               className="self-center"

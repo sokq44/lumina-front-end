@@ -179,10 +179,37 @@
     @apply text-blue-500 underline cursor-pointer;
   }
   
-
   .ProseMirror:focus {
     @apply outline-none;
-  }  
+  }
+  
+  .fade-in {
+    animation: fade-in 0.5s forwards;
+  }
+
+  .fade-out {
+    animation: fade-out 0.5s forwards;
+  }
+
+  @keyframes fade-in {
+    from {
+      @apply opacity-0;
+    }
+
+    to {
+      @apply opacity-100;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      @apply opacity-100;
+    }
+    
+    to {
+      @apply opacity-0;
+    }
+  }
 }
 
 .sliding-link {
