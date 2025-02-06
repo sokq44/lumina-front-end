@@ -44,7 +44,7 @@ const HeadingMenuItem = () => {
       onValueChange={(value) => handleSelection(parseInt(value) as Level)}
       value={selectedHeading.toString()}
     >
-      <SelectTrigger className="border border-muted ring-none outline-none transition-all duration-300">
+      <SelectTrigger className="h-auto border border-muted ring-none outline-none transition-all duration-300">
         <SelectValue placeholder="Heading" />
       </SelectTrigger>
       <SelectContent className="font-funnel">

@@ -14,7 +14,22 @@ interface TextEditorMenuItemProps {
     | "block-quote"
     | "bullet-list"
     | "ordered-list"
-    | "horizontal-rule";
+    | "insert-table"
+    | "horizontal-rule"
+    | "merge-table-cells"
+    | "delete-table"
+    | "insert-column-before"
+    | "insert-column-after"
+    | "delete-column"
+    | "insert-row-before"
+    | "insert-row-after"
+    | "delete-row"
+    | "split-table-cell"
+    | "toggle-header-column"
+    | "toggle-header-row"
+    | "toggle-header-cell"
+    | "go-to-next-cell"
+    | "go-to-previous-cell";
 }
 
 const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {

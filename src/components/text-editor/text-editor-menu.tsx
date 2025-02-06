@@ -2,8 +2,11 @@ import TextEditorMenuItem from "./text-editor-menu-item";
 import { Separator } from "@/components/ui/separator";
 import HeadingMenuItem from "./heading-menu-item";
 import {
+  BookCheck,
+  BookLock,
   Check,
   ChevronsUpDown,
+  Info,
   LoaderCircle,
   Save,
   Trash2,
@@ -30,7 +33,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
-import { PrivatePublicSwitch } from "./private-public-switch";
 
 const TextEditorMenu = () => {
   const { toast } = useToast();
@@ -139,7 +141,7 @@ const TextEditorMenu = () => {
         </CollapsibleTrigger>
         <Separator orientation="vertical" className="h-100" />
         <div className="flex flex-col w-full">
-          <div className="flex items-center gap-2 ml-1">
+          <div className="flex items-center gap-2 ml-1 pr-2">
             <TextEditorMenuItem variant="bold" />
             <TextEditorMenuItem variant="underline" />
             <TextEditorMenuItem variant="italic" />
@@ -148,8 +150,10 @@ const TextEditorMenu = () => {
             <TextEditorMenuItem variant="task-list" />
             <TextEditorMenuItem variant="code-block" />
             <TextEditorMenuItem variant="block-quote" />
+            <TextEditorMenuItem variant="horizontal-rule" />
+            <TextEditorMenuItem variant="hard-break" />
             <HeadingMenuItem />
-            <Separator orientation="vertical" className="h-10 w-[2px]" />
+            {/* <Separator orientation="vertical" className="h-10 w-[2px]" /> */}
             <Button
               onClick={saveChanges}
               disabled={articleSaver.isLoading}
@@ -210,34 +214,80 @@ const TextEditorMenu = () => {
               </DialogContent>
             </Dialog>
           </div>
-          <CollapsibleContent className="pl-1 pt-1">
-            <div className="flex mb-3">
-              <TextEditorMenuItem variant="horizontal-rule" />
-              <TextEditorMenuItem variant="hard-break" />
-            </div>
+          <CollapsibleContent className="flex gap-2 pl-1 pt-1 pr-2">
+            <TextEditorMenuItem variant="insert-table" />
+            <TextEditorMenuItem variant="delete-table" />
+            <TextEditorMenuItem variant="insert-column-before" />
+            <TextEditorMenuItem variant="insert-column-after" />
+            <TextEditorMenuItem variant="delete-column" />
+            <TextEditorMenuItem variant="insert-row-before" />
+            <TextEditorMenuItem variant="insert-row-after" />
+            <TextEditorMenuItem variant="delete-row" />
+            <TextEditorMenuItem variant="merge-table-cells" />
+            <TextEditorMenuItem variant="split-table-cell" />
+            <TextEditorMenuItem variant="toggle-header-column" />
+            <TextEditorMenuItem variant="toggle-header-row" />
+            <TextEditorMenuItem variant="toggle-header-cell" />
+            <TextEditorMenuItem variant="go-to-next-cell" />
             <Dialog>
-              <DialogTrigger className="w-full">
-                <PrivatePublicSwitch isLoading={articleSaver.isLoading} />
+              <DialogTrigger className="ml-auto">
+                <Button
+                  disabled={
+                    articleSaver.isLoading ||
+                    articleRemover.isLoading ||
+                    !textEditor.article?.id
+                  }
+                  className="p-2 w-9 h-9 transition-all duration-300"
+                >
+                  {textEditor.article?.public ? (
+                    <BookCheck />
+                  ) : (
+                    <BookLock size={20} />
+                  )}
+                </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="font-funnel">
                 <DialogHeader>
                   <DialogTitle>Are you sure?</DialogTitle>
                   <DialogDescription>
                     {textEditor.article?.public
-                      ? "After you confirm this article is possible to view for every user."
-                      : "After you confirm, You will be the only one able to see this article"}
+                      ? "After you confirm and save, You will be the only one able to see this article."
+                      : "After you confirm and save, this article will be possible to view for every user."}
                   </DialogDescription>
                 </DialogHeader>
-                <DialogFooter className="sm:justify-start">
+                <DialogFooter className="">
                   <DialogClose asChild>
                     <Button type="button" variant="outline">
-                      Close
+                      Cancel
                     </Button>
                   </DialogClose>
                   <DialogClose asChild>
                     <Button onClick={changeVisibility}>Confirm</Button>
                   </DialogClose>
                 </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="secondary"
+                  disabled={
+                    articleSaver.isLoading ||
+                    articleRemover.isLoading ||
+                    !textEditor.article?.id
+                  }
+                  className="p-2 w-9 h-9 transition-all duration-300"
+                >
+                  <Info />
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>How to Write?</DialogTitle>
+                  <DialogDescription>
+                    Placeholder for a tutorial on how to write.
+                  </DialogDescription>
+                </DialogHeader>
               </DialogContent>
             </Dialog>
           </CollapsibleContent>

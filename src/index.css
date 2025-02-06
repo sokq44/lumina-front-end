@@ -157,6 +157,32 @@
     }
   }
 
+  table {
+    @apply border-collapse m-0 overflow-hidden table-fixed w-full text-sm my-4;
+
+    td, th {
+      @apply border border-muted-foreground box-border min-w-4 px-2.5 py-2 relative align-top;
+    }
+
+    th {
+      @apply bg-gray-200 dark:bg-muted font-semibold;
+    }
+
+    .selectedCell:after {
+      @apply bg-muted-foreground opacity-25 left-0 right-0 top-0 bottom-0 pointer-events-none absolute z-10;
+      content: "";
+    }
+    
+  }
+
+  .tiptap {
+    &.resize-cursor {
+      cursor: ew-resize;
+      cursor: col-resize;
+    }
+  }
+  
+
   .ProseMirror:focus {
     @apply outline-none;
   }  
