@@ -34,6 +34,7 @@ import { Separator } from "@/components/ui/separator";
 import HeadingMenuItem from "@/components/text-editor/heading-menu-item";
 import TextEditorMenuItem from "@/components/text-editor/text-editor-menu-item";
 import { useInformBadge } from "@/hooks/inform-badge";
+import ImageUploader from "./image-uploader";
 
 const TextEditorMenu = () => {
   const { toast } = useToast();
@@ -287,11 +288,6 @@ const TextEditorMenu = () => {
                     variant="secondary"
                     onMouseOver={() => showInformBadge("Help")}
                     onMouseLeave={() => clearInformBadge()}
-                    disabled={
-                      articleSaver.isLoading ||
-                      articleRemover.isLoading ||
-                      !textEditor.article?.id
-                    }
                     className="p-2 w-9 h-9 transition-all duration-300"
                   >
                     <Info />
@@ -310,6 +306,7 @@ const TextEditorMenu = () => {
             <div className="flex gap-2">
               <TextEditorMenuItem variant="set-link" />
               <TextEditorMenuItem variant="unset-link" />
+              <ImageUploader />
             </div>
           </CollapsibleContent>
         </div>
