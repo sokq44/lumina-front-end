@@ -6,6 +6,7 @@ import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
 import Link from "@tiptap/extension-link";
 import Table from "@tiptap/extension-table";
+import Image from "@tiptap/extension-image";
 import Italic from "@tiptap/extension-italic";
 import Heading from "@tiptap/extension-heading";
 import Document from "@tiptap/extension-document";
@@ -30,6 +31,8 @@ import TextEditorProvider from "@/components/text-editor/text-editor-provider";
 
 // TODO: define prohibited protocols and urls for the Link extension
 // TODO: check whether certain text editor menu items can be triggered
+// TODO: resizable images
+// TODO: dialog for setting a link
 
 interface TextEditorProps {
   article: Article;
@@ -56,10 +59,15 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
       TableHeader,
       OrderedList,
       HorizontalRule,
+      Image.configure({
+        HTMLAttributes: {
+          class: "tip-tap-image",
+        },
+      }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-editor-link",
+          class: "tip-tap-link",
         },
       }),
       Table.configure({

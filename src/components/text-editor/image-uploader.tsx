@@ -1,7 +1,7 @@
 import { useTextEditor } from "@/hooks/text-editor";
 import { Button } from "../ui/button";
 import { useInformBadge } from "@/hooks/inform-badge";
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, LoaderCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { ChangeEventHandler, useRef, useState } from "react";
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
+import { useUploadAsset } from "@/hooks/assets";
+import { useToast } from "@/hooks/use-toast";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const ImageUploader = () => {
   const [imageSource, setImageSource] = useState<string>(
@@ -19,8 +22,27 @@ const ImageUploader = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textEditor = useTextEditor();
   const { showInformBadge, clearInformBadge } = useInformBadge();
+  const assetUploader = useUploadAsset();
+  const { toast } = useToast();
 
-  const filePath = inputRef.current?.value;
+  useEffect(() => {
+    if (assetUploader.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem with Uploading",
+        description: assetUploader.error,
+      });
+    } else if (assetUploader.error === null) {
+      if (assetUploader.url) {
+        console.log(assetUploader.url);
+        textEditor.editor
+          ?.chain()
+          .focus()
+          .setImage({ src: assetUploader.url })
+          .run();
+      }
+    }
+  }, [assetUploader.error]);
 
   const imageChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const files = event.target?.files;
@@ -31,10 +53,32 @@ const ImageUploader = () => {
     }
   };
 
+  const uploadImage = async () => {
+    const files = inputRef.current?.files;
+
+    if (files) {
+      if (files?.length < 1) {
+        toast({
+          variant: "destructive",
+          title: "Problem with Uploading",
+          description: "No file selected",
+        });
+      }
+
+      await assetUploader.upload(files[0]);
+    }
+  };
+
+  const resetImagePicker = () => {
+    if (inputRef.current) inputRef.current.value = "";
+    setImageSource("/image-uploader-placeholder.webp");
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
+          onClick={resetImagePicker}
           variant="ghost"
           onMouseOver={() => showInformBadge("Upload Image")}
           onMouseLeave={() => clearInformBadge()}
@@ -55,14 +99,38 @@ const ImageUploader = () => {
           src={imageSource}
         />
         <div className="flex gap-x-2">
-          <input ref={inputRef} type="file" onChange={imageChange} hidden />
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            onChange={imageChange}
+            hidden
+          />
           <div
             onClick={() => inputRef.current?.click()}
             className="flex items-center pl-2 w-full border rounded-sm text-sm text-muted-foreground transition-all duration-300 hover:cursor-pointer hover:bg-muted"
           >
-            {filePath ? filePath : "Pick an Image"}
+            {inputRef.current?.value
+              ? inputRef.current?.value.split(/[/\\]/).pop()
+              : "Pick an Image"}
           </div>
-          <Button onClick={() => inputRef.current?.click()}>Upload</Button>
+          <DialogClose asChild>
+            <Button
+              variant={
+                assetUploader.isLoading || !inputRef.current?.value
+                  ? "ghost"
+                  : "default"
+              }
+              onClick={uploadImage}
+              disabled={assetUploader.isLoading || !inputRef.current?.value}
+            >
+              {assetUploader.isLoading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                "Upload"
+              )}
+            </Button>
+          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>

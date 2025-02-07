@@ -175,8 +175,12 @@
     
   }
 
-  .text-editor-link {
+  .tip-tap-link {
     @apply text-blue-500 underline cursor-pointer;
+  }
+
+  .tip-tap-image {
+    @apply my-4;
   }
   
   .ProseMirror:focus {
