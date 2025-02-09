@@ -183,6 +183,18 @@
     @apply my-4;
   }
   
+  div[data-youtube-video] {
+    @apply cursor-move pr-6;
+
+    iframe {
+      @apply outline-none border border-black min-h-[200px] min-w-[200px] rounded-md;
+    }
+
+    &.ProseMirror-selectednode iframe {
+      @apply outline-4 outline-purple-500 outline-offset-0 transition-all duration-150;
+    }
+  }
+
   .ProseMirror:focus {
     @apply outline-none;
   }

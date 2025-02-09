@@ -9,6 +9,7 @@ import Table from "@tiptap/extension-table";
 import Image from "@tiptap/extension-image";
 import Italic from "@tiptap/extension-italic";
 import Heading from "@tiptap/extension-heading";
+import Youtube from "@tiptap/extension-youtube";
 import Document from "@tiptap/extension-document";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
@@ -32,7 +33,9 @@ import TextEditorProvider from "@/components/text-editor/text-editor-provider";
 // TODO: define prohibited protocols and urls for the Link extension
 // TODO: check whether certain text editor menu items can be triggered
 // TODO: resizable images
+// TODO: resizable youtube videos
 // TODO: dialog for setting a link
+// TODO: cursor change for resizing tables
 
 interface TextEditorProps {
   article: Article;
@@ -59,6 +62,9 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
       TableHeader,
       OrderedList,
       HorizontalRule,
+      Youtube.configure({
+        nocookie: true,
+      }),
       Image.configure({
         HTMLAttributes: {
           class: "tip-tap-image",

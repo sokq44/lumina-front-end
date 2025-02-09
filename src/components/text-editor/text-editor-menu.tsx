@@ -35,6 +35,7 @@ import HeadingMenuItem from "@/components/text-editor/heading-menu-item";
 import TextEditorMenuItem from "@/components/text-editor/text-editor-menu-item";
 import { useInformBadge } from "@/hooks/inform-badge";
 import ImageUploader from "./image-uploader";
+import YoutubeMenuItem from "./youtube-menu-item";
 
 const TextEditorMenu = () => {
   const { toast } = useToast();
@@ -307,6 +308,7 @@ const TextEditorMenu = () => {
               <TextEditorMenuItem variant="set-link" />
               <TextEditorMenuItem variant="unset-link" />
               <ImageUploader />
+              <YoutubeMenuItem />
             </div>
           </CollapsibleContent>
         </div>
