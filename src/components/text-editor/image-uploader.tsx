@@ -1,7 +1,7 @@
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { useUploadAsset } from "@/hooks/assets";
 import { useTextEditor } from "@/hooks/text-editor";
-import { Button } from "../ui/button";
-import { useInformBadge } from "@/hooks/inform-badge";
-import { ImagePlus, LoaderCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -9,11 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { ChangeEventHandler, useEffect, useRef, useState } from "react";
-import { useUploadAsset } from "@/hooks/assets";
-import { useToast } from "@/hooks/use-toast";
-import { DialogClose } from "@radix-ui/react-dialog";
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import Informative from "@/components/inform-badge/informative";
+import { ImagePlus, LoaderCircle } from "lucide-react";
 
 const ImageUploader = () => {
   const [imageSource, setImageSource] = useState<string>(
@@ -21,7 +21,6 @@ const ImageUploader = () => {
   );
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textEditor = useTextEditor();
-  const { showInformBadge, clearInformBadge } = useInformBadge();
   const assetUploader = useUploadAsset();
   const { toast } = useToast();
 
@@ -76,17 +75,17 @@ const ImageUploader = () => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          onClick={resetImagePicker}
-          variant="ghost"
-          onMouseOver={() => showInformBadge("Upload Image")}
-          onMouseLeave={() => clearInformBadge()}
-          className="p-2 w-9 h-9 hover:bg-secondary hover:text-primary dark:hover:bg-black"
-        >
-          <ImagePlus />
-        </Button>
-      </DialogTrigger>
+      <Informative label="Image">
+        <DialogTrigger asChild>
+          <Button
+            onClick={resetImagePicker}
+            variant="ghost"
+            className="p-2 w-9 h-9 hover:bg-secondary hover:text-primary dark:hover:bg-black"
+          >
+            <ImagePlus />
+          </Button>
+        </DialogTrigger>
+      </Informative>
       <DialogContent className="font-funnel">
         <DialogHeader>
           <DialogTitle>Upload an Image</DialogTitle>

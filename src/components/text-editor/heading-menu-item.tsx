@@ -1,20 +1,19 @@
+import { useEffect, useState } from "react";
+import { useTextEditor } from "@/hooks/text-editor";
 import {
   Select,
-  SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
+  SelectTrigger,
+  SelectContent,
 } from "@/components/ui/select";
-import { useInformBadge } from "@/hooks/inform-badge";
-import { useTextEditor } from "@/hooks/text-editor";
-import { useEffect, useState } from "react";
+import Informative from "@/components/inform-badge/informative";
 
 type Level = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 const HeadingMenuItem = () => {
   const textEditor = useTextEditor();
   const [selectedHeading, setSelectedHeading] = useState<Level>(0);
-  const { showInformBadge, clearInformBadge } = useInformBadge();
 
   useEffect(() => {
     const updateSelectedLevel = () => {
@@ -46,13 +45,11 @@ const HeadingMenuItem = () => {
       onValueChange={(value) => handleSelection(parseInt(value) as Level)}
       value={selectedHeading.toString()}
     >
-      <SelectTrigger
-        onMouseOver={() => showInformBadge("Heading")}
-        onMouseLeave={() => clearInformBadge()}
-        className="h-auto border border-muted ring-none outline-none transition-all duration-300"
-      >
-        <SelectValue placeholder="Heading" />
-      </SelectTrigger>
+      <Informative label="Heading" className="w-full">
+        <SelectTrigger className="ring-none h-auto outline-none transition-all duration-300">
+          <SelectValue placeholder="Heading" />
+        </SelectTrigger>
+      </Informative>
       <SelectContent className="font-funnel">
         <SelectItem value="1" className="text-4xl">
           Heading 1

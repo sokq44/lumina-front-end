@@ -5,16 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useTextEditor } from "@/hooks/text-editor";
 import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
 import {
-  BookCheck,
-  BookLock,
-  Check,
-  ChevronsUpDown,
-  Info,
-  LoaderCircle,
-  Save,
-  Trash2,
-} from "lucide-react";
-import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -31,11 +21,20 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import Informative from "@/components/inform-badge/informative";
+import ImageUploader from "@/components/text-editor/image-uploader";
 import HeadingMenuItem from "@/components/text-editor/heading-menu-item";
+import YoutubeMenuItem from "@/components/text-editor/youtube-menu-item";
 import TextEditorMenuItem from "@/components/text-editor/text-editor-menu-item";
-import { useInformBadge } from "@/hooks/inform-badge";
-import ImageUploader from "./image-uploader";
-import YoutubeMenuItem from "./youtube-menu-item";
+import {
+  BookCheck,
+  BookLock,
+  ChevronsUpDown,
+  Info,
+  LoaderCircle,
+  Save,
+  Trash2,
+} from "lucide-react";
 
 const TextEditorMenu = () => {
   const { toast } = useToast();
@@ -43,7 +42,6 @@ const TextEditorMenu = () => {
   const textEditor = useTextEditor();
   const articleSaver = useSaveArticle(textEditor.article?.id);
   const articleRemover = useRemoveArticle();
-  const { showInformBadge, clearInformBadge } = useInformBadge();
 
   useEffect(() => {
     if (articleSaver.error) {
@@ -103,16 +101,10 @@ const TextEditorMenu = () => {
       if (newArticle) {
         await articleSaver.save(newArticle);
         toast({
-          variant: "default",
+          variant: "success",
           title: "Changes Applied",
-          description: (
-            <div className="text-md flex">
-              <span>
-                All the changes You've made have been applied to the article.
-              </span>
-              <Check className="text-green-500" />
-            </div>
-          ),
+          description:
+            "All the changes You've made have been applied to the article.",
         });
       }
     }
@@ -146,6 +138,7 @@ const TextEditorMenu = () => {
         <Separator orientation="vertical" className="h-100" />
         <div className="flex flex-col w-full">
           <div className="flex items-center gap-2 ml-1 pr-2">
+            <TextEditorMenuItem variant="paragraph" />
             <TextEditorMenuItem variant="bold" />
             <TextEditorMenuItem variant="underline" />
             <TextEditorMenuItem variant="italic" />
@@ -157,35 +150,35 @@ const TextEditorMenu = () => {
             <TextEditorMenuItem variant="horizontal-rule" />
             <TextEditorMenuItem variant="hard-break" />
             <HeadingMenuItem />
-            <Button
-              onClick={saveChanges}
-              onMouseOver={() => showInformBadge("Save Article")}
-              onMouseLeave={() => clearInformBadge()}
-              disabled={articleSaver.isLoading}
-              className="p-2 w-9 h-9 transition-all duration-300"
-            >
-              {articleSaver.isLoading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                <Save />
-              )}
-            </Button>
+            <Informative label="Save Article">
+              <Button
+                onClick={saveChanges}
+                disabled={articleSaver.isLoading}
+                className="p-2 w-9 h-9 transition-all duration-300"
+              >
+                {articleSaver.isLoading ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  <Save />
+                )}
+              </Button>
+            </Informative>
             <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  variant="destructive"
-                  onMouseOver={() => showInformBadge("Delete Article")}
-                  onMouseLeave={() => clearInformBadge()}
-                  disabled={
-                    articleSaver.isLoading ||
-                    articleRemover.isLoading ||
-                    !textEditor.article?.id
-                  }
-                  className="p-2 w-9 h-9 transition-all duration-300"
-                >
-                  <Trash2 />
-                </Button>
-              </DialogTrigger>
+              <Informative label="Delete Article">
+                <DialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    disabled={
+                      articleSaver.isLoading ||
+                      articleRemover.isLoading ||
+                      !textEditor.article?.id
+                    }
+                    className="p-2 w-9 h-9 transition-all duration-300"
+                  >
+                    <Trash2 />
+                  </Button>
+                </DialogTrigger>
+              </Informative>
               <DialogContent className="font-funnel">
                 <DialogHeader>
                   <DialogTitle className="text-destructive">
@@ -238,30 +231,29 @@ const TextEditorMenu = () => {
               <TextEditorMenuItem variant="toggle-header-cell" />
               <TextEditorMenuItem variant="go-to-next-cell" />
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    onMouseOver={() =>
-                      showInformBadge(
-                        `Change To ${
-                          textEditor.article?.public ? "Private" : "Public"
-                        }`
-                      )
-                    }
-                    onMouseLeave={() => clearInformBadge()}
-                    disabled={
-                      articleSaver.isLoading ||
-                      articleRemover.isLoading ||
-                      !textEditor.article?.id
-                    }
-                    className="ml-auto p-2 w-9 h-9 transition-all duration-300"
-                  >
-                    {textEditor.article?.public ? (
-                      <BookCheck />
-                    ) : (
-                      <BookLock size={20} />
-                    )}
-                  </Button>
-                </DialogTrigger>
+                <Informative
+                  className="ml-auto"
+                  label={`Change To ${
+                    textEditor.article?.public ? "Private" : "Public"
+                  }`}
+                >
+                  <DialogTrigger asChild>
+                    <Button
+                      disabled={
+                        articleSaver.isLoading ||
+                        articleRemover.isLoading ||
+                        !textEditor.article?.id
+                      }
+                      className="p-2 w-9 h-9 transition-all duration-300"
+                    >
+                      {textEditor.article?.public ? (
+                        <BookCheck />
+                      ) : (
+                        <BookLock size={20} />
+                      )}
+                    </Button>
+                  </DialogTrigger>
+                </Informative>
                 <DialogContent className="font-funnel">
                   <DialogHeader>
                     <DialogTitle>Are you sure?</DialogTitle>
@@ -284,16 +276,16 @@ const TextEditorMenu = () => {
                 </DialogContent>
               </Dialog>
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="secondary"
-                    onMouseOver={() => showInformBadge("Help")}
-                    onMouseLeave={() => clearInformBadge()}
-                    className="p-2 w-9 h-9 transition-all duration-300"
-                  >
-                    <Info />
-                  </Button>
-                </DialogTrigger>
+                <Informative label="Help">
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="secondary"
+                      className="p-2 w-9 h-9 transition-all duration-300"
+                    >
+                      <Info />
+                    </Button>
+                  </DialogTrigger>
+                </Informative>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>How to Write?</DialogTitle>

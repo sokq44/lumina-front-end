@@ -1,33 +1,34 @@
 import { Editor } from "@tiptap/react";
 import {
-  ArrowBigLeftDash,
-  ArrowBigRightDash,
-  BetweenHorizontalEnd,
-  BetweenHorizontalStart,
-  BetweenVerticalEnd,
-  BetweenVerticalStart,
-  Bold,
-  CodeXml,
-  Grid2X2Plus,
-  Grid2x2X,
-  Italic,
   Link,
   List,
-  ListChecks,
-  ListOrdered,
-  LucideIcon,
   Minus,
   Sheet,
-  SquareSplitHorizontal,
+  Unlink,
+  Pilcrow,
+  CodeXml,
+  Grid2x2X,
+  WrapText,
+  TextQuote,
+  ListChecks,
+  LucideIcon,
+  Grid2X2Plus,
+  ListOrdered,
+  TableRowsSplit,
   TableCellsMerge,
   TableCellsSplit,
-  TableColumnsSplit,
   TableProperties,
-  TableRowsSplit,
-  TextQuote,
-  Underline,
-  Unlink,
-  WrapText,
+  Bold as BoldIcon,
+  ArrowBigLeftDash,
+  TableColumnsSplit,
+  ArrowBigRightDash,
+  BetweenVerticalEnd,
+  Italic as ItalicIcon,
+  BetweenVerticalStart,
+  BetweenHorizontalEnd,
+  SquareSplitHorizontal,
+  BetweenHorizontalStart,
+  Underline as UnderlineIcon,
 } from "lucide-react";
 
 abstract class MenuItem {
@@ -44,9 +45,19 @@ abstract class MenuItem {
   public abstract toggle(): void;
 }
 
-export class BoldMenuItem extends MenuItem {
+export class Paragraph extends MenuItem {
   constructor(editor: Editor) {
-    super(editor, Bold, "Bold");
+    super(editor, Pilcrow, "Paragraph");
+  }
+
+  public override toggle() {
+    this.editor.chain().focus().setParagraph().run();
+  }
+}
+
+export class Bold extends MenuItem {
+  constructor(editor: Editor) {
+    super(editor, BoldIcon, "Bold");
   }
 
   public override toggle() {
@@ -54,9 +65,9 @@ export class BoldMenuItem extends MenuItem {
   }
 }
 
-export class UnderlineMenuItem extends MenuItem {
+export class Underline extends MenuItem {
   constructor(editor: Editor) {
-    super(editor, Underline, "Underline");
+    super(editor, UnderlineIcon, "Underline");
   }
 
   public override toggle() {
@@ -64,9 +75,9 @@ export class UnderlineMenuItem extends MenuItem {
   }
 }
 
-export class ItalicMenuItem extends MenuItem {
+export class Italic extends MenuItem {
   constructor(editor: Editor) {
-    super(editor, Italic, "Italic");
+    super(editor, ItalicIcon, "Italic");
   }
 
   public override toggle() {
@@ -74,7 +85,7 @@ export class ItalicMenuItem extends MenuItem {
   }
 }
 
-export class CodeBlockMenuItem extends MenuItem {
+export class CodeBlock extends MenuItem {
   constructor(editor: Editor) {
     super(editor, CodeXml, "Code Block");
   }
@@ -336,14 +347,16 @@ export class UnsetLink extends MenuItem {
 
 export function getMenuItem(variant: string, editor: Editor): MenuItem | null {
   switch (variant) {
+    case "paragraph":
+      return new Paragraph(editor);
     case "bold":
-      return new BoldMenuItem(editor);
+      return new Bold(editor);
     case "underline":
-      return new UnderlineMenuItem(editor);
+      return new Underline(editor);
     case "italic":
-      return new ItalicMenuItem(editor);
+      return new Italic(editor);
     case "code-block":
-      return new CodeBlockMenuItem(editor);
+      return new CodeBlock(editor);
     case "block-quote":
       return new BlockQuote(editor);
     case "bullet-list":

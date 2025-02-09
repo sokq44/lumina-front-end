@@ -1,19 +1,20 @@
 import { useRef } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { useTextEditor } from "@/hooks/text-editor";
-import { Button } from "../ui/button";
 import {
   Dialog,
-  DialogHeader,
-  DialogTrigger,
-  DialogContent,
-  DialogDescription,
   DialogTitle,
-  DialogFooter,
   DialogClose,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
+  DialogHeader,
+  DialogFooter,
+  DialogContent,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { TvMinimalPlay } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import Informative from "../inform-badge/informative";
 
 const YoutubeMenuItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,14 +44,16 @@ const YoutubeMenuItem = () => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          className="p-2 w-9 h-9 hover:bg-secondary hover:text-primary dark:hover:bg-black"
-        >
-          <TvMinimalPlay />
-        </Button>
-      </DialogTrigger>
+      <Informative label="Youtube Video">
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            className="p-2 w-9 h-9 hover:bg-secondary hover:text-primary dark:hover:bg-black"
+          >
+            <TvMinimalPlay />
+          </Button>
+        </DialogTrigger>
+      </Informative>
       <DialogContent className="font-funnel">
         <DialogHeader>
           <DialogTitle>Youtube Video</DialogTitle>
