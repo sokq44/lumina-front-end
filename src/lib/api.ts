@@ -6,7 +6,7 @@ export const client = axios.create({
 
   // dev
   baseURL: "http://localhost:3000",
-  
+
   withCredentials: true,
 });
 
