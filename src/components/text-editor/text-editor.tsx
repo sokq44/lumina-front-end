@@ -26,6 +26,7 @@ import TableHeader from "@tiptap/extension-table-header";
 import OrderedList from "@tiptap/extension-ordered-list";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 
+import Container from "@/components/container";
 import TextEditorMenu from "@/components/text-editor/text-editor-menu";
 import TextEditorContent from "@/components/text-editor/text-editor-content";
 import TextEditorProvider from "@/components/text-editor/text-editor-provider";
@@ -85,15 +86,15 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
   });
 
   if (!editor) {
-    return <div>Error While Creating Editor!</div>;
+    return <span>Error While Creating Editor!</span>;
   }
 
   return (
     <TextEditorProvider editor={editor} article={article}>
-      <div className="flex flex-col h-full mx-4 w-[50rem]">
+      <Container className="flex flex-col h-full mx-4 w-[50rem]">
         <TextEditorMenu />
         <TextEditorContent className="mt-28" />
-      </div>
+      </Container>
     </TextEditorProvider>
   );
 };

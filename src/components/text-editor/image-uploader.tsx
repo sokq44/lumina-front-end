@@ -11,6 +11,8 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import Informative from "@/components/inform-badge/informative";
 import { ImagePlus, LoaderCircle } from "lucide-react";
@@ -97,22 +99,22 @@ const ImageUploader = () => {
           className="max-h-52 w-auto mx-auto my-1 rounded-md bg-gray-400"
           src={imageSource}
         />
-        <div className="flex gap-x-2">
-          <input
+        <Container className="flex gap-x-2">
+          <Input
             ref={inputRef}
             type="file"
             accept="image/*"
             onChange={imageChange}
             hidden
           />
-          <div
+          <Container
             onClick={() => inputRef.current?.click()}
             className="flex items-center pl-2 w-full border rounded-sm text-sm text-muted-foreground transition-all duration-300 hover:cursor-pointer hover:bg-muted"
           >
             {inputRef.current?.value
               ? inputRef.current?.value.split(/[/\\]/).pop()
               : "Pick an Image"}
-          </div>
+          </Container>
           <DialogClose asChild>
             <Button
               variant={
@@ -130,7 +132,7 @@ const ImageUploader = () => {
               )}
             </Button>
           </DialogClose>
-        </div>
+        </Container>
       </DialogContent>
     </Dialog>
   );

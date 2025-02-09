@@ -1,15 +1,16 @@
 import { FC, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { EditorContent } from "@tiptap/react";
-import { useGetArticle } from "@/hooks/articles";
-import { LoaderCircle } from "lucide-react";
-import { useTextEditor } from "@/hooks/text-editor";
 import { Article } from "@/lib/api";
-import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { EditorContent } from "@tiptap/react";
+import { useToast } from "@/hooks/use-toast";
 import { useUploadAsset } from "@/hooks/assets";
+import { useGetArticle } from "@/hooks/articles";
+import { useTextEditor } from "@/hooks/text-editor";
+import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import Container from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { LoaderCircle } from "lucide-react";
 
 interface TextEditorContentProps {
   className?: string;
@@ -88,9 +89,9 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
   if (articleGetter.isLoading) {
     return (
-      <div className="bg-background flex items-center justify-center h-screen">
+      <Container className="bg-background flex items-center justify-center h-screen">
         <LoaderCircle size={24} className="animate-spin" />
-      </div>
+      </Container>
     );
   }
 
@@ -103,9 +104,9 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
     : "";
 
   return (
-    <div className={cn("flex flex-col mt-4", className)}>
-      <div className="flex flex-col mb-10">
-        <div className="relative mb-8 group">
+    <Container className={cn("flex flex-col mt-4", className)}>
+      <Container className="flex flex-col mb-10">
+        <Container className="relative mb-8 group">
           <img
             src={
               textEditor.article?.banner
@@ -127,7 +128,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           >
             Change
           </Button>
-        </div>
+        </Container>
         <input
           ref={titleRef}
           type="text"
@@ -148,13 +149,13 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
             on the {formattedDate}
           </span>
         )}
-      </div>
+      </Container>
       <EditorContent
         onClick={focusEditor}
         editor={textEditor.editor ?? null}
         className="min-h-svh w-full mx-auto hover:cursor-text"
       />
-    </div>
+    </Container>
   );
 };
 

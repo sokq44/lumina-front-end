@@ -1,4 +1,3 @@
-import { Article } from "@/lib/api";
 import { useTextEditor } from "@/hooks/text-editor";
 import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
 import {
@@ -13,32 +12,24 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Informative from "@/components/inform-badge/informative";
-import { BookCheck, BookLock } from "lucide-react";
+import { LoaderCircle, Trash2 } from "lucide-react";
 
-export const PrivatePublicSwitch = () => {
+const DeleteArticleButton = () => {
   const textEditor = useTextEditor();
   const articleSaver = useSaveArticle(textEditor.article?.id);
   const articleRemover = useRemoveArticle();
 
-  const changeVisibility = async () => {
-    const previousArticle = textEditor.article;
-    if (previousArticle) {
-      const newArticle = {
-        ...(previousArticle as Article),
-        public: !previousArticle.public,
-      };
-
-      textEditor.setArticle(newArticle);
-    }
+  const deleteArticle = async () => {
+    const id = textEditor.article?.id;
+    if (id) await articleRemover.remove(id);
   };
 
   return (
     <Dialog>
-      <Informative
-        label={`Change To ${textEditor.article?.public ? "Private" : "Public"}`}
-      >
+      <Informative label="Delete Article">
         <DialogTrigger asChild>
           <Button
+            variant="destructive"
             disabled={
               articleSaver.isLoading ||
               articleRemover.isLoading ||
@@ -46,34 +37,40 @@ export const PrivatePublicSwitch = () => {
             }
             className="p-2 w-9 h-9 transition-all duration-300"
           >
-            {textEditor.article?.public ? (
-              <BookCheck />
-            ) : (
-              <BookLock size={20} />
-            )}
+            <Trash2 />
           </Button>
         </DialogTrigger>
       </Informative>
       <DialogContent className="font-funnel">
         <DialogHeader>
-          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogTitle className="text-destructive">Are you sure?</DialogTitle>
           <DialogDescription>
-            {textEditor.article?.public
-              ? "After you confirm and save, You will be the only one able to see this article."
-              : "After you confirm and save, this article will be possible to view for every user."}
+            Are you certain that you want to delete this article?
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="">
+        <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline">
+            <Button variant="outline" disabled={articleRemover.isLoading}>
               Cancel
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button onClick={changeVisibility}>Confirm</Button>
+            <Button
+              variant="destructive"
+              disabled={articleRemover.isLoading}
+              onClick={deleteArticle}
+            >
+              {articleSaver.isLoading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                "Delete"
+              )}
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
+
+export default DeleteArticleButton;

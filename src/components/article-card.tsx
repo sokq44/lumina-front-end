@@ -1,16 +1,17 @@
 import { FC, HTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 import { Article } from "@/lib/api";
 import {
   Card,
-  CardContent,
-  CardDescription,
+  CardTitle,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { cn } from "@/lib/utils";
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
+import Container from "@/components/container";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageCircle, ThumbsDown, ThumbsUp } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
   article: Article;
@@ -43,15 +44,15 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
         />
       </CardContent>
       <CardFooter className="flex justify-center gap-x-6 text-muted-foreground">
-        <div className="flex items-center gap-x-1">
+        <Container className="flex items-center gap-x-1">
           <MessageCircle size={20} className="text-muted-foreground" /> 22
-        </div>
-        <div className="flex items-center gap-x-1">
+        </Container>
+        <Container className="flex items-center gap-x-1">
           <ThumbsUp size={20} className="text-muted-foreground" /> 21
-        </div>
-        <div className="flex items-center gap-x-1">
+        </Container>
+        <Container className="flex items-center gap-x-1">
           <ThumbsDown size={20} className="text-muted-foreground" /> 13
-        </div>
+        </Container>
       </CardFooter>
     </Card>
   );

@@ -1,9 +1,6 @@
 import { useEffect } from "react";
-import { useLoggedIn } from "@/hooks/user";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CornerUpLeft, LoaderCircle } from "lucide-react";
-import TextEditor from "@/components/text-editor/text-editor";
-import ThemeSwitch from "@/components/theme-switch";
+import { useLoggedIn } from "@/hooks/user";
 import {
   Dialog,
   DialogClose,
@@ -14,7 +11,11 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
+import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
+import ThemeSwitch from "@/components/theme-switch";
+import TextEditor from "@/components/text-editor/text-editor";
+import { CornerUpLeft, LoaderCircle } from "lucide-react";
 
 const WritingPage = () => {
   const { state } = useLocation();
@@ -36,14 +37,14 @@ const WritingPage = () => {
 
   if (loggedIn.isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen w-screen">
+      <Container className="flex items-center justify-center h-screen w-screen">
         <LoaderCircle size={24} className="animate-spin" />
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="flex items-center justify-center h-screen w-screen">
+    <Container className="flex items-center justify-center h-screen w-screen">
       <Dialog>
         <DialogTrigger asChild>
           <Button
@@ -72,7 +73,7 @@ const WritingPage = () => {
       </Dialog>
       <ThemeSwitch position="top-right" />
       <TextEditor article={state?.article} />
-    </div>
+    </Container>
   );
 };
 

@@ -11,11 +11,11 @@ interface TextEditorMenuItemProps {
 const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {
   const textEditor = useTextEditor();
 
-  if (!textEditor.editor) return <div>No Text Editor Was Found.</div>;
+  if (!textEditor.editor) return <span>No Text Editor Was Found.</span>;
 
   const item = getMenuItem(variant, textEditor.editor);
 
-  if (!item) return <div>Wrong Variant</div>;
+  if (!item) return <span>Wrong Variant</span>;
 
   return (
     <Informative label={item.label}>

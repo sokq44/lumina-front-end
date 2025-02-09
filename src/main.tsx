@@ -1,9 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/theme-provider";
-import InformBadger from "@/components/inform-badge/inform-badger";
+
 import MainPage from "@/pages/main-page";
 import UserPage from "@/pages/user-page";
 import LoginPage from "@/pages/login-page";
@@ -19,6 +17,12 @@ import EmailVerifiedPage from "@/pages/email-verified-page";
 import ChangePasswordPage from "@/pages/change-password-page";
 import SuggestedArticlesPage from "@/pages/suggested-articles-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
+
+import Container from "@/components/container";
+import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/theme-provider";
+import InformBadger from "@/components/inform-badge/inform-badger";
+
 import "./index.css";
 
 // TODO: Logo design.
@@ -76,7 +80,7 @@ const router = createBrowserRouter([
       },
       {
         path: "Security",
-        element: <div>Security</div>,
+        element: <Container>Security</Container>,
       },
     ],
   },

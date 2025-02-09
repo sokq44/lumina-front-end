@@ -1,11 +1,12 @@
 import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useGetArticle } from "@/hooks/articles";
-import { Link, useLocation } from "react-router-dom";
-import { LoaderCircle } from "lucide-react";
+import Container from "@/components/container";
 import ThemeSwitch from "@/components/theme-switch";
 import GoBackArrow from "@/components/go-back-arrow";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { LoaderCircle } from "lucide-react";
 
 const ArticlePage = () => {
   const { toast } = useToast();
@@ -24,9 +25,9 @@ const ArticlePage = () => {
 
   if (articleGetter.isLoading) {
     return (
-      <div className="bg-background flex items-center justify-center h-screen">
+      <Container className="bg-background flex items-center justify-center h-screen">
         <LoaderCircle size={24} className="animate-spin" />
-      </div>
+      </Container>
     );
   }
 
@@ -39,10 +40,10 @@ const ArticlePage = () => {
     : "";
 
   return (
-    <div className="w-screen h-screen flex justify-center">
+    <Container className="w-screen h-screen flex justify-center">
       <ThemeSwitch position="top-right" />
       <GoBackArrow position="top-left" />
-      <div className="w-[50rem] h-full flex flex-col p-4">
+      <Container className="w-[50rem] h-full flex flex-col p-4">
         <img
           src={
             articleGetter.article?.banner
@@ -51,12 +52,12 @@ const ArticlePage = () => {
           }
           className="w-full h-auto aspect-7/4 my-8 rounded-lg brightness-90 shadow-md"
         />
-        <div className="flex items-center gap-x-2 my-6">
+        <Container className="flex items-center gap-x-2 my-6">
           <Avatar className="w-16 h-auto shadow-md">
             <AvatarImage src="https://cdn2.vectorstock.com/i/1000x1000/44/01/default-avatar-photo-placeholder-icon-grey-vector-38594401.jpg" />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col items-start gap-y-1">
+          <Container className="flex flex-col items-start gap-y-1">
             <span className="text-5xl font-bold">
               {articleGetter.article?.title}
             </span>
@@ -70,16 +71,16 @@ const ArticlePage = () => {
               </Link>{" "}
               on the {formattedDate}
             </span>
-          </div>
-        </div>
-        <div
+          </Container>
+        </Container>
+        <Container
           className="mt-4"
           dangerouslySetInnerHTML={{
             __html: articleGetter.article?.content || "",
           }}
         />
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 };
 

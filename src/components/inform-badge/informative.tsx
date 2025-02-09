@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { useInformBadge } from "@/hooks/inform-badge";
+import Container from "@/components/container";
 
 interface InformativeProps {
   label: string;
@@ -11,13 +12,13 @@ const Informative: FC<InformativeProps> = ({ label, children, className }) => {
   const { showInformBadge, clearInformBadge } = useInformBadge();
 
   return (
-    <div
+    <Container
       onMouseEnter={() => showInformBadge(label)}
       onMouseLeave={clearInformBadge}
       className={className}
     >
       {children}
-    </div>
+    </Container>
   );
 };
 
