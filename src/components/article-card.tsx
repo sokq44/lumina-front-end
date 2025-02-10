@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/card";
 import Container from "@/components/container";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageCircle, ThumbsDown, ThumbsUp } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
   article: Article;
 }
 
 const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
+  console.log(article.user_image);
+
   return (
     <Card
       className={cn(
@@ -31,7 +33,8 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
         </CardTitle>
         <CardDescription className="flex items-center gap-x-1">
           <Avatar className="w-8 h-auto col-auto my-auto shadow-md">
-            <AvatarImage src="https://cdn2.vectorstock.com/i/1000x1000/44/01/default-avatar-photo-placeholder-icon-grey-vector-38594401.jpg" />
+            {/* <AvatarImage src="https://cdn2.vectorstock.com/i/1000x1000/44/01/default-avatar-photo-placeholder-icon-grey-vector-38594401.jpg" /> */}
+            <AvatarImage src={article.user_image} />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           @{article.user}
@@ -46,12 +49,6 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
       <CardFooter className="flex justify-center gap-x-6 text-muted-foreground">
         <Container className="flex items-center gap-x-1">
           <MessageCircle size={20} className="text-muted-foreground" /> 22
-        </Container>
-        <Container className="flex items-center gap-x-1">
-          <ThumbsUp size={20} className="text-muted-foreground" /> 21
-        </Container>
-        <Container className="flex items-center gap-x-1">
-          <ThumbsDown size={20} className="text-muted-foreground" /> 13
         </Container>
       </CardFooter>
     </Card>

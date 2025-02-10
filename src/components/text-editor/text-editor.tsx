@@ -37,6 +37,9 @@ import TextEditorProvider from "@/components/text-editor/text-editor-provider";
 // TODO: resizable youtube videos
 // TODO: dialog for setting a link
 // TODO: cursor change for resizing tables
+// TODO: tracking changes within an article
+
+// FIXME: user should be redirected right after deleting an article
 
 interface TextEditorProps {
   article: Article;

@@ -27,6 +27,7 @@ export type Article = {
   title: string;
   banner: string;
   content: string;
+  user_image: string;
   public: boolean;
   created_at: Date;
 };

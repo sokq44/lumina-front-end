@@ -54,8 +54,8 @@ const ArticlePage = () => {
         />
         <Container className="flex items-center gap-x-2 my-6">
           <Avatar className="w-16 h-auto shadow-md">
-            <AvatarImage src="https://cdn2.vectorstock.com/i/1000x1000/44/01/default-avatar-photo-placeholder-icon-grey-vector-38594401.jpg" />
-            <AvatarFallback>U</AvatarFallback>
+            <AvatarImage src={articleGetter.article?.user_image} />
+            <AvatarFallback>{articleGetter.article?.user[0]}</AvatarFallback>
           </Avatar>
           <Container className="flex flex-col items-start gap-y-1">
             <span className="text-5xl font-bold">
