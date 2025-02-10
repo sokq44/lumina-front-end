@@ -7,13 +7,14 @@ import { useUploadAsset } from "@/hooks/assets";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useGetUser, useLoggedIn, useModifyUser } from "@/hooks/user";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { ImageUp, LoaderCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import Container from "@/components/container";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { ImageUp, LoaderCircle } from "lucide-react";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -132,9 +133,9 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="h-full w-full flex flex-col gap-4 items-center lg:justify-center">
+    <Container className="h-full w-full flex flex-col gap-4 items-center lg:justify-center">
       <Card className="w-full h-auto p-8 border-none shadow-none mt-8 lg:mt-0">
-        <div className="w-full flex flex-col items-center gap-y-4">
+        <Container className="w-full flex flex-col items-center gap-y-4">
           <Avatar className="w-32 h-auto">
             <AvatarImage src={userGetter.user?.image} />
             <AvatarFallback className="w-32 h-32 bg-muted">
@@ -157,7 +158,7 @@ const ProfilePage = () => {
             <ImageUp />
             <span>Select Picture</span>
           </Button>
-        </div>
+        </Container>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -203,7 +204,7 @@ const ProfilePage = () => {
                 </FormItem>
               )}
             />
-            <div className="flex w-full space-x-2">
+            <Container className="flex w-full space-x-2">
               {modifying && (
                 <Button
                   type="button"
@@ -230,11 +231,11 @@ const ProfilePage = () => {
                   "Modify Your Data"
                 )}
               </Button>
-            </div>
+            </Container>
           </form>
         </Form>
       </Card>
-    </div>
+    </Container>
   );
 };
 

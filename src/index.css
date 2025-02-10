@@ -149,8 +149,82 @@
     @apply text-base;
   }
 
+  hr {
+    @apply my-6;
+
+    &.ProseMirror-selectednode {
+      @apply border-t-purple-500;
+    }
+  }
+
+  table {
+    @apply border-collapse m-0 overflow-hidden table-fixed w-full text-sm my-4;
+
+    td, th {
+      @apply border border-muted-foreground box-border min-w-4 px-2.5 py-2 relative align-top;
+    }
+
+    th {
+      @apply bg-gray-200 dark:bg-muted font-semibold;
+    }
+
+    .selectedCell:after {
+      @apply bg-muted-foreground opacity-25 left-0 right-0 top-0 bottom-0 pointer-events-none absolute z-10;
+      content: "";
+    }
+    
+  }
+
+  .tip-tap-link {
+    @apply text-blue-500 underline cursor-pointer;
+  }
+
+  .tip-tap-image {
+    @apply my-4;
+  }
+  
+  div[data-youtube-video] {
+    @apply cursor-move pr-6;
+
+    iframe {
+      @apply outline-none border border-black min-h-[200px] min-w-[200px] rounded-md;
+    }
+
+    &.ProseMirror-selectednode iframe {
+      @apply outline-4 outline-purple-500 outline-offset-0 transition-all duration-150;
+    }
+  }
+
   .ProseMirror:focus {
     @apply outline-none;
+  }
+  
+  .fade-in {
+    animation: fade-in 0.5s forwards;
+  }
+
+  .fade-out {
+    animation: fade-out 0.5s forwards;
+  }
+
+  @keyframes fade-in {
+    from {
+      @apply opacity-0;
+    }
+
+    to {
+      @apply opacity-100;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      @apply opacity-100;
+    }
+    
+    to {
+      @apply opacity-0;
+    }
   }
 }
 

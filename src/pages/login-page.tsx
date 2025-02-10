@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { Circle, LoaderCircle, LogIn } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import ThemeSwitch from "@/components/theme-switch";
 import SlidingLink from "@/components/sliding-link";
@@ -29,7 +30,7 @@ const LoginPage = () => {
   });
 
   useEffect(() => {
-    if (loggedIn.isLoggedIn) navigate("/user");
+    if (loggedIn.isLoggedIn) navigate("/user/articles");
   }, [loggedIn.isLoggedIn, navigate]);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const LoginPage = () => {
         description: login.error,
       });
     } else if (login.error === null) {
-      navigate("/user");
+      navigate("/user/articles");
     }
   }, [login.error, navigate, toast]);
 
@@ -65,15 +66,15 @@ const LoginPage = () => {
 
   if (loggedIn.isLoading) {
     return (
-      <div className="bg-background flex items-center justify-center h-screen">
+      <Container className="bg-background flex items-center justify-center h-screen">
         <LoaderCircle size={24} className="animate-spin" />
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="bg-background flex items-center justify-center h-screen">
-      <GoBackArrow to="/" />
+    <Container className="bg-background flex items-center justify-center h-screen">
+      <GoBackArrow to="/" position="top-left" />
       <ThemeSwitch position="top-right" />
       <motion.div
         initial={{
@@ -85,7 +86,7 @@ const LoginPage = () => {
         }}
         className="flex w-full h-[28rem] md:w-[38rem] lg:w-[42rem] xl:w-[48rem]"
       >
-        <div className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
+        <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
           {/* Logo Placeholder */}
           <Circle strokeWidth="1px" fill="" size={84} />
 
@@ -123,16 +124,16 @@ const LoginPage = () => {
               )}
             </Button>
           </form>
-          <div className="flex flex-col gap-y-2 mt-4 md:flex-row md:gap-x-4">
+          <Container className="flex flex-col gap-y-2 mt-4 md:flex-row md:gap-x-4">
             <SlidingLink to="/register">Don't Have an Account?</SlidingLink>
             <SlidingLink to="/user/password">Forgot Your Password?</SlidingLink>
-          </div>
-        </div>
-        <div className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
+          </Container>
+        </Container>
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
           <LogIn size={48} className="text-card" />
-        </div>
+        </Container>
       </motion.div>
-    </div>
+    </Container>
   );
 };
 

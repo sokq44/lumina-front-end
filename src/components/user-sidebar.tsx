@@ -1,16 +1,17 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import Separator from "./separator";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import { MenuItem } from "@/lib/menu-items";
-import { FC } from "react";
+import {
+  Sidebar,
+  SidebarMenu,
+  SidebarGroup,
+  SidebarContent,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarGroupContent,
+} from "@/components/ui/sidebar";
+import Container from "@/components/container";
+import { Separator } from "@/components/ui/separator";
 
 interface UserSidebarProps {
   items: MenuItem[];
@@ -19,8 +20,8 @@ interface UserSidebarProps {
 const UserSidebar: FC<UserSidebarProps> = ({ items }) => {
   return (
     <Sidebar className="border-none">
-      <div className="flex w-full h-full">
-        <div className="flex flex-col w-full">
+      <Container className="flex w-full h-full">
+        <Container className="flex flex-col w-full">
           <SidebarContent>
             <SidebarGroup className="my-auto">
               <SidebarGroupContent>
@@ -45,9 +46,9 @@ const UserSidebar: FC<UserSidebarProps> = ({ items }) => {
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
-        </div>
+        </Container>
         <Separator orientation="vertical" />
-      </div>
+      </Container>
     </Sidebar>
   );
 };

@@ -3,23 +3,26 @@ import { AxiosError } from "axios";
 import { Article, client } from "@/lib/api";
 
 export function useSaveArticle(articleId?: string): {
-  save: (title: string, content: string) => Promise<void>;
+  save: (article: Article) => Promise<void>;
+  id: string;
   isLoading: boolean;
   error: string | undefined | null;
 } {
-  const [id, setId] = useState<string>(articleId ?? "");
+  const [id, setId] = useState<string>(articleId ? articleId : "");
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const save = async (title: string, content: string) => {
+  const save = async (article: Article) => {
     setIsLoading(true);
     setError(undefined);
 
     try {
       const response = await client.put("/articles/save", {
         id,
-        title,
-        content,
+        title: article.title,
+        content: article.content,
+        public: article.public,
+        banner: article.banner,
       });
       if (response.status === 200) {
         setError(null);
@@ -33,7 +36,7 @@ export function useSaveArticle(articleId?: string): {
     }
   };
 
-  return { save, isLoading, error };
+  return { save, id, isLoading, error };
 }
 
 export function useGetArticles(): {
@@ -106,4 +109,68 @@ export function useGetArticle(articleId?: string): {
   }, [articleId]);
 
   return { article, isLoading, error };
+}
+
+export function useRemoveArticle(): {
+  remove: (id: string) => Promise<void>;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const remove = async (id: string) => {
+    setIsLoading(true);
+    setError(undefined);
+
+    try {
+      const response = await client.delete("/articles/delete", {
+        data: { id },
+      });
+
+      if (response.status === 200) setError(null);
+    } catch (err) {
+      const message = (err as AxiosError).response?.data as string;
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { remove, isLoading, error };
+}
+
+export function useGetSuggestedArticles() {
+  const canFetch = useRef<boolean>(true);
+  const [articles, setArticles] = useState<Article[] | null>(null);
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const get = async () => {
+    setIsLoading(true);
+    setError(undefined);
+
+    try {
+      const response = await client.get("/articles/get-suggested");
+
+      if (response.status === 200) {
+        setArticles(response.data as Article[]);
+        setError(null);
+      }
+    } catch (err) {
+      const message = (err as AxiosError).response?.data as string;
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (canFetch) {
+      canFetch.current = false;
+      get();
+    }
+  }, []);
+
+  return { articles, isLoading, error };
 }

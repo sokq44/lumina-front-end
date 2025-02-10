@@ -6,16 +6,16 @@ import { useToast } from "@/hooks/use-toast";
 import { usePasswordChangeInit } from "@/hooks/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
-import { LoaderCircle, MailQuestion } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import ThemeSwitch from "@/components/theme-switch";
 import GoBackArrow from "@/components/go-back-arrow";
+import { LoaderCircle, MailQuestion } from "lucide-react";
 
 const PasswordChangeInitPage = () => {
   const { init, attempts, isLoading, error } = usePasswordChangeInit();
   const { toast } = useToast();
-
   const [sentMessage, setSentMessage] = useState<string>("");
 
   const form = useForm<z.infer<typeof passwordChangeInitSchema>>({
@@ -60,8 +60,8 @@ const PasswordChangeInitPage = () => {
   };
 
   return (
-    <div className="bg-background flex items-center justify-center h-screen">
-      <GoBackArrow />
+    <Container className="bg-background flex items-center justify-center h-screen">
+      <GoBackArrow position="top-left" />
       <ThemeSwitch position="top-right" />
       <motion.div
         initial={{
@@ -73,7 +73,7 @@ const PasswordChangeInitPage = () => {
         }}
         className="flex w-full h-[24rem] md:w-[38rem] lg:w-[42rem] xl:w-[48rem]"
       >
-        <div className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
+        <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
           {sentMessage ? (
             <span className="text-base text-muted-foreground text-center tracking-wide leading-relaxed px-4">
               {sentMessage}
@@ -110,12 +110,12 @@ const PasswordChangeInitPage = () => {
               </form>
             </>
           )}
-        </div>
-        <div className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
+        </Container>
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
           <MailQuestion size={48} className="text-card" />
-        </div>
+        </Container>
       </motion.div>
-    </div>
+    </Container>
   );
 };
 

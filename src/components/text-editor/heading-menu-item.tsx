@@ -1,12 +1,13 @@
+import { useEffect, useState } from "react";
+import { useTextEditor } from "@/hooks/text-editor";
 import {
   Select,
-  SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { useTextEditor } from "./text-editor-provider";
-import { useEffect, useState } from "react";
+  SelectTrigger,
+  SelectContent,
+} from "@/components/ui/select";
+import Informative from "@/components/inform-badge/informative";
 
 type Level = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -44,9 +45,11 @@ const HeadingMenuItem = () => {
       onValueChange={(value) => handleSelection(parseInt(value) as Level)}
       value={selectedHeading.toString()}
     >
-      <SelectTrigger className="transition-all duration-300">
-        <SelectValue placeholder="Heading" />
-      </SelectTrigger>
+      <Informative label="Heading" className="w-full">
+        <SelectTrigger className="ring-none h-auto outline-none transition-all duration-300">
+          <SelectValue placeholder="Heading" />
+        </SelectTrigger>
+      </Informative>
       <SelectContent className="font-funnel">
         <SelectItem value="1" className="text-4xl">
           Heading 1

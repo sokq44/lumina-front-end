@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
 import { useVerifyUser } from "@/hooks/user";
 import { LoaderCircle, MailCheck, MailX } from "lucide-react";
+import Container from "@/components/container";
 import SlidingLink from "@/components/sliding-link";
 import ThemeSwitch from "@/components/theme-switch";
 
@@ -39,9 +40,9 @@ const EmailVerifiedPage = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-background flex items-center justify-center h-screen">
+      <Container className="bg-background flex items-center justify-center h-screen">
         <LoaderCircle size={32} className="animate-spin text-primary" />
-      </div>
+      </Container>
     );
   }
 
@@ -57,8 +58,8 @@ const EmailVerifiedPage = () => {
       className="bg-background flex items-center justify-center h-screen"
     >
       <ThemeSwitch position="top-right" />
-      <div className="flex w-full h-[24rem] md:w-[28rem] lg:w-[34rem] xl:w-[40rem]">
-        <div className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
+      <Container className="flex w-full h-[24rem] md:w-[28rem] lg:w-[34rem] xl:w-[40rem]">
+        <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
           <span
             className={
               errorMessage
@@ -71,7 +72,7 @@ const EmailVerifiedPage = () => {
           <span className="text-base text-muted-foreground text-center tracking-wide leading-relaxed px-4">
             {description}
           </span>
-          <div className="flex flex-col gap-y-4 mt-4 md:flex-row md:gap-x-8">
+          <Container className="flex flex-col gap-y-4 mt-4 md:flex-row md:gap-x-8">
             <SlidingLink to="/">Back to home</SlidingLink>
             {errorMessage && (
               <SlidingLink to={`mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`}>
@@ -79,16 +80,16 @@ const EmailVerifiedPage = () => {
               </SlidingLink>
             )}
             {!errorMessage && <SlidingLink to="/login">Sign in</SlidingLink>}
-          </div>
-        </div>
-        <div className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
+          </Container>
+        </Container>
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
           {errorMessage ? (
             <MailX size={48} className="text-card" />
           ) : (
             <MailCheck size={48} className="text-card" />
           )}
-        </div>
-      </div>
+        </Container>
+      </Container>
     </motion.div>
   );
 };

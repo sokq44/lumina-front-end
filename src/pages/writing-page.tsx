@@ -1,9 +1,6 @@
 import { useEffect } from "react";
-import { useLoggedIn } from "@/hooks/user";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CornerUpLeft, LoaderCircle } from "lucide-react";
-import TextEditor from "@/components/text-editor";
-import ThemeSwitch from "@/components/theme-switch";
+import { useLoggedIn } from "@/hooks/user";
 import {
   Dialog,
   DialogClose,
@@ -14,7 +11,11 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
+import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
+import ThemeSwitch from "@/components/theme-switch";
+import TextEditor from "@/components/text-editor/text-editor";
+import { CornerUpLeft, LoaderCircle } from "lucide-react";
 
 const WritingPage = () => {
   const { state } = useLocation();
@@ -29,21 +30,26 @@ const WritingPage = () => {
     if (loggedIn.error) navigate("/login");
   }, [loggedIn.error, navigate]);
 
+  const finishWriting = () => {
+    localStorage.removeItem("curr_article");
+    navigate("/user/my-articles");
+  };
+
   if (loggedIn.isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen w-screen">
+      <Container className="flex items-center justify-center h-screen w-screen">
         <LoaderCircle size={24} className="animate-spin" />
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="flex items-center justify-center h-screen w-screen">
+    <Container className="flex items-center justify-center h-screen w-screen">
       <Dialog>
         <DialogTrigger asChild>
           <Button
             variant="ghost"
-            className="absolute top-0 left-0 z-[100] m-2 p-2 rounded-md hover:cursor-pointer transition-all duration-300"
+            className="fixed top-0 left-0 z-[100] m-2 p-2 rounded-md hover:cursor-pointer transition-all duration-300"
           >
             <CornerUpLeft />
           </Button>
@@ -57,17 +63,17 @@ const WritingPage = () => {
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">No</Button>
+              <Button variant="outline">Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button onClick={() => navigate(-1)}>Yes</Button>
+              <Button onClick={finishWriting}>Quit</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
       </Dialog>
       <ThemeSwitch position="top-right" />
       <TextEditor article={state?.article} />
-    </div>
+    </Container>
   );
 };
 

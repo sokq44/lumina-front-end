@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
+import { Link, Outlet, To, useNavigate } from "react-router-dom";
 import { settingsMenuItems } from "@/lib/menu-items";
 import { useMediaQuery } from "usehooks-ts";
-import { useTheme } from "@/components/theme-provider";
-import Separator from "@/components/separator";
+import Container from "@/components/container";
+import { Button } from "@/components/ui/button";
 import ThemeSwitch from "@/components/theme-switch";
 import GoBackArrow from "@/components/go-back-arrow";
-import { Button } from "@/components/ui/button";
-import { PanelBottom, SunMoon } from "lucide-react";
-import { Link, Outlet, To, useNavigate } from "react-router-dom";
+import { Separator } from "@/components/ui/separator";
+import { useTheme } from "@/components/theme-provider";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { PanelBottom, SunMoon } from "lucide-react";
 
 const SettingsPage = () => {
   const { theme, setTheme } = useTheme();
@@ -22,11 +23,11 @@ const SettingsPage = () => {
 
   if (matches) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center">
+      <Container className="w-screen h-screen flex items-center justify-center">
         <ThemeSwitch position="top-right" />
-        <GoBackArrow to="/user" />
-        <div className="flex items-center gap-x-8 w-full h-auto p-8 md:w-[52rem] lg:w-[58rem] xl:w-[68rem]">
-          <div className="flex flex-col gap-y-4 w-1/5">
+        <GoBackArrow to="/user/articles" position="top-left" />
+        <Container className="flex items-center gap-x-8 w-full h-auto p-8 md:w-[52rem] lg:w-[58rem] xl:w-[68rem]">
+          <Container className="flex flex-col gap-y-4 w-1/5">
             {settingsMenuItems.map((item, index) => (
               <Button
                 key={index}
@@ -48,19 +49,19 @@ const SettingsPage = () => {
                 <p className="text-md">{item.title}</p>
               </Button>
             ))}
-          </div>
+          </Container>
           <Separator orientation="vertical" className="h-52" />
-          <div className="w-full h-full">
+          <Container className="w-full h-full">
             <Outlet />
-          </div>
-        </div>
-      </div>
+          </Container>
+        </Container>
+      </Container>
     );
   }
 
   return (
     <Drawer>
-      <GoBackArrow to="/user" />
+      <GoBackArrow to="/user/articles" position="top-left" />
       <DrawerContent className="flex flex-col gap-y-4 px-4 items-center justify-center my-8">
         {settingsMenuItems.map((item, index) => (
           <Link
@@ -94,9 +95,9 @@ const SettingsPage = () => {
       <DrawerTrigger className=" absolute top-0 right-0 mr-2 mt-2 w-12 h-12 flex">
         <PanelBottom className="self-center" strokeWidth="1.2px" size={48} />
       </DrawerTrigger>
-      <div className="flex items-center justify-center h-screen pt-16">
+      <Container className="flex items-center justify-center h-screen pt-16">
         <Outlet />
-      </div>
+      </Container>
     </Drawer>
   );
 };

@@ -18,12 +18,12 @@ export type MenuItem = {
 export const userMenuItems: MenuItem[] = [
   {
     title: "Articles",
-    url: "/user",
+    url: "articles",
     icon: LayoutTemplate,
   },
   {
     title: "My Articles",
-    url: "articles",
+    url: "my-articles",
     icon: FileText,
   },
   {

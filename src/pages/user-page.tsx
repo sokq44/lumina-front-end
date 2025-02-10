@@ -1,18 +1,9 @@
-import { useEffect, useState } from "react";
-import { userMenuItems } from "@/lib/menu-items";
+import { useEffect } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "usehooks-ts";
 import { useToast } from "@/hooks/use-toast";
+import { userMenuItems } from "@/lib/menu-items";
 import { useLoggedIn, useLogout } from "@/hooks/user";
-import { useTheme } from "@/components/theme-provider";
-import Separator from "@/components/separator";
-import SearchBar from "@/components/search-bar";
-import { Button } from "@/components/ui/button";
-import ThemeSwitch from "@/components/theme-switch";
-import UserSidebar from "@/components/user-sidebar";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { LoaderCircle, LogOut, PanelBottom, SunMoon } from "lucide-react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import {
   Pagination,
   PaginationContent,
@@ -22,6 +13,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import Container from "@/components/container";
+import { Button } from "@/components/ui/button";
+import ThemeSwitch from "@/components/theme-switch";
+import UserSidebar from "@/components/user-sidebar";
+import { Separator } from "@/components/ui/separator";
+import { useTheme } from "@/components/theme-provider";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { LoaderCircle, LogOut, PanelBottom, SunMoon } from "lucide-react";
 
 const UserPage = () => {
   const logout = useLogout();
@@ -30,8 +30,6 @@ const UserPage = () => {
   const matches = useMediaQuery("(min-width:1024px)");
   const { toast } = useToast();
   const { theme, setTheme } = useTheme();
-
-  const [search, setSearch] = useState<string>("");
 
   const updatedMenuItems = userMenuItems.concat([
     {
@@ -58,9 +56,9 @@ const UserPage = () => {
 
   if (logout.isLoading || loggedIn.isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen w-screen">
+      <Container className="flex items-center justify-center h-screen w-screen">
         <LoaderCircle size={24} className="animate-spin" />
-      </div>
+      </Container>
     );
   }
 
@@ -68,23 +66,15 @@ const UserPage = () => {
     return (
       <SidebarProvider>
         <UserSidebar items={updatedMenuItems} />
-        <div className="flex flex-col h-screen w-screen">
-          <div className="flex items-center w-full bg-background h-20">
+        <Container className="flex flex-col h-screen w-screen">
+          <Container className="flex items-center w-full bg-background h-14 justify-between">
             <SidebarTrigger className="ml-2 w-10 h-10 transition-all duration-300" />
-            <div className="flex justify-center w-full">
-              <SearchBar
-                onSearch={() => console.log(search)}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <ThemeSwitch className="mr-2" />
-          </div>
-          <Separator orientation="horizontal" />
-          <div className="flex w-full bg-background h-full">
+            <ThemeSwitch className="relative" />
+          </Container>
+          <Container className="flex w-full bg-background h-full">
             <Outlet />
-          </div>
-        </div>
+          </Container>
+        </Container>
       </SidebarProvider>
     );
   }
@@ -111,15 +101,8 @@ const UserPage = () => {
           <p className="text-base">Toggle Theme</p>
         </Button>
       </DrawerContent>
-      <div className="flex flex-col items-center p-2 gap-y-2 h-screen w-screen">
-        <div className="flex items-center justify-between w-full mb-2 gap-x-2">
-          <div className="flex justify-center w-full">
-            <SearchBar
-              onSearch={() => console.log(search)}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
+      <Container className="flex flex-col items-center p-2 gap-y-2 h-screen w-screen">
+        <Container className="flex items-center justify-between w-full mb-2 gap-x-2">
           <DrawerTrigger className="w-12 h-12 flex">
             <PanelBottom
               className="self-center"
@@ -127,10 +110,10 @@ const UserPage = () => {
               size={48}
             />
           </DrawerTrigger>
-        </div>
-        <div className="h-full">{/* Place For The Articles */}</div>
+        </Container>
+        <Container className="h-full">{/* Place For The Articles */}</Container>
         <Separator orientation="horizontal" />
-        <div className="w-full flex items-center justify-center">
+        <Container className="w-full flex items-center justify-center">
           <Pagination className="text-muted-foreground font-semibold">
             <PaginationContent>
               <PaginationItem>
@@ -147,8 +130,8 @@ const UserPage = () => {
               </PaginationItem>
             </PaginationContent>
           </Pagination>
-        </div>
-      </div>
+        </Container>
+      </Container>
     </Drawer>
   );
 };
