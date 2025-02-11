@@ -13,7 +13,7 @@ const GoBackArrow: FC<GoBackArrowProps> = ({ to, position }) => {
   const navigate = useNavigate();
 
   let finalClassName =
-    "fixed top-0 z-50 m-2 p-2 rounded-md hover:cursor-pointer transition-all duration-300 ";
+    "fixed top-0 z-50 m-2 p-2 rounded-md text-primary bg-secondary/50 dark:bg-secondary/70 hover:cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300";
 
   switch (position) {
     case "top-left":

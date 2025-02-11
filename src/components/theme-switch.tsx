@@ -13,7 +13,7 @@ const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, position }) => {
   const { theme, setTheme } = useTheme();
 
   let finalClassName =
-    "fixed z-50 m-2 p-2 top-0 rounded-md hover:cursor-pointer transition-all duration-300";
+    "fixed z-50 m-2 p-2 top-0 rounded-md text-primary bg-secondary/50 dark:bg-secondary/70 hover:cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300";
 
   switch (position) {
     case "top-left":
@@ -33,7 +33,6 @@ const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, position }) => {
 
   return (
     <Button
-      variant="ghost"
       size="icon"
       onClick={switchTheme}
       className={cn(finalClassName, className)}

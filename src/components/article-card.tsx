@@ -18,8 +18,6 @@ interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
-  console.log(article.user_image);
-
   return (
     <Card
       className={cn(
@@ -28,12 +26,11 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
       )}
     >
       <CardHeader>
-        <CardTitle className="text-2xl overflow-hidden whitespace-nowrap text-ellipsis mx-1">
+        <CardTitle className="w-full text-2xl overflow-hidden line-clamp-1 text-ellipsis break-all">
           {article.title}
         </CardTitle>
         <CardDescription className="flex items-center gap-x-1">
           <Avatar className="w-8 h-auto col-auto my-auto shadow-md">
-            {/* <AvatarImage src="https://cdn2.vectorstock.com/i/1000x1000/44/01/default-avatar-photo-placeholder-icon-grey-vector-38594401.jpg" /> */}
             <AvatarImage src={article.user_image} />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>

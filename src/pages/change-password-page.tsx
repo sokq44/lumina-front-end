@@ -14,11 +14,11 @@ import ThemeSwitch from "@/components/theme-switch";
 import { KeyRound, LoaderCircle } from "lucide-react";
 
 const ChangePasswordPage = () => {
-  const { change, attempts, isLoading, error } = useChangePassword();
   const { toast } = useToast();
   const { token } = useParams();
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>("");
+  const { change, attempts, isLoading, error } = useChangePassword();
 
   const form = useForm<z.infer<typeof changePasswordFormSchema>>({
     resolver: zodResolver(changePasswordFormSchema),

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { AxiosError } from "axios";
 import { Article, client } from "@/lib/api";
+import { grabErrorMessage } from "@/lib/utils";
 
 export function useSaveArticle(articleId?: string): {
   save: (article: Article) => Promise<void>;
@@ -28,8 +28,8 @@ export function useSaveArticle(articleId?: string): {
         setError(null);
         setId(response.data);
       }
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -58,8 +58,8 @@ export function useGetArticles(): {
         setArticles(response.data as Article[]);
         setError(null);
       }
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -94,8 +94,8 @@ export function useGetArticle(articleId?: string): {
           setArticle(response.data as Article);
           setError(null);
         }
-      } catch (err) {
-        const message = (err as AxiosError).response?.data as string;
+      } catch (e) {
+        const message = grabErrorMessage(e);
         setError(message);
       } finally {
         setIsLoading(false);
@@ -129,8 +129,8 @@ export function useRemoveArticle(): {
       });
 
       if (response.status === 200) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -157,8 +157,8 @@ export function useGetSuggestedArticles() {
         setArticles(response.data as Article[]);
         setError(null);
       }
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);

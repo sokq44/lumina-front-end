@@ -83,7 +83,7 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
       }),
       Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
     ],
-    content: `<p>Contents of your article...<p>`,
+    content: `<span>Contents of your article...<span>`,
   });
 
   if (!editor) {

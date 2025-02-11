@@ -120,7 +120,7 @@ const LoginPage = () => {
               {login.isLoading ? (
                 <LoaderCircle size={24} className="animate-spin" />
               ) : (
-                <span>Sign In</span>
+                "Sign In"
               )}
             </Button>
           </form>

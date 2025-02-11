@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AxiosError } from "axios";
 import { client } from "@/lib/api";
+import { grabErrorMessage } from "@/lib/utils";
 
 export function useUploadAsset(): {
   url: string | null;
@@ -34,8 +34,8 @@ export function useUploadAsset(): {
 
       setUrl(response.data as string);
       setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);

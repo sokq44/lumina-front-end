@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { AxiosError } from "axios";
 import { client, User } from "@/lib/api";
+import { grabErrorMessage } from "@/lib/utils";
 
 export function useRegister(): {
   register: (username: string, email: string, password: string) => void;
@@ -26,8 +26,8 @@ export function useRegister(): {
         password: password,
       });
       setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);
@@ -56,8 +56,8 @@ export function useLogin(): {
         password: password,
       });
       setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -84,8 +84,8 @@ export function useLoggedIn(): {
       try {
         const response = await client.get("/user/logged-in");
         if (response.status === 200) setIsLoggedIn(true);
-      } catch (err) {
-        const message = (err as AxiosError).response?.data as string;
+      } catch (e) {
+        const message = grabErrorMessage(e);
         setError(message);
         setIsLoggedIn(false);
       } finally {
@@ -103,7 +103,7 @@ export function useLoggedIn(): {
 }
 
 export function useLogout(): {
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
   error: string | undefined;
 } {
@@ -115,8 +115,8 @@ export function useLogout(): {
 
     try {
       await client.delete("user/logout");
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -141,8 +141,8 @@ export function useVerifyUser(token: string | undefined): {
       try {
         const response = await client.patch("/user/verify-email", { token });
         if (response.status === 204) setError(null);
-      } catch (err) {
-        const message = (err as AxiosError).response?.data as string;
+      } catch (e) {
+        const message = grabErrorMessage(e);
         setError(message);
       } finally {
         setIsLoading(false);
@@ -178,8 +178,8 @@ export function usePasswordChangeInit(): {
         email: email,
       });
       if (response.status === 201) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);
@@ -209,8 +209,8 @@ export function useChangePassword(): {
         password: password,
       });
       if (response.status === 200) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);
@@ -236,8 +236,8 @@ export function useGetUser(): {
       const response = await client.get("/user/get-user");
       setUser(response.data as User);
       setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -267,8 +267,8 @@ export function useModifyUser(): {
     try {
       const response = await client.patch("/user/modify-user", user);
       if (response.status === 200) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);

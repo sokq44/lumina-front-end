@@ -21,10 +21,11 @@ const ImageUploader = () => {
   const [imageSource, setImageSource] = useState<string>(
     "/image-uploader-placeholder.webp"
   );
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { toast } = useToast();
   const textEditor = useTextEditor();
   const assetUploader = useUploadAsset();
-  const { toast } = useToast();
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (assetUploader.error) {
