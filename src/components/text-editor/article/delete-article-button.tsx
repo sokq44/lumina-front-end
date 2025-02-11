@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { useTextEditor } from "@/hooks/text-editor";
 import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
 import {
@@ -10,19 +11,21 @@ import {
   DialogContent,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import Informative from "@/components/inform-badge/informative";
 import { LoaderCircle, Trash2 } from "lucide-react";
 
-const DeleteArticleButton = () => {
-  const textEditor = useTextEditor();
-  const articleSaver = useSaveArticle(textEditor.article?.id);
-  const articleRemover = useRemoveArticle();
+interface DeleteArticleButtonProps extends ButtonProps {
+  onDeleteArticle: () => Promise<void>;
+}
 
-  const deleteArticle = async () => {
-    const id = textEditor.article?.id;
-    if (id) await articleRemover.remove(id);
-  };
+const DeleteArticleButton: FC<DeleteArticleButtonProps> = ({
+  onDeleteArticle,
+  ...props
+}) => {
+  const textEditor = useTextEditor();
+  const articleRemover = useRemoveArticle();
+  const articleSaver = useSaveArticle(textEditor.article?.id);
 
   return (
     <Dialog>
@@ -30,12 +33,8 @@ const DeleteArticleButton = () => {
         <DialogTrigger asChild>
           <Button
             variant="destructive"
-            disabled={
-              articleSaver.isLoading ||
-              articleRemover.isLoading ||
-              !textEditor.article?.id
-            }
             className="p-2 w-9 h-9 transition-all duration-300"
+            {...props}
           >
             <Trash2 />
           </Button>
@@ -58,7 +57,7 @@ const DeleteArticleButton = () => {
             <Button
               variant="destructive"
               disabled={articleRemover.isLoading}
-              onClick={deleteArticle}
+              onClick={onDeleteArticle}
             >
               {articleSaver.isLoading ? (
                 <LoaderCircle className="animate-spin" />

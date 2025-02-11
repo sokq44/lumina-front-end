@@ -17,10 +17,10 @@ interface TextEditorContentProps {
 }
 
 const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
-  const textEditor = useTextEditor();
-  const articleGetter = useGetArticle(textEditor.article?.id);
-  const assetUploader = useUploadAsset();
   const { toast } = useToast();
+  const textEditor = useTextEditor();
+  const assetUploader = useUploadAsset();
+  const articleGetter = useGetArticle(textEditor.article?.id);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const bannerRef = useRef<HTMLInputElement>(null);

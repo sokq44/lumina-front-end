@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Informative from "@/components/inform-badge/informative";
 import { TvMinimalPlay } from "lucide-react";
-import Informative from "../inform-badge/informative";
 
 const YoutubeMenuItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
