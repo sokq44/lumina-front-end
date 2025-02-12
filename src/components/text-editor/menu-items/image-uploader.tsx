@@ -11,11 +11,11 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import Informative from "@/components/inform-badge/informative";
 import { ImagePlus, LoaderCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const ImageUploader = () => {
   const [imageSource, setImageSource] = useState<string>(
@@ -106,7 +106,7 @@ const ImageUploader = () => {
             type="file"
             accept="image/*"
             onChange={imageChange}
-            hidden
+            className="hidden"
           />
           <Container
             onClick={() => inputRef.current?.click()}

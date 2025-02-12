@@ -25,6 +25,9 @@ export function useUploadAsset(): {
     formData.append("filename", file.name);
     formData.append("image", file);
 
+    setError(undefined);
+    setIsLoading(true);
+
     try {
       const response = await client.post("/assets/add", formData, {
         headers: {
