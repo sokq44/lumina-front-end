@@ -95,7 +95,7 @@ const LoginPage = () => {
           </span>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="flex flex-col items-center gap-y-6 w-full px-8"
+            className="flex flex-col items-center gap-y-4 w-full px-8"
             autoComplete="off"
           >
             <Input
@@ -124,9 +124,19 @@ const LoginPage = () => {
               )}
             </Button>
           </form>
-          <Container className="flex flex-col gap-y-2 mt-4 md:flex-row md:gap-x-4">
-            <SlidingLink to="/register">Don't Have an Account?</SlidingLink>
-            <SlidingLink to="/user/password">Forgot Your Password?</SlidingLink>
+          <Container className="w-full flex flex-col items-center gap-y-2 px-8 mt-2 md:flex-row md:gap-x-4 md:mt-4 md:justify-center">
+            <SlidingLink
+              to="/register"
+              className="w-full px-2 py-[10px] text-sm  bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+            >
+              Don't Have an Account?
+            </SlidingLink>
+            <SlidingLink
+              to="/user/password"
+              className="w-full px-2 py-[10px] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+            >
+              Forgot Your Password?
+            </SlidingLink>
           </Container>
         </Container>
         <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">

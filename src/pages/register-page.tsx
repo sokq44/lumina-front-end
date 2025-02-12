@@ -88,7 +88,7 @@ const RegisterPage = () => {
           </span>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="flex flex-col items-center gap-y-6 w-full px-8"
+            className="flex flex-col items-center gap-y-4 w-full px-8"
             autoComplete="off"
           >
             <Input
@@ -130,7 +130,12 @@ const RegisterPage = () => {
                 <span>Sign up</span>
               )}
             </Button>
-            <SlidingLink to="/login">Already have an account?</SlidingLink>
+            <SlidingLink
+              to="/login"
+              className="w-full px-2 py-[10px] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+            >
+              Already have an account?
+            </SlidingLink>
           </form>
         </Container>
         <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">

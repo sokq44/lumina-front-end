@@ -87,7 +87,9 @@ const ArticlePage = () => {
               <AvatarFallback>{article?.user[0]}</AvatarFallback>
             </Avatar>
             <Container className="flex flex-col items-start gap-y-1">
-              <span className="text-xl text- font-bold">{article?.title}</span>
+              <span className="text-xl sm:text-4xl font-bold">
+                {article?.title}
+              </span>
               <span className="text-sm text-muted-foreground">
                 Written by{" "}
                 <Link
