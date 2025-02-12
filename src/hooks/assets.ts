@@ -15,6 +15,9 @@ export function useUploadAsset(): {
   const [attempts, setAttempts] = useState<number>(0);
 
   const upload = async (file: File) => {
+    setError(undefined);
+    setIsLoading(true);
+
     if (!file) {
       setAttempts((prev) => prev + 1);
       setError("There seems to be a problem with this image.");
@@ -24,9 +27,6 @@ export function useUploadAsset(): {
     const formData = new FormData();
     formData.append("filename", file.name);
     formData.append("image", file);
-
-    setError(undefined);
-    setIsLoading(true);
 
     try {
       const response = await client.post("/assets/add", formData, {
