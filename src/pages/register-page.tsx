@@ -36,8 +36,10 @@ const RegisterPage = () => {
     if (error) {
       toast({
         variant: "destructive",
-        title: "Problem With Signing Up",
-        description: error,
+        title: "Sign-Up Error",
+        description:
+          error ||
+          "An issue occurred while creating your account. Please try again later.",
       });
     } else if (error === null) {
       navigate("/email", { state: { email: email } });
@@ -59,8 +61,9 @@ const RegisterPage = () => {
     if (message) {
       toast({
         variant: "destructive",
-        title: "Problem With Signing Up",
-        description: message,
+        title: "Form Submission Error",
+        description:
+          message || "Please ensure all fields are correctly filled out.",
       });
     }
   };
@@ -83,8 +86,8 @@ const RegisterPage = () => {
           {/* Logo Placeholder */}
           <Circle strokeWidth="1px" fill="" size={84} />
 
-          <span className="text-base text-center font-semibold text-muted-foreground mb-2 px-4">
-            Provide your credentials in order to create an account.
+          <span className="text-center font-medium text-muted-foreground mb-2 px-4">
+            Create an account by filling in the details below.
           </span>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -95,28 +98,28 @@ const RegisterPage = () => {
               variant="register"
               disabled={isLoading}
               type="text"
-              placeholder="Username"
+              placeholder="Choose a Username"
               {...form.register("username")}
             />
             <Input
               variant="register"
               disabled={isLoading}
               type="text"
-              placeholder="E-mail Address"
+              placeholder="Enter you email address"
               {...form.register("email")}
             />
             <Input
               variant="register"
               disabled={isLoading}
               type="password"
-              placeholder="Password"
+              placeholder="Create a strong Password"
               {...form.register("password")}
             />
             <Input
               variant="register"
               disabled={isLoading}
               type="password"
-              placeholder="Repeat password"
+              placeholder="Repeat your password"
               {...form.register("repeatPass")}
             />
             <Button
@@ -125,9 +128,12 @@ const RegisterPage = () => {
               className="w-full transition-all duration-300"
             >
               {isLoading ? (
-                <LoaderCircle size={24} className="animate-spin text-card" />
+                <LoaderCircle
+                  size={24}
+                  className="animate-spin text-secondary"
+                />
               ) : (
-                <span>Sign up</span>
+                <span>Sign Up Now</span>
               )}
             </Button>
             <SlidingLink

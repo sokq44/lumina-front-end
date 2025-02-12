@@ -17,9 +17,9 @@ import GoBackArrow from "@/components/go-back-arrow";
 
 const LoginPage = () => {
   const login = useLogin();
+  const { toast } = useToast();
   const loggedIn = useLoggedIn();
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -37,8 +37,10 @@ const LoginPage = () => {
     if (login.error) {
       toast({
         variant: "destructive",
-        title: "Problem With Signing In",
-        description: login.error,
+        title: "Sign-In Error",
+        description:
+          login.error ||
+          "Something went wrong while signing in. Please try again.",
       });
     } else if (login.error === null) {
       navigate("/user/articles");
@@ -58,16 +60,17 @@ const LoginPage = () => {
     if (message) {
       toast({
         variant: "destructive",
-        title: "Problem With Signing In",
-        description: message,
+        title: "Form Submission Error",
+        description: message || "Please check your input and try again.",
       });
     }
   };
 
   if (loggedIn.isLoading) {
     return (
-      <Container className="bg-background flex items-center justify-center h-screen">
+      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
         <LoaderCircle size={24} className="animate-spin" />
+        <span className="ml-2 text-lg">Checking your login status...</span>
       </Container>
     );
   }
@@ -90,8 +93,8 @@ const LoginPage = () => {
           {/* Logo Placeholder */}
           <Circle strokeWidth="1px" fill="" size={84} />
 
-          <span className="text-base text-center font-semibold text-muted-foreground mb-4 px-4">
-            Provide your credentials in order to sign in.
+          <span className="text-center font-medium text-muted-foreground mb-2 px-4">
+            Welcome back! Please enter your credentials to access your account.
           </span>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -102,14 +105,14 @@ const LoginPage = () => {
               variant="login"
               disabled={login.isLoading}
               type="email"
-              placeholder="E-mail Address"
+              placeholder="Enter your email address"
               {...form.register("email")}
             />
             <Input
               variant="login"
               disabled={login.isLoading}
               type="password"
-              placeholder="Password"
+              placeholder="Enter your password"
               {...form.register("password")}
             />
             <Button
@@ -118,9 +121,12 @@ const LoginPage = () => {
               className="w-full text-secondary transition-all duration-300"
             >
               {login.isLoading ? (
-                <LoaderCircle size={24} className="animate-spin" />
+                <LoaderCircle
+                  size={24}
+                  className="animate-spin text-secondary"
+                />
               ) : (
-                "Sign In"
+                "Log In to Your Account"
               )}
             </Button>
           </form>
@@ -129,13 +135,13 @@ const LoginPage = () => {
               to="/register"
               className="w-full px-2 py-[10px] text-sm  bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
             >
-              Don't Have an Account?
+              Create an Account
             </SlidingLink>
             <SlidingLink
               to="/user/password"
               className="w-full px-2 py-[10px] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
             >
-              Forgot Your Password?
+              Reset Your Password
             </SlidingLink>
           </Container>
         </Container>
