@@ -26,8 +26,6 @@ import InformBadger from "@/components/inform-badge/inform-badger";
 import "./index.css";
 
 // TODO: Logo design.
-// TODO: responsive layouts (email-verified-page, verify-email-page)
-// TODO: better messaging (email-verified-page, profile-page, settings-page, user-page, verify-email-page, writing-page)
 // TODO: preview of the profile picture before uploading (profile-page)
 
 const router = createBrowserRouter([

@@ -2,10 +2,10 @@ import {
   User,
   UserCog,
   Settings,
-  FileText,
+  Newspaper,
   LucideIcon,
   ShieldCheck,
-  LayoutTemplate,
+  NotebookTabs,
 } from "lucide-react";
 
 export type MenuItem = {
@@ -17,14 +17,14 @@ export type MenuItem = {
 
 export const userMenuItems: MenuItem[] = [
   {
-    title: "Articles",
+    title: "Suggested",
     url: "articles",
-    icon: LayoutTemplate,
+    icon: Newspaper,
   },
   {
     title: "My Articles",
     url: "my-articles",
-    icon: FileText,
+    icon: NotebookTabs,
   },
   {
     title: "Settings",

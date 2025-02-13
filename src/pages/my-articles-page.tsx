@@ -89,19 +89,6 @@ const MyArticlesPage = () => {
       <Less>
         {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
           <Container className="w-full h-full flex flex-col items-center gap-y-4 px-2">
-            {/* <Link
-              to={"/user/writing"}
-              state={{ article: undefined }}
-              className="w-full h-full"
-            >
-              <Card className="w-full h-full py-2 flex flex-col items-center justify-center bg-card-foreground text-card border-0">
-                <CardTitle className="text-3xl font-bold">Create</CardTitle>
-                <CardDescription className="flex items-center text-inherit">
-                  <PenLine size={12} className="mr-1" />
-                  Write a new article
-                </CardDescription>
-              </Card>
-            </Link> */}
             {articlesGetter.articles.map((article, index) => (
               <Link
                 to={"/user/writing"}
