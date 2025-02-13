@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import Informative from "@/components/inform-badge/informative";
 import { Info } from "lucide-react";
 
-const HelpButton = () => {
+const HelpArticleButton = () => {
   return (
     <Dialog>
       <Informative label="Help">
@@ -35,4 +35,4 @@ const HelpButton = () => {
   );
 };
 
-export default HelpButton;
+export default HelpArticleButton;

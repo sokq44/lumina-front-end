@@ -26,6 +26,7 @@ import InformBadger from "@/components/inform-badge/inform-badger";
 import "./index.css";
 
 // TODO: Logo design.
+// TODO: preview of the profile picture before uploading (profile-page)
 
 const router = createBrowserRouter([
   {

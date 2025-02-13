@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
+import { cn } from "@/lib/utils";
+import { User } from "@/lib/api";
 import { modifyUserFormSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +27,7 @@ const ProfilePage = () => {
   const { toast } = useToast();
 
   const [modifying, setModifying] = useState<boolean>(false);
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [currentUser, setCurrentUser] = useState<User | null>(userGetter.user);
   const pictureInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof modifyUserFormSchema>>({
@@ -38,7 +40,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (loggedIn.error) navigate("/login");
-  }, [loggedIn.isLoggedIn, loggedIn.error, navigate]);
+  }, [loggedIn.error, navigate]);
 
   useEffect(() => {
     if (userGetter.error) {
@@ -54,25 +56,17 @@ const ProfilePage = () => {
     if (userModifier.error) {
       toast({
         variant: "destructive",
-        title: "Problem With Modifying Data",
+        title: "Failed to Update Profile",
         description: userModifier.error,
       });
     } else if (userModifier.error === null) {
       toast({
-        variant: "default",
-        title: "Modifications Applied",
-        description: "Changes have been saved.",
+        variant: "success",
+        title: "Updated Successfully",
+        description: "Your profile has been updated successfully!",
       });
     }
-  }, [userModifier.attempts, userModifier.error, toast]);
-
-  useEffect(() => {
-    if (userGetter.user && !modifying) {
-      setImageUrl(userGetter.user.image);
-      form.setValue("username", userGetter.user.username);
-      form.setValue("email", userGetter.user.email);
-    }
-  }, [userGetter.user, form, modifying]);
+  }, [userModifier.error, toast]);
 
   useEffect(() => {
     if (assetUploader.error) {
@@ -82,26 +76,34 @@ const ProfilePage = () => {
         description: assetUploader.error,
       });
     }
-  }, [assetUploader.attempts, assetUploader.error, toast]);
+  }, [assetUploader.error, toast]);
+
+  useEffect(() => {
+    if (userGetter.user) {
+      setCurrentUser({
+        ...(currentUser as User),
+        image: userGetter.user.image,
+      });
+      form.setValue("username", userGetter.user.username);
+      form.setValue("email", userGetter.user.email);
+    }
+  }, [userGetter.user]);
 
   useEffect(() => {
     if (assetUploader.url) {
-      toast({
-        variant: "default",
-        title: "Image Uploaded",
-        description:
-          "The image may not be visible straightaway. Try refreshing the page after saving changes",
+      setCurrentUser({
+        ...(currentUser as User),
+        image: assetUploader.url,
       });
-      setImageUrl(assetUploader.url);
     }
-  }, [assetUploader.url, toast]);
+  }, [assetUploader.url]);
 
   const onSubmit = async (values: z.infer<typeof modifyUserFormSchema>) => {
-    if (modifying) {
+    if (modifying && currentUser) {
       await userModifier.modify({
         username: values.username,
         email: values.email,
-        image: imageUrl,
+        image: currentUser.image,
       });
     }
 
@@ -118,7 +120,7 @@ const ProfilePage = () => {
     if (message) {
       toast({
         variant: "destructive",
-        title: "Problem With Modfying Data",
+        title: "Failed to Update Profile",
         description: message,
       });
     }
@@ -127,36 +129,55 @@ const ProfilePage = () => {
   const onPictureChange = async () => {
     const file = pictureInputRef.current?.files?.[0];
 
-    if (file) {
-      await assetUploader.upload(file);
-    }
+    if (file) await assetUploader.upload(file);
   };
+
+  const onCancelModifying = async () => {
+    setModifying(false);
+    setCurrentUser(userGetter.user);
+  };
+
+  const isLoading =
+    userModifier.isLoading || userGetter.isLoading || assetUploader.isLoading;
 
   return (
     <Container className="h-full w-full flex flex-col gap-4 items-center lg:justify-center">
       <Card className="w-full h-auto p-8 border-none shadow-none mt-8 lg:mt-0">
         <Container className="w-full flex flex-col items-center gap-y-4">
-          <Avatar className="w-32 h-auto">
-            <AvatarImage src={userGetter.user?.image} />
+          <Avatar className="w-32 h-auto shadow-md">
+            <AvatarImage src={currentUser?.image} />
             <AvatarFallback className="w-32 h-32 bg-muted">
-              <LoaderCircle size={24} className="animate-spin" />
+              <LoaderCircle
+                size={24}
+                className="animate-spin text-muted-foreground"
+              />
             </AvatarFallback>
           </Avatar>
+          <Input
+            ref={pictureInputRef}
+            type="file"
+            accept="image/*"
+            disabled={!modifying}
+            onChange={onPictureChange}
+            className="hidden"
+          />
           <Button
             variant="secondary"
-            className={`${modifying ? "visible" : "hidden"} gap-2 p-3`}
+            disabled={isLoading}
             onClick={() => pictureInputRef.current?.click()}
+            className={cn(
+              modifying ? "visible" : "hidden",
+              " gap-x-2 p-3 transition-all duration-300"
+            )}
           >
-            <Input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              disabled={!modifying}
-              onChange={onPictureChange}
-              ref={pictureInputRef}
-            />
-            <ImageUp />
-            <span>Select Picture</span>
+            {assetUploader.isLoading ? (
+              "Uploading..."
+            ) : (
+              <>
+                <ImageUp />
+                <span>Select a Picture</span>
+              </>
+            )}
           </Button>
         </Container>
         <Form {...form}>
@@ -177,7 +198,7 @@ const ProfilePage = () => {
                       type="text"
                       placeholder="..."
                       autoComplete="off"
-                      disabled={!modifying}
+                      disabled={!modifying || isLoading}
                       {...field}
                     />
                   </FormControl>
@@ -197,7 +218,7 @@ const ProfilePage = () => {
                       type="text"
                       placeholder="..."
                       autoComplete="off"
-                      disabled={!modifying}
+                      disabled={!modifying || isLoading}
                       {...field}
                     />
                   </FormControl>
@@ -207,28 +228,31 @@ const ProfilePage = () => {
             <Container className="flex w-full space-x-2">
               {modifying && (
                 <Button
-                  type="button"
-                  className="w-full font-semibold"
                   variant="secondary"
-                  onClick={() => setModifying(false)}
+                  disabled={isLoading}
+                  onClick={onCancelModifying}
+                  className="w-full transition-all duration-300"
                 >
                   Cancel
                 </Button>
               )}
               <Button
-                disabled={userModifier.isLoading}
+                disabled={isLoading}
                 type="submit"
                 variant={modifying ? "default" : "secondary"}
-                className="w-full font-semibold"
+                className="w-full transition-all duration-300"
               >
                 {modifying ? (
                   userModifier.isLoading ? (
-                    <LoaderCircle size={24} className="animate-spin" />
+                    <LoaderCircle
+                      size={24}
+                      className="animate-spin text-muted-foreground"
+                    />
                   ) : (
                     "Save Changes"
                   )
                 ) : (
-                  "Modify Your Data"
+                  "Update Your Profile"
                 )}
               </Button>
             </Container>

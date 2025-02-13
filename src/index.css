@@ -90,7 +90,7 @@
   }
 
   blockquote {
-    @apply ml-6 my-3 pl-4 border-l-2 border-l-gray-300
+    @apply ml-6 my-3 pl-4 border-l-[3px] border-l-gray-300 text-muted-foreground;
   }
 
   ul, ol {
@@ -126,23 +126,23 @@
   }
 
   h1 {
-    @apply text-4xl;
+    @apply text-4xl my-1;
   }
 
   h2 {
-    @apply text-3xl;
+    @apply text-3xl my-1;
   }
 
   h3 {
-    @apply text-2xl;
+    @apply text-2xl my-1;
   }
 
   h4 {
-    @apply text-xl;
+    @apply text-xl my-1;
   }
 
   h5 {
-    @apply text-lg;
+    @apply text-lg my-1;
   }
 
   h6 {
@@ -180,14 +180,14 @@
   }
 
   .tip-tap-image {
-    @apply my-4;
+    @apply w-full h-auto my-4 rounded-lg;
   }
   
   div[data-youtube-video] {
     @apply cursor-move pr-6;
 
     iframe {
-      @apply outline-none border border-black min-h-[200px] min-w-[200px] rounded-md;
+      @apply w-full max-h-[300px] outline-none border border-black rounded-lg sm:min-h-[480px] sm:w-[640px];
     }
 
     &.ProseMirror-selectednode iframe {

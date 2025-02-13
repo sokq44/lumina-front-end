@@ -31,11 +31,11 @@ const PasswordChangeInitPage = () => {
       toast({
         variant: "destructive",
         title: "Problem With Sending Email",
-        description: error,
+        description: error || "Something went wrong. Please try again later.",
       });
     } else if (error === null) {
       setSentMessage(
-        "An email has been sent successfully. Please check your inbox and follow the instructions to reset your password."
+        "We've sent password reset instructions to your email. Please check your inbox (and spam folder) and follow the link provided to reset your password."
       );
     }
   }, [error, attempts, form, toast]);
@@ -54,7 +54,7 @@ const PasswordChangeInitPage = () => {
       toast({
         variant: "destructive",
         title: "Problem With Signing In",
-        description: message,
+        description: message || "Please provide a valid email address.",
       });
     }
   };
@@ -81,9 +81,10 @@ const PasswordChangeInitPage = () => {
           ) : (
             <>
               <span className="text-base text-center font-semibold text-muted-foreground mb-4 px-4">
-                Please provide your email address to receive password reset
-                instructions.
+                Enter your email address, and we will send you instructions to
+                reset your password.
               </span>
+
               <form
                 onSubmit={form.handleSubmit(onSubmit, onError)}
                 className="flex flex-col items-center gap-y-6 w-full px-8"
@@ -92,7 +93,7 @@ const PasswordChangeInitPage = () => {
                 <Input
                   disabled={isLoading}
                   type="email"
-                  placeholder="E-mail Address"
+                  placeholder="Enter your email address"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("email")}
                 />
@@ -104,7 +105,7 @@ const PasswordChangeInitPage = () => {
                   {isLoading ? (
                     <LoaderCircle size={24} className="animate-spin" />
                   ) : (
-                    <span>Send The Instructions</span>
+                    <span>Send Password Reset Instructions</span>
                   )}
                 </Button>
               </form>

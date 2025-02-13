@@ -1,6 +1,5 @@
-import { Article } from "@/lib/api";
+import { FC } from "react";
 import { useTextEditor } from "@/hooks/text-editor";
-import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
 import {
   Dialog,
   DialogTitle,
@@ -11,26 +10,19 @@ import {
   DialogContent,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import Informative from "@/components/inform-badge/informative";
 import { BookCheck, BookLock } from "lucide-react";
 
-export const PrivatePublicSwitch = () => {
+interface PrivatePublicSwitchProps extends ButtonProps {
+  onChangeVisibility: () => Promise<void>;
+}
+
+const ArticleVisibilitySwitch: FC<PrivatePublicSwitchProps> = ({
+  onChangeVisibility,
+  ...props
+}) => {
   const textEditor = useTextEditor();
-  const articleSaver = useSaveArticle(textEditor.article?.id);
-  const articleRemover = useRemoveArticle();
-
-  const changeVisibility = async () => {
-    const previousArticle = textEditor.article;
-    if (previousArticle) {
-      const newArticle = {
-        ...(previousArticle as Article),
-        public: !previousArticle.public,
-      };
-
-      textEditor.setArticle(newArticle);
-    }
-  };
 
   return (
     <Dialog>
@@ -39,12 +31,8 @@ export const PrivatePublicSwitch = () => {
       >
         <DialogTrigger asChild>
           <Button
-            disabled={
-              articleSaver.isLoading ||
-              articleRemover.isLoading ||
-              !textEditor.article?.id
-            }
             className="p-2 w-9 h-9 transition-all duration-300"
+            {...props}
           >
             {textEditor.article?.public ? (
               <BookCheck />
@@ -70,10 +58,12 @@ export const PrivatePublicSwitch = () => {
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button onClick={changeVisibility}>Confirm</Button>
+            <Button onClick={onChangeVisibility}>Confirm</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
+
+export default ArticleVisibilitySwitch;

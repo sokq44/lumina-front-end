@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AxiosError } from "axios";
 import { client } from "@/lib/api";
+import { dummyTimeout, grabErrorMessage } from "@/lib/utils";
 
 export function useUploadAsset(): {
   url: string | null;
@@ -15,6 +15,11 @@ export function useUploadAsset(): {
   const [attempts, setAttempts] = useState<number>(0);
 
   const upload = async (file: File) => {
+    setError(undefined);
+    setIsLoading(true);
+
+    await dummyTimeout(2000);
+
     if (!file) {
       setAttempts((prev) => prev + 1);
       setError("There seems to be a problem with this image.");
@@ -34,8 +39,8 @@ export function useUploadAsset(): {
 
       setUrl(response.data as string);
       setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);

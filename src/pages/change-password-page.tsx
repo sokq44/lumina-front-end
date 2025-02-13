@@ -14,11 +14,11 @@ import ThemeSwitch from "@/components/theme-switch";
 import { KeyRound, LoaderCircle } from "lucide-react";
 
 const ChangePasswordPage = () => {
-  const { change, attempts, isLoading, error } = useChangePassword();
   const { toast } = useToast();
   const { token } = useParams();
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>("");
+  const { change, attempts, isLoading, error } = useChangePassword();
 
   const form = useForm<z.infer<typeof changePasswordFormSchema>>({
     resolver: zodResolver(changePasswordFormSchema),
@@ -37,12 +37,14 @@ const ChangePasswordPage = () => {
       form.reset();
       toast({
         variant: "destructive",
-        title: "Problem With Signing In",
-        description: error,
+        title: "Password Change Error",
+        description:
+          error ||
+          "We encountered a problem while changing your password. Please try again later.",
       });
     } else if (error === null) {
       setMessage(
-        "Your password has been successfully changed. You may now close this window."
+        "Your password has been successfully updated. You may now close this window and log in with your new password."
       );
     }
   }, [error, attempts, toast, form]);
@@ -60,8 +62,10 @@ const ChangePasswordPage = () => {
     if (message) {
       toast({
         variant: "destructive",
-        title: "Problem With Changing Password",
-        description: message,
+        title: "Validation Error",
+        description:
+          message ||
+          "Please make sure your passwords meet the required criteria.",
       });
     }
   };
@@ -87,7 +91,7 @@ const ChangePasswordPage = () => {
           ) : (
             <>
               <span className="text-base text-center font-semibold text-muted-foreground mb-4 px-4">
-                Please provide and confirm your new password.
+                Set a new password to secure your account.
               </span>
               <form
                 onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -97,14 +101,14 @@ const ChangePasswordPage = () => {
                 <Input
                   disabled={isLoading}
                   type="password"
-                  placeholder="New Password"
+                  placeholder="Enter new password"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("password")}
                 />
                 <Input
                   disabled={isLoading}
                   type="password"
-                  placeholder="Repeat New Password"
+                  placeholder="Confirm new password"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("repeat")}
                 />
@@ -114,9 +118,12 @@ const ChangePasswordPage = () => {
                   className="w-full text-secondary transition-all duration-300"
                 >
                   {isLoading ? (
-                    <LoaderCircle size={24} className="animate-spin" />
+                    <LoaderCircle
+                      size={24}
+                      className="animate-spin text-secondary"
+                    />
                   ) : (
-                    <span>Reset Password</span>
+                    <span>Change Password</span>
                   )}
                 </Button>
               </form>

@@ -37,6 +37,7 @@ import TextEditorProvider from "@/components/text-editor/text-editor-provider";
 // TODO: resizable youtube videos
 // TODO: dialog for setting a link
 // TODO: cursor change for resizing tables
+// TODO: tracking changes within an article
 
 interface TextEditorProps {
   article: Article;
@@ -82,7 +83,7 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
       }),
       Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
     ],
-    content: `<p>Contents of your article...<p>`,
+    content: `<span>Contents of your article...<span>`,
   });
 
   if (!editor) {
