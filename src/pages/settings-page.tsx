@@ -60,7 +60,7 @@ const SettingsPage = () => {
       <Less>
         <Drawer>
           <GoBackArrow to="/user/articles" position="top-left" />
-          <DrawerContent className="flex flex-col gap-y-4 px-4 items-center justify-center my-8 font-funnel">
+          <DrawerContent className="flex flex-col gap-y-4 px-4 items-center justify-center my-8 py-3 font-funnel">
             {settingsMenuItems.map((item, index) => (
               <Link
                 key={index}

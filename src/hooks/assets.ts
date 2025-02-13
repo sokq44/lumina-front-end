@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { client } from "@/lib/api";
-import { grabErrorMessage } from "@/lib/utils";
+import { dummyTimeout, grabErrorMessage } from "@/lib/utils";
 
 export function useUploadAsset(): {
   url: string | null;
@@ -17,6 +17,8 @@ export function useUploadAsset(): {
   const upload = async (file: File) => {
     setError(undefined);
     setIsLoading(true);
+
+    await dummyTimeout(2000);
 
     if (!file) {
       setAttempts((prev) => prev + 1);

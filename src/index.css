@@ -126,23 +126,23 @@
   }
 
   h1 {
-    @apply text-4xl;
+    @apply text-4xl my-1;
   }
 
   h2 {
-    @apply text-3xl;
+    @apply text-3xl my-1;
   }
 
   h3 {
-    @apply text-2xl;
+    @apply text-2xl my-1;
   }
 
   h4 {
-    @apply text-xl;
+    @apply text-xl my-1;
   }
 
   h5 {
-    @apply text-lg;
+    @apply text-lg my-1;
   }
 
   h6 {

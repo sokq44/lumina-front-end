@@ -89,7 +89,7 @@ const MyArticlesPage = () => {
       <Less>
         {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
           <Container className="w-full h-full flex flex-col items-center gap-y-4 px-2">
-            <Link
+            {/* <Link
               to={"/user/writing"}
               state={{ article: undefined }}
               className="w-full h-full"
@@ -101,7 +101,7 @@ const MyArticlesPage = () => {
                   Write a new article
                 </CardDescription>
               </Card>
-            </Link>
+            </Link> */}
             {articlesGetter.articles.map((article, index) => (
               <Link
                 to={"/user/writing"}

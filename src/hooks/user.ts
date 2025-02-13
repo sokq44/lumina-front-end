@@ -105,16 +105,18 @@ export function useLoggedIn(): {
 export function useLogout(): {
   logout: () => Promise<void>;
   isLoading: boolean;
-  error: string | undefined;
+  error: string | undefined | null;
 } {
-  const [error, setError] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const logout = async () => {
     setIsLoading(true);
+    setError(undefined);
 
     try {
-      await client.delete("user/logout");
+      const response = await client.delete("user/logout");
+      if (response.status === 200) setError(null);
     } catch (e) {
       const message = grabErrorMessage(e);
       setError(message);
@@ -202,6 +204,7 @@ export function useChangePassword(): {
 
   const change = async (token: string, password: string) => {
     setIsLoading(true);
+    setError(undefined);
 
     try {
       const response = await client.patch("/user/change-password", {
@@ -232,6 +235,9 @@ export function useGetUser(): {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getUser = async () => {
+    setIsLoading(true);
+    setError(undefined);
+
     try {
       const response = await client.get("/user/get-user");
       setUser(response.data as User);
@@ -253,15 +259,14 @@ export function useGetUser(): {
 
 export function useModifyUser(): {
   modify: (user: User) => void;
-  attempts: number;
   isLoading: boolean;
   error: string | undefined | null;
 } {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [attempts, setAttempts] = useState<number>(0);
 
   const modify = async (user: User) => {
+    setError(undefined);
     setIsLoading(true);
 
     try {
@@ -271,10 +276,9 @@ export function useModifyUser(): {
       const message = grabErrorMessage(e);
       setError(message);
     } finally {
-      setAttempts((last) => last + 1);
       setIsLoading(false);
     }
   };
 
-  return { modify, attempts, isLoading, error };
+  return { modify, isLoading, error };
 }
