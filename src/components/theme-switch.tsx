@@ -13,20 +13,14 @@ const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, position }) => {
   const { theme, setTheme } = useTheme();
 
   let finalClassName =
-    "rounded-md hover:cursor-pointer transition-all duration-300";
+    "fixed z-50 m-2 p-2 top-0 rounded-md text-primary bg-gray-200 transition-all duration-300 hover:cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15";
 
   switch (position) {
     case "top-left":
-      finalClassName = cn(
-        finalClassName,
-        "absolute z-[100] m-2 p-2 top-0 left-0"
-      );
+      finalClassName = cn(finalClassName, "left-0");
       break;
     case "top-right":
-      finalClassName = cn(
-        finalClassName,
-        "absolute z-[100] m-2 p-2 top-0 right-0"
-      );
+      finalClassName = cn(finalClassName, "right-0");
       break;
     default:
       break;
@@ -39,10 +33,9 @@ const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, position }) => {
 
   return (
     <Button
-      variant="ghost"
       size="icon"
       onClick={switchTheme}
-      className={cn(className, finalClassName)}
+      className={cn(finalClassName, className)}
     >
       {theme === "light" ? <Sun size={24} /> : <Moon size={24} />}
     </Button>

@@ -1,16 +1,17 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import Separator from "./separator";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import { MenuItem } from "@/lib/menu-items";
-import { FC } from "react";
+import {
+  Sidebar,
+  SidebarMenu,
+  SidebarGroup,
+  SidebarContent,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarGroupContent,
+} from "@/components/ui/sidebar";
+import Container from "@/components/container";
+import { Separator } from "@/components/ui/separator";
 
 interface UserSidebarProps {
   items: MenuItem[];
@@ -19,17 +20,17 @@ interface UserSidebarProps {
 const UserSidebar: FC<UserSidebarProps> = ({ items }) => {
   return (
     <Sidebar className="border-none">
-      <div className="flex w-full h-full">
-        <div className="flex flex-col w-full">
+      <Container className="flex w-full h-full">
+        <Container className="flex flex-col w-full">
           <SidebarContent>
             <SidebarGroup className="my-auto">
               <SidebarGroupContent>
                 <SidebarMenu className="flex flex-col gap-y-4 items-center">
                   {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
+                    <SidebarMenuItem className="list-none" key={item.title}>
                       <SidebarMenuButton
                         asChild
-                        className="w-32 p-4 text-base transition-all duration-300"
+                        className="w-32 p-2 text-base transition-all duration-300"
                       >
                         <Link
                           to={item.url ? item.url : ""}
@@ -45,9 +46,9 @@ const UserSidebar: FC<UserSidebarProps> = ({ items }) => {
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
-        </div>
+        </Container>
         <Separator orientation="vertical" />
-      </div>
+      </Container>
     </Sidebar>
   );
 };

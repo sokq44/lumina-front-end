@@ -1,7 +1,12 @@
 import axios from "axios";
 
 export const client = axios.create({
+  // prod
+  // baseURL: "https://api.illumina-me.org",
+
+  // dev
   baseURL: "http://localhost:3000",
+
   withCredentials: true,
 });
 
@@ -14,4 +19,15 @@ export type User = {
   username: string;
   email: string;
   image: string;
+};
+
+export type Article = {
+  id: string;
+  user: string;
+  title: string;
+  banner: string;
+  content: string;
+  user_image: string;
+  public: boolean;
+  created_at: Date;
 };

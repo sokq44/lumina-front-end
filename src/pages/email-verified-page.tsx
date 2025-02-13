@@ -1,11 +1,12 @@
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
+import { useToast } from "@/hooks/use-toast";
+import { useParams } from "react-router-dom";
+import { useVerifyUser } from "@/hooks/user";
+import { LoaderCircle, MailCheck, MailX } from "lucide-react";
+import Container from "@/components/container";
 import SlidingLink from "@/components/sliding-link";
 import ThemeSwitch from "@/components/theme-switch";
-import { useToast } from "@/hooks/use-toast";
-import { LoaderCircle, MailCheck, MailX } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { motion } from "motion/react";
-import { useVerifyUser } from "@/hooks/user";
 
 const EmailVerifiedPage = () => {
   const { token } = useParams();
@@ -21,7 +22,7 @@ const EmailVerifiedPage = () => {
       setErrorMessage(error);
       setTitle("Verification Error");
       setDescription(
-        "We encountered an issue while verifying your account. If you believe this is an error, please contact us for further assistance."
+        "We encountered an issue while verifying your account. Please try again later."
       );
 
       toast({
@@ -39,9 +40,9 @@ const EmailVerifiedPage = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-background flex items-center justify-center h-screen">
+      <Container className="bg-background flex items-center justify-center h-screen">
         <LoaderCircle size={32} className="animate-spin text-primary" />
-      </div>
+      </Container>
     );
   }
 
@@ -57,8 +58,8 @@ const EmailVerifiedPage = () => {
       className="bg-background flex items-center justify-center h-screen"
     >
       <ThemeSwitch position="top-right" />
-      <div className="flex w-full h-[24rem] md:w-[28rem] lg:w-[34rem] xl:w-[40rem]">
-        <div className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
+      <Container className="flex w-full h-[24rem] md:w-[28rem] lg:w-[34rem] xl:w-[40rem]">
+        <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
           <span
             className={
               errorMessage
@@ -71,24 +72,31 @@ const EmailVerifiedPage = () => {
           <span className="text-base text-muted-foreground text-center tracking-wide leading-relaxed px-4">
             {description}
           </span>
-          <div className="flex flex-col gap-y-4 mt-4 md:flex-row md:gap-x-8">
-            <SlidingLink to="/">Back to home</SlidingLink>
-            {errorMessage && (
-              <SlidingLink to={`mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`}>
-                Contact us
+          <Container className="w-full flex flex-col gap-y-4 mt-4 px-6 md:flex-row md:gap-x-8 md:justify-center">
+            <SlidingLink
+              to="/"
+              className="w-full px-2 py-[10px] text-sm  bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+            >
+              Back to home
+            </SlidingLink>
+            {!errorMessage && (
+              <SlidingLink
+                to="/login"
+                className="w-full px-2 py-[10px] text-sm  bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+              >
+                Sign in
               </SlidingLink>
             )}
-            {!errorMessage && <SlidingLink to="/login">Sign in</SlidingLink>}
-          </div>
-        </div>
-        <div className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
+          </Container>
+        </Container>
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
           {errorMessage ? (
             <MailX size={48} className="text-card" />
           ) : (
             <MailCheck size={48} className="text-card" />
           )}
-        </div>
-      </div>
+        </Container>
+      </Container>
     </motion.div>
   );
 };

@@ -1,23 +1,24 @@
-import ThemeSwitch from "@/components/theme-switch";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { changePasswordFormSchema } from "@/lib/schemas";
+import { useToast } from "@/hooks/use-toast";
+import { useChangePassword } from "@/hooks/user";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { z } from "zod";
 import { motion } from "motion/react";
+import { Input } from "@/components/ui/input";
+import Container from "@/components/container";
+import { Button } from "@/components/ui/button";
+import ThemeSwitch from "@/components/theme-switch";
 import { KeyRound, LoaderCircle } from "lucide-react";
-import { changePasswordFormSchema } from "@/lib/schemas";
-import { useChangePassword } from "@/hooks/user";
-import { useEffect, useState } from "react";
 
 const ChangePasswordPage = () => {
-  const { change, attempts, isLoading, error } = useChangePassword();
   const { toast } = useToast();
   const { token } = useParams();
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>("");
+  const { change, attempts, isLoading, error } = useChangePassword();
 
   const form = useForm<z.infer<typeof changePasswordFormSchema>>({
     resolver: zodResolver(changePasswordFormSchema),
@@ -36,12 +37,14 @@ const ChangePasswordPage = () => {
       form.reset();
       toast({
         variant: "destructive",
-        title: "Problem With Signing In",
-        description: error,
+        title: "Password Change Error",
+        description:
+          error ||
+          "We encountered a problem while changing your password. Please try again later.",
       });
     } else if (error === null) {
       setMessage(
-        "Your password has been successfully changed. You may now close this window."
+        "Your password has been successfully updated. You may now close this window and log in with your new password."
       );
     }
   }, [error, attempts, toast, form]);
@@ -59,14 +62,16 @@ const ChangePasswordPage = () => {
     if (message) {
       toast({
         variant: "destructive",
-        title: "Problem With Changing Password",
-        description: message,
+        title: "Validation Error",
+        description:
+          message ||
+          "Please make sure your passwords meet the required criteria.",
       });
     }
   };
 
   return (
-    <div className="bg-background flex items-center justify-center h-screen">
+    <Container className="bg-background flex items-center justify-center h-screen">
       <ThemeSwitch position="top-right" />
       <motion.div
         initial={{
@@ -78,7 +83,7 @@ const ChangePasswordPage = () => {
         }}
         className="flex w-full h-[24rem] md:w-[38rem] lg:w-[42rem] xl:w-[48rem]"
       >
-        <div className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
+        <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
           {message ? (
             <span className="text-base text-muted-foreground text-center tracking-wide leading-relaxed px-4">
               {message}
@@ -86,7 +91,7 @@ const ChangePasswordPage = () => {
           ) : (
             <>
               <span className="text-base text-center font-semibold text-muted-foreground mb-4 px-4">
-                Please provide and confirm your new password.
+                Set a new password to secure your account.
               </span>
               <form
                 onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -96,14 +101,14 @@ const ChangePasswordPage = () => {
                 <Input
                   disabled={isLoading}
                   type="password"
-                  placeholder="New Password"
+                  placeholder="Enter new password"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("password")}
                 />
                 <Input
                   disabled={isLoading}
                   type="password"
-                  placeholder="Repeat New Password"
+                  placeholder="Confirm new password"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("repeat")}
                 />
@@ -113,20 +118,23 @@ const ChangePasswordPage = () => {
                   className="w-full text-secondary transition-all duration-300"
                 >
                   {isLoading ? (
-                    <LoaderCircle size={24} className="animate-spin" />
+                    <LoaderCircle
+                      size={24}
+                      className="animate-spin text-secondary"
+                    />
                   ) : (
-                    <span>Reset Password</span>
+                    <span>Change Password</span>
                   )}
                 </Button>
               </form>
             </>
           )}
-        </div>
-        <div className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
+        </Container>
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
           <KeyRound size={48} className="text-card" />
-        </div>
+        </Container>
       </motion.div>
-    </div>
+    </Container>
   );
 };
 

@@ -1,8 +1,8 @@
+import { FC } from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
 import { CornerUpLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { FC } from "react";
-import { Button } from "./ui/button";
 
 interface GoBackArrowProps {
   to?: string;
@@ -13,17 +13,16 @@ const GoBackArrow: FC<GoBackArrowProps> = ({ to, position }) => {
   const navigate = useNavigate();
 
   let finalClassName =
-    "absolute z-[100] m-2 p-2 rounded-md hover:cursor-pointer transition-all duration-300";
+    "fixed top-0 z-50 m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 hover:cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15";
 
   switch (position) {
     case "top-left":
-      finalClassName = cn(finalClassName, "top-0 left-0");
+      finalClassName = cn(finalClassName, "left-0");
       break;
     case "top-right":
-      finalClassName = cn(finalClassName, "top-0 right-0");
+      finalClassName = cn(finalClassName, "right-0");
       break;
     default:
-      finalClassName = cn(finalClassName, "top-0 left-0");
       break;
   }
 

@@ -80,8 +80,151 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  pre {
+    @apply bg-zinc-800 rounded-lg p-4 font-mono text-xs text-white my-4;
+  }
+
+  blockquote {
+    @apply ml-6 my-3 pl-4 border-l-[3px] border-l-gray-300 text-muted-foreground;
+  }
+
+  ul, ol {
+    @apply px-4 mt-5 mb-5 mr-4 ml-1.5;
+
+    li p {
+      @apply mt-1 mb-1;
+    }
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  ul[data-type="bulletList"] {
+    @apply list-disc;
+  }
+
+  ul[data-type="taskList"] {
+    @apply list-none p-0;
+
+    li {
+      @apply flex items-center;
+
+      > label {
+        @apply mr-2 select-none;
+      }
+    }
+  }
+
+  h1 {
+    @apply text-4xl my-1;
+  }
+
+  h2 {
+    @apply text-3xl my-1;
+  }
+
+  h3 {
+    @apply text-2xl my-1;
+  }
+
+  h4 {
+    @apply text-xl my-1;
+  }
+
+  h5 {
+    @apply text-lg my-1;
+  }
+
+  h6 {
+    @apply text-base;
+  }
+
+  hr {
+    @apply my-6;
+
+    &.ProseMirror-selectednode {
+      @apply border-t-purple-500;
+    }
+  }
+
+  table {
+    @apply border-collapse m-0 overflow-hidden table-fixed w-full text-sm my-4;
+
+    td, th {
+      @apply border border-muted-foreground box-border min-w-4 px-2.5 py-2 relative align-top;
+    }
+
+    th {
+      @apply bg-gray-200 dark:bg-muted font-semibold;
+    }
+
+    .selectedCell:after {
+      @apply bg-muted-foreground opacity-25 left-0 right-0 top-0 bottom-0 pointer-events-none absolute z-10;
+      content: "";
+    }
+    
+  }
+
+  .tip-tap-link {
+    @apply text-blue-500 underline cursor-pointer;
+  }
+
+  .tip-tap-image {
+    @apply w-full h-auto my-4 rounded-lg;
+  }
+  
+  div[data-youtube-video] {
+    @apply cursor-move pr-6;
+
+    iframe {
+      @apply w-full max-h-[300px] outline-none border border-black rounded-lg sm:min-h-[480px] sm:w-[640px];
+    }
+
+    &.ProseMirror-selectednode iframe {
+      @apply outline-4 outline-purple-500 outline-offset-0 transition-all duration-150;
+    }
+  }
+
+  .ProseMirror:focus {
+    @apply outline-none;
+  }
+  
+  .fade-in {
+    animation: fade-in 0.5s forwards;
+  }
+
+  .fade-out {
+    animation: fade-out 0.5s forwards;
+  }
+
+  @keyframes fade-in {
+    from {
+      @apply opacity-0;
+    }
+
+    to {
+      @apply opacity-100;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      @apply opacity-100;
+    }
+    
+    to {
+      @apply opacity-0;
+    }
   }
 }
 

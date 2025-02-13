@@ -1,24 +1,26 @@
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FieldErrors } from "react-hook-form";
+import { registerFormSchema } from "@/lib/schemas";
+import { useRegister } from "@/hooks/user";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { useForm, FieldErrors } from "react-hook-form";
 import { Circle, LoaderCircle, UserPlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
-import { registerFormSchema } from "@/lib/schemas";
-import GoBackArrow from "@/components/go-back-arrow";
-import ThemeSwitch from "@/components/theme-switch";
-import { useNavigate } from "react-router-dom";
-import { motion } from "motion/react";
 import SlidingLink from "@/components/sliding-link";
-import { useRegister } from "@/hooks/user";
-import { useEffect, useState } from "react";
+import ThemeSwitch from "@/components/theme-switch";
+import GoBackArrow from "@/components/go-back-arrow";
 
 const RegisterPage = () => {
-  const { register, attempts, isLoading, error } = useRegister();
-  const [email, setEmail] = useState<string>("");
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { register, attempts, isLoading, error } = useRegister();
+
+  const [email, setEmail] = useState<string>("");
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -34,8 +36,10 @@ const RegisterPage = () => {
     if (error) {
       toast({
         variant: "destructive",
-        title: "Problem With Signing Up",
-        description: error,
+        title: "Sign-Up Error",
+        description:
+          error ||
+          "An issue occurred while creating your account. Please try again later.",
       });
     } else if (error === null) {
       navigate("/email", { state: { email: email } });
@@ -57,15 +61,16 @@ const RegisterPage = () => {
     if (message) {
       toast({
         variant: "destructive",
-        title: "Problem With Signing Up",
-        description: message,
+        title: "Form Submission Error",
+        description:
+          message || "Please ensure all fields are correctly filled out.",
       });
     }
   };
 
   return (
-    <div className="bg-background flex items-center justify-center h-screen">
-      <GoBackArrow to="/" />
+    <Container className="bg-background flex items-center justify-center h-screen">
+      <GoBackArrow position="top-left" to="/" />
       <ThemeSwitch position="top-right" />
       <motion.div
         initial={{
@@ -77,44 +82,44 @@ const RegisterPage = () => {
         }}
         className="flex w-full h-[34rem] md:w-[34rem] lg:w-[44rem] xl:w-[64rem]"
       >
-        <div className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
+        <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
           {/* Logo Placeholder */}
           <Circle strokeWidth="1px" fill="" size={84} />
 
-          <span className="text-base text-center font-semibold text-muted-foreground mb-2 px-4">
-            Provide your credentials in order to create an account.
+          <span className="text-center font-medium text-muted-foreground mb-2 px-4">
+            Create an account by filling in the details below.
           </span>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="flex flex-col items-center gap-y-6 w-full px-8"
+            className="flex flex-col items-center gap-y-4 w-full px-8"
             autoComplete="off"
           >
             <Input
               variant="register"
               disabled={isLoading}
               type="text"
-              placeholder="Username"
+              placeholder="Choose a Username"
               {...form.register("username")}
             />
             <Input
               variant="register"
               disabled={isLoading}
               type="text"
-              placeholder="E-mail Address"
+              placeholder="Enter you email address"
               {...form.register("email")}
             />
             <Input
               variant="register"
               disabled={isLoading}
               type="password"
-              placeholder="Password"
+              placeholder="Create a strong Password"
               {...form.register("password")}
             />
             <Input
               variant="register"
               disabled={isLoading}
               type="password"
-              placeholder="Repeat password"
+              placeholder="Repeat your password"
               {...form.register("repeatPass")}
             />
             <Button
@@ -123,19 +128,27 @@ const RegisterPage = () => {
               className="w-full transition-all duration-300"
             >
               {isLoading ? (
-                <LoaderCircle size={24} className="animate-spin text-card" />
+                <LoaderCircle
+                  size={24}
+                  className="animate-spin text-secondary"
+                />
               ) : (
-                <span>Sign up</span>
+                <span>Sign Up Now</span>
               )}
             </Button>
-            <SlidingLink to="/login">Already have an account?</SlidingLink>
+            <SlidingLink
+              to="/login"
+              className="w-full px-2 py-[10px] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+            >
+              Already have an account?
+            </SlidingLink>
           </form>
-        </div>
-        <div className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
+        </Container>
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
           <UserPlus size={48} className="text-card" />
-        </div>
+        </Container>
       </motion.div>
-    </div>
+    </Container>
   );
 };
 

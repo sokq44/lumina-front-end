@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { AxiosError } from "axios";
 import { client, User } from "@/lib/api";
+import { grabErrorMessage } from "@/lib/utils";
 
 export function useRegister(): {
   register: (username: string, email: string, password: string) => void;
@@ -26,8 +26,8 @@ export function useRegister(): {
         password: password,
       });
       setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);
@@ -56,8 +56,8 @@ export function useLogin(): {
         password: password,
       });
       setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -84,8 +84,8 @@ export function useLoggedIn(): {
       try {
         const response = await client.get("/user/logged-in");
         if (response.status === 200) setIsLoggedIn(true);
-      } catch (err) {
-        const message = (err as AxiosError).response?.data as string;
+      } catch (e) {
+        const message = grabErrorMessage(e);
         setError(message);
         setIsLoggedIn(false);
       } finally {
@@ -103,20 +103,22 @@ export function useLoggedIn(): {
 }
 
 export function useLogout(): {
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
-  error: string | undefined;
+  error: string | undefined | null;
 } {
-  const [error, setError] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const logout = async () => {
     setIsLoading(true);
+    setError(undefined);
 
     try {
-      await client.delete("user/logout");
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+      const response = await client.delete("user/logout");
+      if (response.status === 200) setError(null);
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -141,8 +143,8 @@ export function useVerifyUser(token: string | undefined): {
       try {
         const response = await client.patch("/user/verify-email", { token });
         if (response.status === 204) setError(null);
-      } catch (err) {
-        const message = (err as AxiosError).response?.data as string;
+      } catch (e) {
+        const message = grabErrorMessage(e);
         setError(message);
       } finally {
         setIsLoading(false);
@@ -178,8 +180,8 @@ export function usePasswordChangeInit(): {
         email: email,
       });
       if (response.status === 201) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);
@@ -202,6 +204,7 @@ export function useChangePassword(): {
 
   const change = async (token: string, password: string) => {
     setIsLoading(true);
+    setError(undefined);
 
     try {
       const response = await client.patch("/user/change-password", {
@@ -209,8 +212,8 @@ export function useChangePassword(): {
         password: password,
       });
       if (response.status === 200) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setAttempts((last) => last + 1);
@@ -232,12 +235,15 @@ export function useGetUser(): {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getUser = async () => {
+    setIsLoading(true);
+    setError(undefined);
+
     try {
       const response = await client.get("/user/get-user");
       setUser(response.data as User);
       setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
       setIsLoading(false);
@@ -253,28 +259,26 @@ export function useGetUser(): {
 
 export function useModifyUser(): {
   modify: (user: User) => void;
-  attempts: number;
   isLoading: boolean;
   error: string | undefined | null;
 } {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [attempts, setAttempts] = useState<number>(0);
 
   const modify = async (user: User) => {
+    setError(undefined);
     setIsLoading(true);
 
     try {
       const response = await client.patch("/user/modify-user", user);
       if (response.status === 200) setError(null);
-    } catch (err) {
-      const message = (err as AxiosError).response?.data as string;
+    } catch (e) {
+      const message = grabErrorMessage(e);
       setError(message);
     } finally {
-      setAttempts((last) => last + 1);
       setIsLoading(false);
     }
   };
 
-  return { modify, attempts, isLoading, error };
+  return { modify, isLoading, error };
 }
