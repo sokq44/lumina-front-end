@@ -3,7 +3,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { changePasswordFormSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { useChangePassword, useLogout } from "@/hooks/user";
+import {
+  useChangePassword,
+  useLogout,
+  usePasswordChangeValid,
+} from "@/hooks/user";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "motion/react";
@@ -12,14 +16,17 @@ import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import ThemeSwitch from "@/components/theme-switch";
 import { KeyRound, LoaderCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const ChangePasswordPage = () => {
   const logout = useLogout();
   const { toast } = useToast();
   const { token } = useParams();
   const navigate = useNavigate();
-  const changePassword = useChangePassword();
+  const changePassword = useChangePassword(token);
+  const changePasswordValid = usePasswordChangeValid(token);
 
+  const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
   const form = useForm<z.infer<typeof changePasswordFormSchema>>({
@@ -35,6 +42,16 @@ const ChangePasswordPage = () => {
   }, [token, navigate]);
 
   useEffect(() => {
+    if (changePasswordValid.error) {
+      setTitle("Password Change Error");
+      setMessage(
+        changePasswordValid.error ||
+          "We encountered a problem while veifying this password change request. Please try again later."
+      );
+    }
+  }, [changePasswordValid.error, toast]);
+
+  useEffect(() => {
     if (changePassword.error) {
       form.reset();
       toast({
@@ -45,6 +62,7 @@ const ChangePasswordPage = () => {
           "We encountered a problem while changing your password. Please try again later.",
       });
     } else if (changePassword.error === null) {
+      setTitle("Password Changed");
       setMessage(
         "Your password has been successfully updated. You may now close this window and log in with your new password."
       );
@@ -54,7 +72,7 @@ const ChangePasswordPage = () => {
   const onSubmit = async (values: z.infer<typeof changePasswordFormSchema>) => {
     if (token) {
       await logout.logout();
-      await changePassword.change(token, values.password);
+      await changePassword.change(values.password);
     }
   };
 
@@ -76,6 +94,8 @@ const ChangePasswordPage = () => {
     }
   };
 
+  const anyError = changePassword.error || changePasswordValid.error;
+
   return (
     <Container className="bg-background flex items-center justify-center h-screen">
       <ThemeSwitch position="top-right" />
@@ -91,9 +111,19 @@ const ChangePasswordPage = () => {
       >
         <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
           {message ? (
-            <span className="text-base text-muted-foreground text-center tracking-wide leading-relaxed px-4">
-              {message}
-            </span>
+            <>
+              <span
+                className={cn(
+                  anyError ? "text-destructive" : "text-success",
+                  "text-xl font-bold text-center tracking-wide leading-relaxed px-4"
+                )}
+              >
+                {title}
+              </span>
+              <span className="text-base text-muted-foreground text-center tracking-wide leading-relaxed px-4">
+                {message}
+              </span>
+            </>
           ) : (
             <>
               <span className="text-base text-center font-semibold text-muted-foreground mb-4 px-4">

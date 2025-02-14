@@ -39,11 +39,11 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
-    if (loggedIn.error) navigate("/login");
-  }, [loggedIn.error, navigate]);
+    if (loggedIn.isLoggedIn === false) navigate("/login");
+  }, [loggedIn.isLoggedIn, navigate]);
 
   useEffect(() => {
-    if (userGetter.error) {
+    if (userGetter.error && loggedIn.isLoggedIn) {
       toast({
         variant: "destructive",
         title: "Problem With Retrieving Data",

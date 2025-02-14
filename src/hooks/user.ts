@@ -192,33 +192,74 @@ export function usePasswordChangeInit(): {
   return { init, attempts, isLoading, error };
 }
 
-export function useChangePassword(): {
-  change: (token: string, password: string) => void;
+export function useChangePassword(token: string | undefined): {
+  change: (password: string) => void;
   isLoading: boolean;
   error: string | undefined | null;
 } {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const change = async (token: string, password: string) => {
-    setIsLoading(true);
-    setError(undefined);
+  const change = async (password: string) => {
+    if (token) {
+      setIsLoading(true);
+      setError(undefined);
 
-    try {
-      const response = await client.patch("/user/change-password", {
-        token: token,
-        password: password,
-      });
-      if (response.status === 200) setError(null);
-    } catch (e) {
-      const message = grabErrorMessage(e);
-      setError(message);
-    } finally {
-      setIsLoading(false);
+      try {
+        const response = await client.patch("/user/change-password", {
+          token: token,
+          password: password,
+        });
+        if (response.status === 200) setError(null);
+      } catch (e) {
+        const message = grabErrorMessage(e);
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
   return { change, isLoading, error };
+}
+
+export function usePasswordChangeValid(token: string | undefined): {
+  valid: boolean | undefined;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const [valid, setValid] = useState<boolean | undefined>(undefined);
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const check = async () => {
+      if (token) {
+        console.log(token);
+        setIsLoading(true);
+        setError(undefined);
+
+        try {
+          const response = await client.get(
+            `/user/password-change-valid?token=${token}`
+          );
+          if (response.status === 200) {
+            setValid(true);
+            setError(null);
+          }
+        } catch (e) {
+          const message = grabErrorMessage(e);
+          setError(message);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    check();
+  }, []);
+
+  return { valid, isLoading, error };
 }
 
 export function useGetUser(): {
