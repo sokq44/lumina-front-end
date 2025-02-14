@@ -4,14 +4,11 @@ import { Article } from "@/lib/api";
 import {
   Card,
   CardTitle,
-  CardFooter,
   CardHeader,
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-import Container from "@/components/container";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageCircle } from "lucide-react";
 
 interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
   article: Article;
@@ -43,11 +40,6 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
           className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-sm group-hover:brightness-[0.75] transition-all duration-300"
         />
       </CardContent>
-      <CardFooter className="flex justify-center gap-x-6 text-muted-foreground">
-        <Container className="flex items-center gap-x-1">
-          <MessageCircle size={20} className="text-muted-foreground" /> 22
-        </Container>
-      </CardFooter>
     </Card>
   );
 };

@@ -7,6 +7,7 @@ import { LoaderCircle, MailCheck, MailX } from "lucide-react";
 import Container from "@/components/container";
 import SlidingLink from "@/components/sliding-link";
 import ThemeSwitch from "@/components/theme-switch";
+import { cn } from "@/lib/utils";
 
 const EmailVerifiedPage = () => {
   const { token } = useParams();
@@ -61,11 +62,10 @@ const EmailVerifiedPage = () => {
       <Container className="flex w-full h-[24rem] md:w-[28rem] lg:w-[34rem] xl:w-[40rem]">
         <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
           <span
-            className={
-              errorMessage
-                ? "text-xl text-center text-destructive font-semibold mb-6"
-                : "text-xl text-center text-success font-semibold mb-6"
-            }
+            className={cn(
+              errorMessage ? "text-destructive" : "text-success",
+              "text-xl text-center font-bold mb-6"
+            )}
           >
             {title}
           </span>
