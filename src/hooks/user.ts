@@ -194,13 +194,11 @@ export function usePasswordChangeInit(): {
 
 export function useChangePassword(): {
   change: (token: string, password: string) => void;
-  attempts: number;
   isLoading: boolean;
   error: string | undefined | null;
 } {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [attempts, setAttempts] = useState<number>(0);
 
   const change = async (token: string, password: string) => {
     setIsLoading(true);
@@ -216,12 +214,11 @@ export function useChangePassword(): {
       const message = grabErrorMessage(e);
       setError(message);
     } finally {
-      setAttempts((last) => last + 1);
       setIsLoading(false);
     }
   };
 
-  return { change, attempts, isLoading, error };
+  return { change, isLoading, error };
 }
 
 export function useGetUser(): {

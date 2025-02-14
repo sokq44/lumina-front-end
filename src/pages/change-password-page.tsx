@@ -3,7 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { changePasswordFormSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { useChangePassword } from "@/hooks/user";
+import { useChangePassword, useLogout } from "@/hooks/user";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "motion/react";
@@ -14,11 +14,13 @@ import ThemeSwitch from "@/components/theme-switch";
 import { KeyRound, LoaderCircle } from "lucide-react";
 
 const ChangePasswordPage = () => {
+  const logout = useLogout();
   const { toast } = useToast();
   const { token } = useParams();
   const navigate = useNavigate();
+  const changePassword = useChangePassword();
+
   const [message, setMessage] = useState<string>("");
-  const { change, attempts, isLoading, error } = useChangePassword();
 
   const form = useForm<z.infer<typeof changePasswordFormSchema>>({
     resolver: zodResolver(changePasswordFormSchema),
@@ -33,24 +35,28 @@ const ChangePasswordPage = () => {
   }, [token, navigate]);
 
   useEffect(() => {
-    if (error) {
+    if (changePassword.error) {
       form.reset();
       toast({
         variant: "destructive",
         title: "Password Change Error",
         description:
-          error ||
+          changePassword.error ||
           "We encountered a problem while changing your password. Please try again later.",
       });
-    } else if (error === null) {
+    } else if (changePassword.error === null) {
       setMessage(
         "Your password has been successfully updated. You may now close this window and log in with your new password."
       );
     }
-  }, [error, attempts, toast, form]);
+  }, [changePassword.error, toast, form]);
 
-  const onSubmit = async (v: z.infer<typeof changePasswordFormSchema>) =>
-    token ? change(token, v.password) : null;
+  const onSubmit = async (values: z.infer<typeof changePasswordFormSchema>) => {
+    if (token) {
+      await logout.logout();
+      await changePassword.change(token, values.password);
+    }
+  };
 
   const onError = async (
     errors: FieldErrors<z.infer<typeof changePasswordFormSchema>>
@@ -99,25 +105,29 @@ const ChangePasswordPage = () => {
                 autoComplete="off"
               >
                 <Input
-                  disabled={isLoading}
+                  disabled={changePassword.isLoading}
                   type="password"
                   placeholder="Enter new password"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("password")}
                 />
                 <Input
-                  disabled={isLoading}
+                  disabled={changePassword.isLoading}
                   type="password"
                   placeholder="Confirm new password"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("repeat")}
                 />
                 <Button
-                  variant={isLoading ? "formSubmitAwaiting" : "formSubmit"}
+                  variant={
+                    changePassword.isLoading
+                      ? "formSubmitAwaiting"
+                      : "formSubmit"
+                  }
                   type="submit"
                   className="w-full text-secondary transition-all duration-300"
                 >
-                  {isLoading ? (
+                  {changePassword.isLoading ? (
                     <LoaderCircle
                       size={24}
                       className="animate-spin text-secondary"

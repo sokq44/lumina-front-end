@@ -27,6 +27,8 @@ import "./index.css";
 
 // TODO: Logo design.
 // TODO: preview of the profile picture before uploading (profile-page)
+// TODO: play with the colours of the app a little bit (find the best theme)
+// TODO: improve layouts of the emails sent when changing password or verifying
 
 const router = createBrowserRouter([
   {
