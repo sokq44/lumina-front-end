@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { z } from "zod";
-import { motion } from "motion/react";
 import { loginFormSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -78,16 +77,7 @@ const LoginPage = () => {
     <Container className="bg-background flex items-center justify-center h-screen">
       <GoBackArrow to="/" position="top-left" />
       <ThemeSwitch position="top-right" />
-      <motion.div
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-          transition: { duration: 0.5 },
-        }}
-        className="flex w-full h-[28rem] md:w-[38rem] lg:w-[42rem] xl:w-[48rem]"
-      >
+      <Container className="flex w-full h-[28rem] md:w-[38rem] lg:w-[42rem] xl:w-[48rem]">
         <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
           {/* Logo Placeholder */}
           <Circle strokeWidth="1px" fill="" size={84} />
@@ -147,7 +137,7 @@ const LoginPage = () => {
         <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
           <LogIn size={48} className="text-card" />
         </Container>
-      </motion.div>
+      </Container>
     </Container>
   );
 };

@@ -14,7 +14,6 @@ import NotFoundPage from "./pages/not-found-page";
 import MyArticlesPage from "./pages/my-articles-page";
 import VerifyEmailPage from "@/pages/verify-email-page";
 import EmailVerifiedPage from "@/pages/email-verified-page";
-import ChangePasswordPage from "@/pages/change-password-page";
 import SuggestedArticlesPage from "@/pages/suggested-articles-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
 
@@ -23,6 +22,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import InformBadger from "@/components/inform-badge/inform-badger";
 
 import "./index.css";
+import PasswordChangePage from "@/pages/password-change-page";
 
 // TODO: Logo design.
 // TODO: preview of the profile picture before uploading (profile-page)
@@ -88,7 +88,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/password/:token",
-    element: <ChangePasswordPage />,
+    element: <PasswordChangePage />,
   },
   {
     path: "/article",

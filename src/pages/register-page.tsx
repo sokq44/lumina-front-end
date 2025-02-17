@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerFormSchema } from "@/lib/schemas";
@@ -72,16 +71,7 @@ const RegisterPage = () => {
     <Container className="bg-background flex items-center justify-center h-screen">
       <GoBackArrow position="top-left" to="/" />
       <ThemeSwitch position="top-right" />
-      <motion.div
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-          transition: { duration: 0.5 },
-        }}
-        className="flex w-full h-[34rem] md:w-[34rem] lg:w-[44rem] xl:w-[64rem]"
-      >
+      <Container className="flex w-full h-[34rem] md:w-[34rem] lg:w-[44rem] xl:w-[64rem]">
         <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
           {/* Logo Placeholder */}
           <Circle strokeWidth="1px" fill="" size={84} />
@@ -147,7 +137,7 @@ const RegisterPage = () => {
         <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
           <UserPlus size={48} className="text-card" />
         </Container>
-      </motion.div>
+      </Container>
     </Container>
   );
 };

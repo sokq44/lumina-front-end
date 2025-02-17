@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
 import { useVerifyUser } from "@/hooks/user";
@@ -48,16 +47,7 @@ const EmailVerifiedPage = () => {
   }
 
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-        transition: { duration: 0.5 },
-      }}
-      className="bg-background flex items-center justify-center h-screen"
-    >
+    <Container className="bg-background flex items-center justify-center h-screen">
       <ThemeSwitch position="top-right" />
       <Container className="flex w-full h-[24rem] md:w-[28rem] lg:w-[34rem] xl:w-[40rem]">
         <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
@@ -97,7 +87,7 @@ const EmailVerifiedPage = () => {
           )}
         </Container>
       </Container>
-    </motion.div>
+    </Container>
   );
 };
 
