@@ -75,12 +75,10 @@ export function useLoggedIn(): {
   const canFetch = useRef<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
   const [error, setError] = useState<string | undefined | null>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const checkLoggedIn = async () => {
-      setIsLoading(true);
-
       try {
         const response = await client.get("/user/logged-in");
         if (response.status === 200) setIsLoggedIn(true);

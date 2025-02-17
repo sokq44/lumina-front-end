@@ -4,7 +4,6 @@ import {
   Settings,
   Newspaper,
   LucideIcon,
-  ShieldCheck,
   NotebookTabs,
 } from "lucide-react";
 
@@ -28,7 +27,7 @@ export const userMenuItems: MenuItem[] = [
   },
   {
     title: "Settings",
-    url: "settings",
+    url: "/settings",
     icon: Settings,
   },
 ];
@@ -43,10 +42,5 @@ export const settingsMenuItems: MenuItem[] = [
     title: "Account",
     url: "account",
     icon: UserCog,
-  },
-  {
-    title: "Security",
-    url: "security",
-    icon: ShieldCheck,
   },
 ];

@@ -37,8 +37,9 @@ const WritingPage = () => {
 
   if (loggedIn.isLoading) {
     return (
-      <Container className="flex items-center justify-center h-screen w-screen">
+      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
         <LoaderCircle size={24} className="animate-spin" />
+        <span className="ml-2 text-lg">Checking your login status...</span>
       </Container>
     );
   }

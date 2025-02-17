@@ -30,10 +30,20 @@ const MyArticlesPage = () => {
     }
   }, [articlesGetter.error, toast, navigate]);
 
-  if (loggedIn.isLoading || articlesGetter.isLoading) {
+  if (loggedIn.isLoading) {
     return (
-      <Container className="flex items-center justify-center h-full w-full">
+      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
         <LoaderCircle size={24} className="animate-spin" />
+        <span className="ml-2 text-lg">Checking your login status...</span>
+      </Container>
+    );
+  }
+
+  if (articlesGetter.isLoading) {
+    return (
+      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
+        <LoaderCircle size={24} className="animate-spin" />
+        <span className="ml-2 text-lg">Retrieving articles...</span>
       </Container>
     );
   }
@@ -45,7 +55,7 @@ const MyArticlesPage = () => {
           {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
             <Container className="grid grid-cols-4 gap-x-12 gap-y-8 items-center px-4">
               <Link
-                to={"/user/writing"}
+                to={"/writing"}
                 state={{ article: undefined }}
                 className="h-full"
               >
@@ -73,7 +83,7 @@ const MyArticlesPage = () => {
                 You haven't written anything yet.
               </span>
               <Link
-                to={"/user/writing"}
+                to={"/writing"}
                 state={{ article: undefined }}
                 className="w-auto"
               >

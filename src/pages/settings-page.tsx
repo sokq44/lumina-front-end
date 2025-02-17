@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, To, useNavigate } from "react-router-dom";
 import { settingsMenuItems } from "@/lib/menu-items";
+import { useLoggedIn } from "@/hooks/user";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import ThemeSwitch from "@/components/theme-switch";
@@ -8,17 +9,31 @@ import GoBackArrow from "@/components/go-back-arrow";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/components/theme-provider";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { PanelBottom, SunMoon } from "lucide-react";
+import { LoaderCircle, PanelBottom, SunMoon } from "lucide-react";
 import { Less, MediaQuery, More } from "@/components/media-query";
 
 const SettingsPage = () => {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
+  const loggedIn = useLoggedIn();
   const [selected, setSelected] = useState<number>(0);
 
   useEffect(() => {
     navigate(settingsMenuItems[selected].url as To);
   }, [selected, navigate]);
+
+  useEffect(() => {
+    if (loggedIn.isLoggedIn === false) navigate("/login");
+  }, [loggedIn.isLoggedIn, navigate]);
+
+  if (loggedIn.isLoading) {
+    return (
+      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
+        <LoaderCircle size={24} className="animate-spin" />
+        <span className="ml-2 text-lg">Checking your login status...</span>
+      </Container>
+    );
+  }
 
   return (
     <MediaQuery>

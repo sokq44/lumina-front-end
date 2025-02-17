@@ -18,7 +18,6 @@ import ChangePasswordPage from "@/pages/change-password-page";
 import SuggestedArticlesPage from "@/pages/suggested-articles-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
 
-import Container from "@/components/container";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import InformBadger from "@/components/inform-badge/inform-badger";
@@ -66,7 +65,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/user/settings",
+    path: "/settings",
     element: <SettingsPage />,
     children: [
       {
@@ -76,32 +75,28 @@ const router = createBrowserRouter([
       {
         path: "account",
         element: (
-          <Link to={"/user/password"} className="sliding-link">
+          <Link to={"/password"} className="sliding-link">
             Change your password
           </Link>
         ),
       },
-      {
-        path: "Security",
-        element: <Container>Security</Container>,
-      },
     ],
   },
   {
-    path: "user/writing",
-    element: <WritingPage />,
-  },
-  {
-    path: "/user/password",
+    path: "/password",
     element: <PasswordChangeInitPage />,
   },
   {
-    path: "/user/password/:token",
+    path: "/password/:token",
     element: <ChangePasswordPage />,
   },
   {
     path: "/article",
     element: <ArticlePage />,
+  },
+  {
+    path: "writing",
+    element: <WritingPage />,
   },
   {
     path: "*",

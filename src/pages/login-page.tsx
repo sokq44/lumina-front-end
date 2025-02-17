@@ -74,7 +74,6 @@ const LoginPage = () => {
       </Container>
     );
   }
-
   return (
     <Container className="bg-background flex items-center justify-center h-screen">
       <GoBackArrow to="/" position="top-left" />
@@ -138,7 +137,7 @@ const LoginPage = () => {
               Create an Account
             </SlidingLink>
             <SlidingLink
-              to="/user/password"
+              to="/password"
               className="w-full px-2 py-[10px] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
             >
               Reset Your Password
