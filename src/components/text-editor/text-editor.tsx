@@ -31,13 +31,14 @@ import TextEditorMenu from "@/components/text-editor/text-editor-menu";
 import TextEditorContent from "@/components/text-editor/text-editor-content";
 import TextEditorProvider from "@/components/text-editor/text-editor-provider";
 
-// TODO: define prohibited protocols and urls for the Link extension
-// TODO: check whether certain text editor menu items can be triggered
 // TODO: resizable images
 // TODO: resizable youtube videos
 // TODO: dialog for setting a link
 // TODO: cursor change for resizing tables
 // TODO: tracking changes within an article
+// TODO: define prohibited protocols and urls for the Link extension
+// TODO: check whether certain text editor menu items can be triggered
+// TODO: more user-friendly process of uploading pictures and the banner image
 
 interface TextEditorProps {
   article: Article;

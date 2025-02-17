@@ -14,15 +14,17 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { LoaderCircle, LogOut, PanelBottom, SunMoon } from "lucide-react";
 
 const UserPage = () => {
-  const logout = useLogout();
   const loggedIn = useLoggedIn();
   const navigate = useNavigate();
+  const logout = useLogout();
   const { toast } = useToast();
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
-    if (loggedIn.error) navigate("/login");
+    if (loggedIn.isLoggedIn === false) navigate("/login");
+  }, [loggedIn.isLoggedIn, navigate]);
 
+  useEffect(() => {
     if (logout.error) {
       toast({
         variant: "destructive",
@@ -30,7 +32,7 @@ const UserPage = () => {
         description: logout.error,
       });
     }
-  }, [loggedIn.error, logout.error, toast, navigate]);
+  }, [logout.error, toast, navigate]);
 
   const updatedMenuItems = userMenuItems.concat([
     {
@@ -43,64 +45,76 @@ const UserPage = () => {
     },
   ]);
 
-  if (logout.isLoading || loggedIn.isLoading) {
+  if (loggedIn.isLoading) {
     return (
-      <Container className="flex items-center justify-center h-screen w-screen">
+      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
         <LoaderCircle size={24} className="animate-spin" />
+        <span className="ml-2 text-lg">Checking your login status...</span>
       </Container>
     );
   }
 
-  return (
-    <MediaQuery>
-      <More>
-        <SidebarProvider>
-          <UserSidebar items={updatedMenuItems} />
-          <Container className="flex flex-col h-screen w-screen">
-            <Container className="flex items-center w-full bg-background h-14 justify-between">
-              <SidebarTrigger className="ml-2 w-10 h-10 rounded-md text-primary bg-secondary/50 dark:bg-secondary/70 hover:cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300" />
-              <ThemeSwitch className="relative" />
+  if (logout.isLoading) {
+    return (
+      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
+        <LoaderCircle size={24} className="animate-spin" />
+        <span className="ml-2 text-lg">Logging you out...</span>
+      </Container>
+    );
+  }
+
+  if (loggedIn.isLoggedIn) {
+    return (
+      <MediaQuery>
+        <More>
+          <SidebarProvider>
+            <UserSidebar items={updatedMenuItems} />
+            <Container className="flex flex-col h-screen w-screen">
+              <Container className="flex items-center w-full bg-background h-14 justify-between">
+                <SidebarTrigger className="ml-2 w-10 h-10 rounded-md text-primary bg-secondary/50 dark:bg-secondary/70 hover:cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300" />
+                <ThemeSwitch className="relative" />
+              </Container>
+              <Container className="flex w-full bg-background h-full">
+                <Outlet />
+              </Container>
             </Container>
-            <Container className="flex w-full bg-background h-full">
-              <Outlet />
-            </Container>
-          </Container>
-        </SidebarProvider>
-      </More>
-      <Less>
-        <Drawer>
-          <DrawerContent className="flex flex-col gap-y-10 px-4 items-center justify-center my-8 font-funnel">
-            {updatedMenuItems.map((item) => (
-              <Link
-                key={item.title}
-                to={item.url ? item.url : ""}
-                className="flex"
-                onClick={item.action ? item.action : undefined}
+          </SidebarProvider>
+        </More>
+        <Less>
+          <Drawer>
+            <DrawerContent className="flex flex-col gap-y-10 px-4 items-center justify-center my-8 font-funnel">
+              {updatedMenuItems.map((item) => (
+                <Link
+                  key={item.title}
+                  to={item.url ? item.url : ""}
+                  className="flex"
+                  onClick={item.action ? item.action : undefined}
+                >
+                  <item.icon className="mr-2" />
+                  <span>{item.title}</span>
+                </Link>
+              ))}
+              <Button
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="flex items-center justify-center gap-x-4 h-12 w-full p-4 transition-bg duration-300"
               >
-                <item.icon className="mr-2" />
-                <span>{item.title}</span>
-              </Link>
-            ))}
-            <Button
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="flex items-center justify-center gap-x-4 h-12 w-full p-4 transition-bg duration-300"
-            >
-              <SunMoon size={24} />
-              <span className="text-base">Toggle Theme</span>
-            </Button>
-          </DrawerContent>
-          <DrawerTrigger asChild>
-            <Button className="fixed right-0 z-50 m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 hover:cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15">
-              <PanelBottom />
-            </Button>
-          </DrawerTrigger>
-        </Drawer>
-        <Container className="pt-20 pb-14">
-          <Outlet />
-        </Container>
-      </Less>
-    </MediaQuery>
-  );
+                <SunMoon size={24} />
+                <span className="text-base">Toggle Theme</span>
+              </Button>
+            </DrawerContent>
+            <DrawerTrigger asChild>
+              <Button className="fixed right-0 z-50 m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 hover:cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15">
+                <PanelBottom />
+              </Button>
+            </DrawerTrigger>
+          </Drawer>
+          <Container className="pt-20 pb-14">
+            <Outlet />
+          </Container>
+        </Less>
+      </MediaQuery>
+    );
+  }
 };
 
 export default UserPage;

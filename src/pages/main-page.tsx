@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { motion } from "motion/react";
 import Container from "@/components/container";
 import ThemeSwitch from "@/components/theme-switch";
 import { Less, MediaQuery, More } from "@/components/media-query";
@@ -10,16 +9,7 @@ const MainPage: FC = () => {
     <MediaQuery>
       <More>
         <ThemeSwitch position="top-right" />
-        <motion.div
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-            transition: { duration: 0.5 },
-          }}
-          className="flex flex-col gap-4 items-center justify-center h-screen"
-        >
+        <Container className="flex flex-col gap-4 items-center justify-center h-screen">
           <span className="text-4xl font-bold mb-4">No Main Page Yet</span>
           <Link
             to="/article"
@@ -42,20 +32,11 @@ const MainPage: FC = () => {
               Sign In
             </Link>
           </Container>
-        </motion.div>
+        </Container>
       </More>
       <Less>
         <ThemeSwitch position="top-right" />
-        <motion.div
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-            transition: { duration: 0.5 },
-          }}
-          className="flex flex-col gap-4 items-center justify-center h-screen"
-        >
+        <Container className="flex flex-col gap-4 items-center justify-center h-screen">
           <span className="text-4xl font-bold">No Main Page Yet</span>
           <Container className="w-full p-2 grid grid-cols-2 grid-rows-2 gap-2">
             <Link
@@ -80,7 +61,7 @@ const MainPage: FC = () => {
               Sign In
             </Link>
           </Container>
-        </motion.div>
+        </Container>
       </Less>
     </MediaQuery>
   );

@@ -4,23 +4,20 @@ import { cn } from "@/lib/utils";
 import { User } from "@/lib/api";
 import { modifyUserFormSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
 import { useUploadAsset } from "@/hooks/assets";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useGetUser, useLoggedIn, useModifyUser } from "@/hooks/user";
+import { useGetUser, useModifyUser } from "@/hooks/user";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import Container from "@/components/container";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { ImageUp, LoaderCircle } from "lucide-react";
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
-  const loggedIn = useLoggedIn();
   const userGetter = useGetUser();
   const userModifier = useModifyUser();
   const assetUploader = useUploadAsset();
@@ -39,11 +36,7 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
-    if (loggedIn.isLoggedIn === false) navigate("/login");
-  }, [loggedIn.isLoggedIn, navigate]);
-
-  useEffect(() => {
-    if (userGetter.error && loggedIn.isLoggedIn) {
+    if (userGetter.error) {
       toast({
         variant: "destructive",
         title: "Problem With Retrieving Data",
@@ -128,7 +121,6 @@ const ProfilePage = () => {
 
   const onPictureChange = async () => {
     const file = pictureInputRef.current?.files?.[0];
-
     if (file) await assetUploader.upload(file);
   };
 

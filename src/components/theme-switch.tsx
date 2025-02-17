@@ -33,7 +33,7 @@ const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, position }) => {
 
   return (
     <Button
-      size="icon"
+      // size="icon"
       onClick={switchTheme}
       className={cn(finalClassName, className)}
     >

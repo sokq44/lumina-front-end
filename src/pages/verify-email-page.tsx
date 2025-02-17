@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Container from "@/components/container";
@@ -20,16 +19,7 @@ const VerifyEmailPage = () => {
   }, [location, navigate]);
 
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-        transition: { duration: 0.5 },
-      }}
-      className="bg-background flex items-center justify-center h-screen"
-    >
+    <Container className="bg-background flex items-center justify-center h-screen">
       <GoBackArrow position="top-left" />
       <ThemeSwitch position="top-right" />
       <Container className="flex w-full h-[24rem] md:w-[34rem] lg:w-[40rem] xl:w-[46rem]">
@@ -62,7 +52,7 @@ const VerifyEmailPage = () => {
           <Mail size={48} className="text-card" />
         </Container>
       </Container>
-    </motion.div>
+    </Container>
   );
 };
 

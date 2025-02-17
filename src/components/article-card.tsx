@@ -9,6 +9,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Informative from "@/components/inform-badge/informative";
 
 interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
   article: Article;
@@ -16,31 +17,33 @@ interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
 
 const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
   return (
-    <Card
-      className={cn(
-        "group transition-all duration-300 hover:cursor-pointer hover:bg-muted",
-        className
-      )}
-    >
-      <CardHeader>
-        <CardTitle className="w-full text-2xl overflow-hidden line-clamp-1 text-ellipsis break-all">
-          {article.title}
-        </CardTitle>
-        <CardDescription className="flex items-center gap-x-1">
-          <Avatar className="w-8 h-auto col-auto my-auto shadow-md">
-            <AvatarImage src={article.user_image} />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-          @{article.user}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="px-4">
-        <img
-          src={article?.banner ? article?.banner : "/default-banner.png"}
-          className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-sm group-hover:brightness-[0.75] transition-all duration-300"
-        />
-      </CardContent>
-    </Card>
+    <Informative label={article.title}>
+      <Card
+        className={cn(
+          "group transition-all duration-300 hover:cursor-pointer hover:bg-muted",
+          className
+        )}
+      >
+        <CardHeader>
+          <CardTitle className="w-full text-2xl overflow-hidden line-clamp-1 text-ellipsis break-all">
+            {article.title}
+          </CardTitle>
+          <CardDescription className="flex items-center gap-x-1">
+            <Avatar className="w-8 h-auto col-auto my-auto shadow-md">
+              <AvatarImage src={article.user_image} />
+              <AvatarFallback>U</AvatarFallback>
+            </Avatar>
+            @{article.user}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-4">
+          <img
+            src={article?.banner ? article?.banner : "/default-banner.png"}
+            className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-sm group-hover:brightness-[0.75] transition-all duration-300"
+          />
+        </CardContent>
+      </Card>
+    </Informative>
   );
 };
 

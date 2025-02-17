@@ -15,8 +15,8 @@ const SuggestedArticlesPage = () => {
     if (error) {
       toast({
         variant: "destructive",
-        title: "Problem With Retrieving Articles",
-        description: error,
+        title: "Articles Retrieval Error",
+        description: error || "Something went wrong while retrieving articles.",
       });
     }
   }, [error, toast]);
