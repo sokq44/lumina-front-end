@@ -71,7 +71,7 @@ const UserPage = () => {
             <UserSidebar items={updatedMenuItems} />
             <Container className="flex flex-col h-screen w-screen">
               <Container className="flex items-center w-full bg-background h-14 justify-between">
-                <SidebarTrigger className="ml-2 w-10 h-10 rounded-md text-primary bg-secondary/50 dark:bg-secondary/70 hover:cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300" />
+                <SidebarTrigger className="ml-2 w-10 h-10 rounded-md text-primary bg-secondary/50 dark:bg-secondary/70 cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300" />
                 <ThemeSwitch className="relative" />
               </Container>
               <Container className="flex w-full bg-background h-full">
@@ -103,7 +103,7 @@ const UserPage = () => {
               </Button>
             </DrawerContent>
             <DrawerTrigger asChild>
-              <Button className="fixed right-0 z-50 m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 hover:cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15">
+              <Button className="fixed right-0 z-50 m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15">
                 <PanelBottom />
               </Button>
             </DrawerTrigger>

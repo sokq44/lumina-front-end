@@ -15,6 +15,7 @@ const Informative: FC<InformativeProps> = ({ label, children, className }) => {
     <Container
       onMouseEnter={() => showInformBadge(label)}
       onMouseLeave={clearInformBadge}
+      onClick={clearInformBadge}
       className={className}
     >
       {children}

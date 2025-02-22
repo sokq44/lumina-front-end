@@ -30,12 +30,14 @@ import Container from "@/components/container";
 import TextEditorMenu from "@/components/text-editor/text-editor-menu";
 import TextEditorContent from "@/components/text-editor/text-editor-content";
 import TextEditorProvider from "@/components/text-editor/text-editor-provider";
+import EditorDialogueProvider from "./dialogues/editor-dialogue-provider";
 
 // TODO: resizable images
 // TODO: resizable youtube videos
 // TODO: dialog for setting a link
 // TODO: cursor change for resizing tables
 // TODO: tracking changes within an article
+// TODO: context menu for all the menu items
 // TODO: define prohibited protocols and urls for the Link extension
 // TODO: check whether certain text editor menu items can be triggered
 // TODO: more user-friendly process of uploading pictures and the banner image
@@ -93,10 +95,12 @@ const TextEditor: FC<TextEditorProps> = ({ article }) => {
 
   return (
     <TextEditorProvider editor={editor} article={article}>
-      <Container className="flex flex-col h-full mx-4 w-[50rem]">
-        <TextEditorMenu />
-        <TextEditorContent className="mt-28" />
-      </Container>
+      <EditorDialogueProvider>
+        <Container className="w-[50rem] flex flex-col h-full mx-4 mt-6">
+          <TextEditorMenu />
+          <TextEditorContent className="mt-4" />
+        </Container>
+      </EditorDialogueProvider>
     </TextEditorProvider>
   );
 };

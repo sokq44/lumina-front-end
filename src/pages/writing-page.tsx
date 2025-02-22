@@ -50,7 +50,7 @@ const WritingPage = () => {
         <DialogTrigger asChild>
           <Button
             variant="ghost"
-            className="fixed top-0 left-0 z-[100] m-2 p-2 rounded-md hover:cursor-pointer transition-all duration-300"
+            className="fixed top-0 left-0 z-[100] m-2 p-2 rounded-md cursor-pointer transition-all duration-300"
           >
             <CornerUpLeft />
           </Button>

@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
+import EditorToolbar from "@/components/text-editor/editor-toolbar";
 
 interface TextEditorContentProps {
   className?: string;
@@ -23,6 +24,13 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
   const titleRef = useRef<HTMLInputElement>(null);
   const bannerRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    console.log(textEditor.article);
+    window.addEventListener("beforeunload", textEditor.finishArticle);
+    return () =>
+      window.removeEventListener("beforeunload", textEditor.finishArticle);
+  }, []);
 
   useEffect(() => {
     if (articleGetter.error) {
@@ -151,11 +159,13 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
             </span>
           )}
         </Container>
-        <EditorContent
-          onClick={focusEditor}
-          editor={textEditor.editor ?? null}
-          className="min-h-svh w-full mx-auto hover:cursor-text"
-        />
+        <EditorToolbar>
+          <EditorContent
+            onClick={focusEditor}
+            editor={textEditor.editor ?? null}
+            className="min-h-svh w-full mx-auto hover:cursor-text"
+          />
+        </EditorToolbar>
       </Container>
     );
   }

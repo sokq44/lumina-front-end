@@ -13,7 +13,7 @@ const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, position }) => {
   const { theme, setTheme } = useTheme();
 
   let finalClassName =
-    "fixed z-50 m-2 p-2 top-0 rounded-md text-primary bg-gray-200 transition-all duration-300 hover:cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15";
+    "fixed z-50 m-2 p-2 top-0 rounded-md text-primary bg-gray-200 transition-all duration-300 cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15";
 
   switch (position) {
     case "top-left":

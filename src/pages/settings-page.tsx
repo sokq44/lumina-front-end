@@ -106,7 +106,7 @@ const SettingsPage = () => {
             </Button>
           </DrawerContent>
           <DrawerTrigger asChild>
-            <Button className="fixed right-0 z-50 m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 hover:cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15">
+            <Button className="fixed right-0 z-50 m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15">
               <PanelBottom />
             </Button>
           </DrawerTrigger>

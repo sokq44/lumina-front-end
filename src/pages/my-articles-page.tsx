@@ -59,7 +59,7 @@ const MyArticlesPage = () => {
                 state={{ article: undefined }}
                 className="h-full"
               >
-                <Card className="h-full flex flex-col items-center justify-center bg-card-foreground text-card border-0 transition-all duration-300 hover:cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
+                <Card className="h-full flex flex-col items-center justify-center bg-card-foreground text-card border-0 transition-all duration-300 cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
                   <CardTitle className="text-5xl font-bold">Create</CardTitle>
                   <CardDescription className="flex items-center text-inherit">
                     <PenLine size={12} className="mr-1" />
@@ -69,7 +69,7 @@ const MyArticlesPage = () => {
               </Link>
               {articlesGetter.articles.map((article, index) => (
                 <Link
-                  to={"/user/writing"}
+                  to={"/writing"}
                   state={{ article: article }}
                   key={`article ${index}`}
                 >

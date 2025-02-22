@@ -10,11 +10,11 @@ const MainPage: FC = () => {
       <More>
         <ThemeSwitch position="top-right" />
         <Container className="flex flex-col gap-4 items-center justify-center h-screen">
-          <span className="text-4xl font-bold mb-4">No Main Page Yet</span>
+          <span className="text-4xl font-bold">No Main Page Yet</span>
           <Link
             to="/article"
             state={{ article: { id: "4a48eff2-e8ec-4841-943f-e6ee0352ecfe" } }}
-            className="mt-4 w-[35rem] flex items-center justify-center bg-muted rounded-md py-2 transition-all duration-300 hover:bg-muted-foreground/50"
+            className="w-[35rem] flex items-center justify-center bg-muted rounded-md py-2 transition-all duration-300 hover:bg-muted-foreground/50"
           >
             Showcase
           </Link>

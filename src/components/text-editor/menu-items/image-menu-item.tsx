@@ -13,11 +13,14 @@ import {
 } from "@/components/ui/dialog";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
-import Informative from "@/components/inform-badge/informative";
 import { ImagePlus, LoaderCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import {
+  ContextMenuItem,
+  ContextMenuShortcut,
+} from "@/components/ui/context-menu";
 
-const ImageUploader = () => {
+const ImageMenuItem = () => {
   const [imageSource, setImageSource] = useState<string>(
     "/image-uploader-placeholder.webp"
   );
@@ -71,24 +74,25 @@ const ImageUploader = () => {
     }
   };
 
-  const resetImagePicker = () => {
-    if (inputRef.current) inputRef.current.value = "";
-    setImageSource("/image-uploader-placeholder.webp");
+  // const resetImagePicker = () => {
+  //   if (inputRef.current) inputRef.current.value = "";
+  //   setImageSource("/image-uploader-placeholder.webp");
+  // };
+
+  const onDialogOpenChange = (open: boolean) => {
+    console.log(open);
   };
 
   return (
-    <Dialog>
-      <Informative label="Image">
-        <DialogTrigger asChild>
-          <Button
-            onClick={resetImagePicker}
-            variant="ghost"
-            className="p-2 w-9 h-9 hover:bg-secondary hover:text-primary dark:hover:bg-black"
-          >
-            <ImagePlus />
-          </Button>
-        </DialogTrigger>
-      </Informative>
+    <Dialog onOpenChange={(open) => onDialogOpenChange(open)}>
+      <DialogTrigger asChild>
+        <ContextMenuItem inset className="cursor-pointer">
+          Upload Image
+          <ContextMenuShortcut>
+            <ImagePlus size={14} />
+          </ContextMenuShortcut>
+        </ContextMenuItem>
+      </DialogTrigger>
       <DialogContent className="font-funnel">
         <DialogHeader>
           <DialogTitle>Upload an Image</DialogTitle>
@@ -110,7 +114,7 @@ const ImageUploader = () => {
           />
           <Container
             onClick={() => inputRef.current?.click()}
-            className="flex items-center pl-2 w-full border rounded-sm text-sm text-muted-foreground transition-all duration-300 hover:cursor-pointer hover:bg-muted"
+            className="flex items-center pl-2 w-full border rounded-sm text-sm text-muted-foreground transition-all duration-300 cursor-pointer hover:bg-muted"
           >
             {inputRef.current?.value
               ? inputRef.current?.value.split(/[/\\]/).pop()
@@ -139,4 +143,4 @@ const ImageUploader = () => {
   );
 };
 
-export default ImageUploader;
+export default ImageMenuItem;

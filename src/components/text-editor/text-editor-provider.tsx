@@ -25,6 +25,7 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
 
   const finishArticle = () => {
     localStorage.removeItem("curr_article");
+    setArticle(undefined);
   };
 
   useEffect(() => {

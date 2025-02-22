@@ -20,7 +20,7 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
     <Informative label={article.title}>
       <Card
         className={cn(
-          "group transition-all duration-300 hover:cursor-pointer hover:bg-muted",
+          "group transition-all duration-300 cursor-pointer hover:bg-muted",
           className
         )}
       >
