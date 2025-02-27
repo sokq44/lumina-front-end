@@ -4,6 +4,7 @@ import UploadImageDialogue from "@/components/dialogues/upload-image-dialog";
 import DeleteArticleDialogue from "@/components/dialogues/delete-article-dialogue";
 import ArticleVisibilityDialogue from "@/components/dialogues/article-visibility-dialogue";
 import AddLinkDialogue from "./add-link-dialogue";
+import AddYTVideoDialogue from "./add-yt-video-dialogue";
 
 const eventTarget = new EventTarget();
 
@@ -11,7 +12,10 @@ const uploadImageDialogue = () => {
   eventTarget.dispatchEvent(new Event("upload-image-dialogue"));
 };
 
-const youtubeVideoDialogue = () => {};
+const youtubeVideoDialogue = () => {
+  eventTarget.dispatchEvent(new Event("add-yt-video-dialogue"));
+};
+
 const addLinkDialogue = () => {
   eventTarget.dispatchEvent(new Event("add-link-dialogue"));
 };
@@ -37,6 +41,7 @@ const EditorDialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
       }}
     >
       <AddLinkDialogue />
+      <AddYTVideoDialogue />
       <UploadImageDialogue />
       <DeleteArticleDialogue />
       <ArticleVisibilityDialogue />

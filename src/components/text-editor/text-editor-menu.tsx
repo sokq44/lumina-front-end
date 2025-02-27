@@ -175,6 +175,9 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
+            disabled={
+              !textEditor.editor?.can().setImage({ src: "/iu-placeholder.png" })
+            }
             onSelect={editorDialogue.uploadImageDialogue}
             className="cursor-pointer transition-all duration-300"
           >
@@ -184,6 +187,11 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
+            disabled={
+              !textEditor.editor?.can().setYoutubeVideo({
+                src: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+              })
+            }
             onSelect={editorDialogue.youtubeVideoDialogue}
             className="cursor-pointer transition-all duration-300"
           >

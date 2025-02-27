@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const AddLinkDialogue = () => {
+const AddYTVideoDialogue = () => {
   const textEditor = useTextEditor();
   const editorDialogue = useEditorDialogue();
 
@@ -26,13 +26,13 @@ const AddLinkDialogue = () => {
 
     const openDialog = () => triggerRef.current?.click();
     editorDialogue.eventTarget.addEventListener(
-      "add-link-dialogue",
+      "add-yt-video-dialogue",
       openDialog
     );
 
     return () => {
       editorDialogue.eventTarget?.removeEventListener(
-        "add-link-dialogue",
+        "add-yt-video-dialogue",
         openDialog
       );
     };
@@ -43,12 +43,7 @@ const AddLinkDialogue = () => {
 
     const value = inputRef.current?.value;
     if (value && textEditor.editor) {
-      textEditor.editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url, target: "_blank" })
-        .run();
+      textEditor.editor.chain().focus().setYoutubeVideo({ src: url }).run();
     }
   };
 
@@ -80,4 +75,4 @@ const AddLinkDialogue = () => {
   );
 };
 
-export default AddLinkDialogue;
+export default AddYTVideoDialogue;
