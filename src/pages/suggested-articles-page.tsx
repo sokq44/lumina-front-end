@@ -23,8 +23,9 @@ const SuggestedArticlesPage = () => {
 
   if (isLoading) {
     return (
-      <Container className="w-full h-full bg-background flex items-center justify-center">
+      <Container className="w-full h-full bg-background flex items-center justify-center text-muted-foreground">
         <LoaderCircle size={24} className="animate-spin" />
+        <span className="ml-2 text-lg">Retrieving articles...</span>
       </Container>
     );
   }
@@ -32,7 +33,7 @@ const SuggestedArticlesPage = () => {
   return (
     <MediaQuery>
       <More>
-        <Container className="h-min grid grid-cols-4 gap-x-12 gap-y-8 m-auto px-4">
+        <Container className="h-min grid grid-cols-4 gap-x-12 gap-y-8 m-auto px-4 2xl:grid-cols-5">
           {articles?.map((article, index) => (
             <Link key={`article ${index}`} to="/article" state={{ article }}>
               <ArticleCard

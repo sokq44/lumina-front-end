@@ -20,8 +20,11 @@ const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {
 
   if (!item) return <span>Wrong Variant</span>;
 
+  const disabled = !item.canToggle();
+
   return (
     <ContextMenuItem
+      disabled={disabled}
       onClick={() => item.toggle()}
       inset
       className="cursor-pointer"

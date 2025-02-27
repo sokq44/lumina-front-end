@@ -30,17 +30,15 @@ import Container from "@/components/container";
 import TextEditorMenu from "@/components/text-editor/text-editor-menu";
 import TextEditorContent from "@/components/text-editor/text-editor-content";
 import TextEditorProvider from "@/components/text-editor/text-editor-provider";
-import EditorDialogueProvider from "./dialogues/editor-dialogue-provider";
+import EditorDialogueProvider from "@/components/text-editor/dialogues/editor-dialogue-provider";
 
 // TODO: resizable images
 // TODO: resizable youtube videos
 // TODO: dialog for setting a link
 // TODO: cursor change for resizing tables
 // TODO: tracking changes within an article
-// TODO: context menu for all the menu items
 // TODO: define prohibited protocols and urls for the Link extension
-// TODO: check whether certain text editor menu items can be triggered
-// TODO: more user-friendly process of uploading pictures and the banner image
+// TODO: more user-friendly process of uploading pictures, banner image and profile image (lazy loading)
 
 interface TextEditorProps {
   article: Article;

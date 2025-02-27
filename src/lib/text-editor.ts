@@ -43,6 +43,7 @@ abstract class MenuItem {
   }
 
   public abstract toggle(): void;
+  public abstract canToggle(): boolean;
 }
 
 export class Paragraph extends MenuItem {
@@ -52,6 +53,10 @@ export class Paragraph extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().setParagraph().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().setParagraph();
   }
 }
 
@@ -63,6 +68,10 @@ export class Bold extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().toggleBold().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().setBold();
+  }
 }
 
 export class Underline extends MenuItem {
@@ -72,6 +81,10 @@ export class Underline extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().toggleUnderline().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleUnderline();
   }
 }
 
@@ -83,6 +96,10 @@ export class Italic extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().toggleItalic().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleItalic();
+  }
 }
 
 export class CodeBlock extends MenuItem {
@@ -92,6 +109,10 @@ export class CodeBlock extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().toggleCodeBlock().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleCodeBlock();
   }
 }
 
@@ -103,6 +124,10 @@ export class BlockQuote extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().toggleBlockquote().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleBlockquote();
+  }
 }
 
 export class BulletList extends MenuItem {
@@ -112,6 +137,10 @@ export class BulletList extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().toggleBulletList().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleBulletList();
   }
 }
 
@@ -123,6 +152,10 @@ export class OrderedList extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().toggleOrderedList().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleOrderedList();
+  }
 }
 
 export class TaskList extends MenuItem {
@@ -132,6 +165,10 @@ export class TaskList extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().toggleTaskList().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleTaskList();
   }
 }
 
@@ -143,6 +180,10 @@ export class HorizontalRule extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().setHorizontalRule().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().setHorizontalRule();
+  }
 }
 
 export class HardBreak extends MenuItem {
@@ -152,6 +193,10 @@ export class HardBreak extends MenuItem {
 
   public override toggle() {
     this.editor.chain().setHardBreak().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().setHardBreak();
   }
 }
 
@@ -167,6 +212,10 @@ export class InsertTable extends MenuItem {
       .insertTable({ rows: 2, cols: 2, withHeaderRow: true })
       .run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().insertTable();
+  }
 }
 
 export class DeleteTable extends MenuItem {
@@ -176,6 +225,10 @@ export class DeleteTable extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().deleteTable().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().deleteTable();
   }
 }
 
@@ -187,6 +240,10 @@ export class InsertColumnBefore extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().addColumnBefore().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().addColumnBefore();
+  }
 }
 
 export class InsertColumnAfter extends MenuItem {
@@ -196,6 +253,10 @@ export class InsertColumnAfter extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().addColumnAfter().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().addColumnAfter();
   }
 }
 
@@ -207,6 +268,10 @@ export class DeleteColumn extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().deleteColumn().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().deleteColumn();
+  }
 }
 
 export class InsertRowBefore extends MenuItem {
@@ -216,6 +281,10 @@ export class InsertRowBefore extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().addRowBefore().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().addRowBefore();
   }
 }
 
@@ -227,6 +296,10 @@ export class InsertRowAfter extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().addRowAfter().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().addRowAfter();
+  }
 }
 
 export class DeleteRow extends MenuItem {
@@ -236,6 +309,10 @@ export class DeleteRow extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().deleteRow().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().deleteRow();
   }
 }
 
@@ -247,6 +324,10 @@ export class MergeTableCells extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().mergeCells().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().mergeCells();
+  }
 }
 
 export class SplitTableCell extends MenuItem {
@@ -256,6 +337,10 @@ export class SplitTableCell extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().splitCell().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().splitCell();
   }
 }
 
@@ -267,6 +352,10 @@ export class ToggleHeaderColumn extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().toggleHeaderColumn().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleHeaderColumn();
+  }
 }
 
 export class ToggleHeaderRow extends MenuItem {
@@ -276,6 +365,10 @@ export class ToggleHeaderRow extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().toggleHeaderRow().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleHeaderRow();
   }
 }
 
@@ -287,6 +380,10 @@ export class ToggleHeaderCell extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().toggleHeaderCell().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().toggleHeaderCell();
+  }
 }
 
 export class GoToNextCell extends MenuItem {
@@ -297,6 +394,10 @@ export class GoToNextCell extends MenuItem {
   public override toggle() {
     this.editor.chain().focus().goToNextCell().run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().goToNextCell();
+  }
 }
 
 export class GoToPreviousCell extends MenuItem {
@@ -306,6 +407,10 @@ export class GoToPreviousCell extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().goToPreviousCell().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().goToPreviousCell();
   }
 }
 
@@ -333,6 +438,10 @@ export class SetLink extends MenuItem {
       .setLink({ href: url, target: "_blank" })
       .run();
   }
+
+  public override canToggle(): boolean {
+    return this.editor.can().setLink({ href: "#" });
+  }
 }
 
 export class UnsetLink extends MenuItem {
@@ -342,6 +451,10 @@ export class UnsetLink extends MenuItem {
 
   public override toggle() {
     this.editor.chain().focus().unsetLink().run();
+  }
+
+  public override canToggle(): boolean {
+    return this.editor.can().unsetLink();
   }
 }
 

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoggedIn } from "@/hooks/user";
 import { useToast } from "@/hooks/use-toast";
 import { useGetArticles } from "@/hooks/articles";
 import Container from "@/components/container";
@@ -12,13 +11,8 @@ import { Button } from "@/components/ui/button";
 
 const MyArticlesPage = () => {
   const navigate = useNavigate();
-  const loggedIn = useLoggedIn();
   const articlesGetter = useGetArticles();
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (loggedIn.error) navigate("/login");
-  }, [loggedIn.error, navigate]);
 
   useEffect(() => {
     if (articlesGetter.error) {
@@ -30,18 +24,9 @@ const MyArticlesPage = () => {
     }
   }, [articlesGetter.error, toast, navigate]);
 
-  if (loggedIn.isLoading) {
-    return (
-      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
-        <LoaderCircle size={24} className="animate-spin" />
-        <span className="ml-2 text-lg">Checking your login status...</span>
-      </Container>
-    );
-  }
-
   if (articlesGetter.isLoading) {
     return (
-      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
+      <Container className="w-full h-full bg-background flex items-center justify-center text-muted-foreground">
         <LoaderCircle size={24} className="animate-spin" />
         <span className="ml-2 text-lg">Retrieving articles...</span>
       </Container>
@@ -53,7 +38,7 @@ const MyArticlesPage = () => {
       <More>
         <Container className="flex flex-col items-center justify-center gap-y-8 w-full h-full">
           {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
-            <Container className="grid grid-cols-4 gap-x-12 gap-y-8 items-center px-4">
+            <Container className="grid grid-cols-4 gap-x-12 gap-y-8 items-center px-4 2xl:grid-cols-5">
               <Link
                 to={"/writing"}
                 state={{ article: undefined }}

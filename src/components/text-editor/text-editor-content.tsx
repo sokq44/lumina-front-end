@@ -9,7 +9,6 @@ import { useTextEditor } from "@/hooks/text-editor";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/container";
-import { Button } from "@/components/ui/button";
 import EditorToolbar from "@/components/text-editor/editor-toolbar";
 
 interface TextEditorContentProps {
@@ -117,12 +116,13 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
         <Container className="flex flex-col mb-10">
           <Container className="relative mb-8 group">
             <img
+              onClick={() => bannerRef.current?.click()}
               src={
                 textEditor.article?.banner
                   ? textEditor.article?.banner
                   : "/default-banner.png"
               }
-              className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 group-hover:brightness-[0.7] group-hover:blur-[1px]"
+              className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 cursor-pointer group-hover:brightness-[0.7] group-hover:blur-[1px]"
             />
             <Input
               type="file"
@@ -131,12 +131,12 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
               onChange={onBannerChange}
               ref={bannerRef}
             />
-            <Button
+            <span
               onClick={() => bannerRef.current?.click()}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0 text-3xl font-bold text-white cursor-pointer group-hover:opacity-100"
             >
-              Change
-            </Button>
+              Click To Change
+            </span>
           </Container>
           <input
             ref={titleRef}

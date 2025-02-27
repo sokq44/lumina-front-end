@@ -53,7 +53,6 @@ const UploadImageDialogue = () => {
       });
     } else if (assetUploader.error === null) {
       if (assetUploader.url) {
-        console.log(assetUploader.url);
         textEditor.editor
           ?.chain()
           .focus()

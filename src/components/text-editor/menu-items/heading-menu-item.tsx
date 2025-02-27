@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useTextEditor } from "@/hooks/text-editor";
+import { ContextMenuItemProps } from "@radix-ui/react-context-menu";
 import {
   ContextMenuItem,
   ContextMenuShortcut,
@@ -12,7 +13,6 @@ import {
   Heading5,
   Heading6,
 } from "lucide-react";
-import { ContextMenuItemProps } from "@radix-ui/react-context-menu";
 
 interface HeadingMenuItemProps extends ContextMenuItemProps {
   level: 0 | 1 | 2 | 3 | 4 | 5 | 6;

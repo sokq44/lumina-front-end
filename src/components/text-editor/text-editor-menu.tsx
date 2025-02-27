@@ -106,7 +106,7 @@ const TextEditorMenu = () => {
             onClick={newWindow}
             className="cursor-pointer transition-all duration-300"
           >
-            New Article{" "}
+            New Article
             <MenubarShortcut>
               <Plus size={14} />
             </MenubarShortcut>
@@ -117,7 +117,7 @@ const TextEditorMenu = () => {
             disabled={articleSaver.isLoading || articleRemover.isLoading}
             className="cursor-pointer transition-all duration-300"
           >
-            Save Article{" "}
+            Save Article
             <MenubarShortcut>
               <Save size={14} />
             </MenubarShortcut>
@@ -131,7 +131,7 @@ const TextEditorMenu = () => {
             }
             className="cursor-pointer transition-all duration-300"
           >
-            {textEditor.article?.public ? "Public" : "Private"}{" "}
+            {textEditor.article?.public ? "Public" : "Private"}
             <MenubarShortcut>
               {textEditor.article?.public ? (
                 <BookCheck size={14} />
@@ -149,7 +149,7 @@ const TextEditorMenu = () => {
             }
             className="text-destructive cursor-pointer transition-all duration-300 hover:text-destructive"
           >
-            Delete Article{" "}
+            Delete Article
             <MenubarShortcut className="text-destructive">
               <Trash2 size={14} />
             </MenubarShortcut>
@@ -161,7 +161,7 @@ const TextEditorMenu = () => {
         <MenubarContent className="font-funnel">
           <MenubarItem
             onSelect={editorDialogue.addLinkDialogue}
-            className="cursor-pointer"
+            className="cursor-pointer transition-all duration-300"
           >
             Link
             <MenubarShortcut>
@@ -170,7 +170,7 @@ const TextEditorMenu = () => {
           </MenubarItem>
           <MenubarItem
             onSelect={editorDialogue.uploadImageDialogue}
-            className="cursor-pointer"
+            className="cursor-pointer transition-all duration-300"
           >
             Image
             <MenubarShortcut>
@@ -179,7 +179,7 @@ const TextEditorMenu = () => {
           </MenubarItem>
           <MenubarItem
             onSelect={editorDialogue.youtubeVideoDialogue}
-            className="cursor-pointer"
+            className="cursor-pointer transition-all duration-300"
           >
             Youtbe
             <MenubarShortcut>
