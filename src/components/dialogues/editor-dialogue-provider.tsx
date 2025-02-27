@@ -1,8 +1,9 @@
 import { FC, ReactNode } from "react";
 import { EditorDialogueContext } from "@/hooks/editor-dialogue";
-import UploadImageDialogue from "@/components/text-editor/dialogues/upload-image-dialog";
-import DeleteArticleDialogue from "@/components/text-editor/dialogues/delete-article-dialogue";
-import ArticleVisibilityDialogue from "@/components/text-editor/dialogues/article-visibility-dialogue";
+import UploadImageDialogue from "@/components/dialogues/upload-image-dialog";
+import DeleteArticleDialogue from "@/components/dialogues/delete-article-dialogue";
+import ArticleVisibilityDialogue from "@/components/dialogues/article-visibility-dialogue";
+import AddLinkDialogue from "./add-link-dialogue";
 
 const eventTarget = new EventTarget();
 
@@ -35,6 +36,7 @@ const EditorDialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
         articleVisibilityDialogue,
       }}
     >
+      <AddLinkDialogue />
       <UploadImageDialogue />
       <DeleteArticleDialogue />
       <ArticleVisibilityDialogue />

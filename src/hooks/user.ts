@@ -233,7 +233,6 @@ export function usePasswordChangeValid(token: string | undefined): {
   useEffect(() => {
     const check = async () => {
       if (token) {
-        console.log(token);
         setIsLoading(true);
         setError(undefined);
 

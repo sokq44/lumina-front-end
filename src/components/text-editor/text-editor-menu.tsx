@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import { Article } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -24,8 +24,9 @@ import {
   BookCheck,
   TvMinimalPlay,
 } from "lucide-react";
+import { MenubarProps } from "@radix-ui/react-menubar";
 
-const TextEditorMenu = () => {
+const TextEditorMenu: FC<MenubarProps> = (props) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const textEditor = useTextEditor();
@@ -98,7 +99,7 @@ const TextEditorMenu = () => {
   };
 
   return (
-    <Menubar>
+    <Menubar {...props}>
       <MenubarMenu>
         <MenubarTrigger className="cursor-pointer">Article</MenubarTrigger>
         <MenubarContent className="font-funnel">
@@ -160,6 +161,11 @@ const TextEditorMenu = () => {
         <MenubarTrigger className="cursor-pointer">Add</MenubarTrigger>
         <MenubarContent className="font-funnel">
           <MenubarItem
+            disabled={
+              !textEditor.editor
+                ?.can()
+                .setLink({ href: "https://www.example.com" })
+            }
             onSelect={editorDialogue.addLinkDialogue}
             className="cursor-pointer transition-all duration-300"
           >

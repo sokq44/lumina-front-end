@@ -25,7 +25,6 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
   const bannerRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    console.log(textEditor.article);
     window.addEventListener("beforeunload", textEditor.finishArticle);
     return () =>
       window.removeEventListener("beforeunload", textEditor.finishArticle);
