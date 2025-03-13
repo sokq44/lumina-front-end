@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { useForm, FieldErrors } from "react-hook-form";
 import { Circle, LoaderCircle, UserPlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import SlidingLink from "@/components/sliding-link";
-import ThemeSwitch from "@/components/theme-switch";
-import GoBackArrow from "@/components/go-back-arrow";
+import SlidingLink from "@/components/ui/sliding-link";
+import ThemeSwitch from "@/components/theme/theme-switch";
+import GoBackArrow from "@/components/ui/go-back-arrow";
+
+type RegisterForm = z.infer<typeof registerFormSchema>;
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ const RegisterPage = () => {
 
   const [email, setEmail] = useState<string>("");
 
-  const form = useForm<z.infer<typeof registerFormSchema>>({
+  const form = useForm<RegisterForm>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       username: "",
@@ -45,14 +47,12 @@ const RegisterPage = () => {
     }
   }, [attempts, error, navigate, toast, email]);
 
-  const onSubmit = (v: z.infer<typeof registerFormSchema>) => {
+  const onSubmit = (v: RegisterForm) => {
     register(v.username, v.email, v.password);
     setEmail(v.email);
   };
 
-  const onError = async (
-    errors: FieldErrors<z.infer<typeof registerFormSchema>>
-  ) => {
+  const onError = async (errors: FieldErrors<RegisterForm>) => {
     const message: string = Object.entries(errors).map(
       (entry) => (entry[1].message as string) ?? entry
     )[0];

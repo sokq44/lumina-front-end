@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarGroupContent,
 } from "@/components/ui/sidebar";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Separator } from "@/components/ui/separator";
 
 interface UserSidebarProps {

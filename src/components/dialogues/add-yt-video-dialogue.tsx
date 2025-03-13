@@ -54,8 +54,8 @@ const AddYTVideoDialogue = () => {
       <DialogTrigger ref={triggerRef}></DialogTrigger>
       <DialogContent className="font-funnel">
         <DialogHeader>
-          <DialogTitle>Add a link</DialogTitle>
-          <DialogDescription>Enter the URL for the link.</DialogDescription>
+          <DialogTitle>Add a Youtube Video</DialogTitle>
+          <DialogDescription>Enter the URL for the video.</DialogDescription>
         </DialogHeader>
         <form className="flex gap-x-2" onSubmit={handleLinkAddition}>
           <Input

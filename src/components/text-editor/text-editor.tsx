@@ -26,7 +26,7 @@ import TableHeader from "@tiptap/extension-table-header";
 import OrderedList from "@tiptap/extension-ordered-list";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import TextEditorMenu from "@/components/text-editor/text-editor-menu";
 import TextEditorContent from "@/components/text-editor/text-editor-content";
 import TextEditorProvider from "@/components/text-editor/text-editor-provider";

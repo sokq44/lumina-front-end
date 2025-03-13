@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { Button } from "./ui/button";
-import { useTheme } from "./theme-provider";
-import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "@/components/theme/theme-provider";
 
 interface ThemeSwitchProps {
   className?: string;

@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { useEditorDialogue } from "@/hooks/editor-dialogue";

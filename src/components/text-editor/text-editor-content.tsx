@@ -8,7 +8,7 @@ import { useGetArticle } from "@/hooks/articles";
 import { useTextEditor } from "@/hooks/text-editor";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import EditorToolbar from "@/components/text-editor/editor-toolbar";
 
 interface TextEditorContentProps {

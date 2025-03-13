@@ -18,13 +18,14 @@ import SuggestedArticlesPage from "@/pages/suggested-articles-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
 
 import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import InformBadger from "@/components/inform-badge/inform-badger";
 
 import "./index.css";
 import PasswordChangePage from "@/pages/password-change-page";
 
 // TODO: Logo design.
+// TODO: dialog upon logging out
 // TODO: preview of the profile picture before uploading (profile-page)
 // TODO: play with the colours of the app a little bit (find the best theme)
 // TODO: improve layouts of the emails sent when changing password or verifying

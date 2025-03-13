@@ -12,9 +12,9 @@ import { useToast } from "@/hooks/use-toast";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import ThemeSwitch from "@/components/theme-switch";
+import ThemeSwitch from "@/components/theme/theme-switch";
 import { KeyRound, LoaderCircle } from "lucide-react";
 
 const PasswordChangePage = () => {

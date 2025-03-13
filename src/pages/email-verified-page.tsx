@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
 import { useVerifyUser } from "@/hooks/user";
-import { LoaderCircle, MailCheck, MailX } from "lucide-react";
-import Container from "@/components/container";
-import SlidingLink from "@/components/sliding-link";
-import ThemeSwitch from "@/components/theme-switch";
+import { MailCheck, MailX } from "lucide-react";
+import Container from "@/components/ui/container";
+import SlidingLink from "@/components/ui/sliding-link";
+import ThemeSwitch from "@/components/theme/theme-switch";
 import { cn } from "@/lib/utils";
+import LoadingScreen from "@/components/wraps/loading-screen";
 
 const EmailVerifiedPage = () => {
   const { token } = useParams();
@@ -40,8 +41,8 @@ const EmailVerifiedPage = () => {
 
   if (isLoading) {
     return (
-      <Container className="bg-background flex items-center justify-center h-screen">
-        <LoaderCircle size={32} className="animate-spin text-primary" />
+      <Container className="w-screen h-screen">
+        <LoadingScreen>Verifying...</LoadingScreen>
       </Container>
     );
   }

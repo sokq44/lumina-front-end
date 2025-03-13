@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
-import { useGetArticle } from "@/hooks/articles";
-import Container from "@/components/container";
-import ThemeSwitch from "@/components/theme-switch";
-import GoBackArrow from "@/components/go-back-arrow";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LoaderCircle } from "lucide-react";
 import { formatDate } from "@/lib/utils";
-import { Less, MediaQuery, More } from "@/components/media-query";
+import { useToast } from "@/hooks/use-toast";
+import Container from "@/components/ui/container";
+import { useGetArticle } from "@/hooks/articles";
 import { Badge } from "@/components/ui/badge";
+import ThemeSwitch from "@/components/theme/theme-switch";
+import GoBackArrow from "@/components/ui/go-back-arrow";
+import LoadingScreen from "@/components/wraps/loading-screen";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const ArticlePage = () => {
   const { toast } = useToast();
@@ -28,8 +28,8 @@ const ArticlePage = () => {
 
   if (isLoading) {
     return (
-      <Container className="bg-background flex items-center justify-center h-screen">
-        <LoaderCircle size={24} className="animate-spin" />
+      <Container className="w-screen h-screen">
+        <LoadingScreen>Retrieving Article...</LoadingScreen>
       </Container>
     );
   }

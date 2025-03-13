@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Less, MediaQuery, More } from "@/components/media-query";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();

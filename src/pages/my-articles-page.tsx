@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useGetArticles } from "@/hooks/articles";
-import Container from "@/components/container";
-import ArticleCard from "@/components/article-card";
+import Container from "@/components/ui/container";
+import ArticleCard from "@/components/ui/article-card";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { LoaderCircle, PenLine } from "lucide-react";
-import { Less, MediaQuery, More } from "@/components/media-query";
+import { PenLine } from "lucide-react";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Button } from "@/components/ui/button";
+import LoadingScreen from "@/components/wraps/loading-screen";
 
 const MyArticlesPage = () => {
   const navigate = useNavigate();
@@ -26,9 +27,8 @@ const MyArticlesPage = () => {
 
   if (articlesGetter.isLoading) {
     return (
-      <Container className="w-full h-full bg-background flex items-center justify-center text-muted-foreground">
-        <LoaderCircle size={24} className="animate-spin" />
-        <span className="ml-2 text-lg">Retrieving articles...</span>
+      <Container className="w-screen h-screen">
+        <LoadingScreen>Retrieving Articles...</LoadingScreen>
       </Container>
     );
   }

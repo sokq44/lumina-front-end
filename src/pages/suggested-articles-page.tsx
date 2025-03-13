@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useGetSuggestedArticles } from "@/hooks/articles";
 import { useToast } from "@/hooks/use-toast";
-import Container from "@/components/container";
-import ArticleCard from "@/components/article-card";
-import { LoaderCircle } from "lucide-react";
-import { Less, MediaQuery, More } from "@/components/media-query";
+import Container from "@/components/ui/container";
+import ArticleCard from "@/components/ui/article-card";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
+import LoadingScreen from "@/components/wraps/loading-screen";
 
 const SuggestedArticlesPage = () => {
   const { toast } = useToast();
@@ -23,9 +23,8 @@ const SuggestedArticlesPage = () => {
 
   if (isLoading) {
     return (
-      <Container className="w-full h-full bg-background flex items-center justify-center text-muted-foreground">
-        <LoaderCircle size={24} className="animate-spin" />
-        <span className="ml-2 text-lg">Retrieving articles...</span>
+      <Container className="w-screen h-screen">
+        <LoadingScreen>Retrieving Articles...</LoadingScreen>
       </Container>
     );
   }

@@ -6,10 +6,10 @@ import { usePasswordChangeInit } from "@/hooks/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import ThemeSwitch from "@/components/theme-switch";
-import GoBackArrow from "@/components/go-back-arrow";
+import ThemeSwitch from "@/components/theme/theme-switch";
+import GoBackArrow from "@/components/ui/go-back-arrow";
 import { LoaderCircle, MailQuestion } from "lucide-react";
 
 const PasswordChangeInitPage = () => {

@@ -1,70 +1,52 @@
 import { useEffect } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useLogout } from "@/hooks/user";
 import { useToast } from "@/hooks/use-toast";
 import { userMenuItems } from "@/lib/menu-items";
-import { useLoggedIn, useLogout } from "@/hooks/user";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import ThemeSwitch from "@/components/theme-switch";
-import UserSidebar from "@/components/user-sidebar";
-import { useTheme } from "@/components/theme-provider";
-import { Less, MediaQuery, More } from "@/components/media-query";
+import Authorized from "@/components/wraps/authorized";
+import ThemeSwitch from "@/components/theme/theme-switch";
+import UserSidebar from "@/components/ui/user-sidebar";
+import { useTheme } from "@/components/theme/theme-provider";
+import LoadingScreen from "@/components/wraps/loading-screen";
+import { LogOut, PanelBottom, SunMoon } from "lucide-react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { LoaderCircle, LogOut, PanelBottom, SunMoon } from "lucide-react";
 
-const UserPage = () => {
-  const loggedIn = useLoggedIn();
-  const navigate = useNavigate();
-  const logout = useLogout();
+export default function UserPage() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const { logout, isLoading, error } = useLogout();
 
   useEffect(() => {
-    if (loggedIn.isLoggedIn === false) navigate("/login");
-  }, [loggedIn.isLoggedIn, navigate]);
-
-  useEffect(() => {
-    if (logout.error) {
+    if (error) {
       toast({
         variant: "destructive",
         title: "Logout Error",
-        description: logout.error,
+        description: error,
       });
     }
-  }, [logout.error, toast, navigate]);
+  }, [error]);
 
   const updatedMenuItems = userMenuItems.concat([
     {
       title: "Logout",
       icon: LogOut,
-      action: async () => {
-        await logout.logout();
-        navigate("/login");
-      },
+      action: () => logout().then(() => navigate("/login")),
     },
   ]);
 
-  if (loggedIn.isLoading) {
-    return (
-      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
-        <LoaderCircle size={24} className="animate-spin" />
-        <span className="ml-2 text-lg">Checking your login status...</span>
-      </Container>
-    );
+  if (isLoading) {
+    <Container className="w-screen h-screen">
+      <LoadingScreen>Loggin you out...</LoadingScreen>
+    </Container>;
   }
 
-  if (logout.isLoading) {
-    return (
-      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
-        <LoaderCircle size={24} className="animate-spin" />
-        <span className="ml-2 text-lg">Logging you out...</span>
-      </Container>
-    );
-  }
-
-  if (loggedIn.isLoggedIn) {
-    return (
+  return (
+    <Authorized onFail={() => navigate("/login")}>
       <MediaQuery>
         <More>
           <SidebarProvider>
@@ -113,8 +95,6 @@ const UserPage = () => {
           </Container>
         </Less>
       </MediaQuery>
-    );
-  }
-};
-
-export default UserPage;
+    </Authorized>
+  );
+}

@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Container from "@/components/container";
-import GoBackArrow from "@/components/go-back-arrow";
-import SlidingLink from "@/components/sliding-link";
-import ThemeSwitch from "@/components/theme-switch";
-import { Less, MediaQuery, More } from "@/components/media-query";
+import Container from "@/components/ui/container";
+import GoBackArrow from "@/components/ui/go-back-arrow";
+import SlidingLink from "@/components/ui/sliding-link";
+import ThemeSwitch from "@/components/theme/theme-switch";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Mail } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
