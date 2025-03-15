@@ -6,15 +6,6 @@ import { useTextEditor } from "@/hooks/text-editor";
 import { useEditorDialogue } from "@/hooks/editor-dialogue";
 import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
 import {
-  Menubar,
-  MenubarMenu,
-  MenubarItem,
-  MenubarContent,
-  MenubarTrigger,
-  MenubarShortcut,
-  MenubarSeparator,
-} from "@/components/ui/menubar";
-import {
   Link,
   Plus,
   Save,
@@ -24,43 +15,58 @@ import {
   BookCheck,
   TvMinimalPlay,
 } from "lucide-react";
+import {
+  Menubar,
+  MenubarMenu,
+  MenubarItem,
+  MenubarContent,
+  MenubarTrigger,
+  MenubarShortcut,
+  MenubarSeparator,
+} from "@/components/ui/menubar";
 import { MenubarProps } from "@radix-ui/react-menubar";
 
 const TextEditorMenu: FC<MenubarProps> = (props) => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const textEditor = useTextEditor();
   const articleRemover = useRemoveArticle();
   const editorDialogue = useEditorDialogue();
-  const articleSaver = useSaveArticle(textEditor.article?.id);
+  const { editor, article, setArticle, finishArticle } = useTextEditor();
+  const articleSaver = useSaveArticle(article?.id);
 
   useEffect(() => {
     if (articleSaver.error) {
       toast({
         variant: "destructive",
         title: "Problem With Saving",
-        description: articleSaver.error,
+        description:
+          articleSaver.error ||
+          "There was an unexpected error while saving your article.",
       });
     }
   }, [articleSaver.error, toast]);
 
   useEffect(() => {
     if (articleSaver.id) {
-      const newArticle = {
-        ...textEditor.article,
+      const updated = {
+        ...article,
         id: articleSaver.id,
       } as Article;
-      textEditor.setArticle(newArticle);
+
+      setArticle(updated);
+
       navigate(".", {
         replace: true,
-        state: { article: newArticle },
+        state: { article: updated },
       });
     }
   }, [articleSaver.id]);
 
   const saveChanges = async () => {
-    const title = textEditor.article?.title;
-    const content = textEditor.editor?.getHTML();
+    if (!editor || !article) return;
+
+    const title = article.title;
+    const content = JSON.stringify(editor.getJSON());
 
     if (!title || title.length < 1 || title.length > 25) {
       toast({
@@ -75,13 +81,10 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
         description: "Contents of your article musn't be empty.",
       });
     } else {
-      const newArticle = {
-        ...textEditor.article,
-        content: textEditor.editor?.getHTML(),
-      } as Article;
+      const updated = { ...article, content } as Article;
 
-      if (newArticle) {
-        await articleSaver.save(newArticle);
+      if (updated) {
+        await articleSaver.save(updated);
         toast({
           variant: "success",
           title: "Changes Applied",
@@ -93,7 +96,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
   };
 
   const newWindow = () => {
-    textEditor.finishArticle();
+    finishArticle();
     navigate(".", { replace: true, state: { article: undefined } });
     window.location.reload();
   };
@@ -126,15 +129,13 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           <MenubarItem
             onClick={editorDialogue.articleVisibilityDialogue}
             disabled={
-              articleSaver.isLoading ||
-              articleRemover.isLoading ||
-              !textEditor.article?.id
+              articleSaver.isLoading || articleRemover.isLoading || !article?.id
             }
             className="cursor-pointer transition-all duration-300"
           >
-            {textEditor.article?.public ? "Public" : "Private"}
+            {article?.public ? "Public" : "Private"}
             <MenubarShortcut>
-              {textEditor.article?.public ? (
+              {article?.public ? (
                 <BookCheck size={14} />
               ) : (
                 <BookLock size={14} />
@@ -144,9 +145,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           <MenubarItem
             onClick={editorDialogue.deleteArticleDialogue}
             disabled={
-              articleSaver.isLoading ||
-              articleRemover.isLoading ||
-              !textEditor.article?.id
+              articleSaver.isLoading || articleRemover.isLoading || !article?.id
             }
             className="text-destructive cursor-pointer transition-all duration-300 hover:text-destructive"
           >
@@ -161,11 +160,9 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
         <MenubarTrigger className="cursor-pointer">Add</MenubarTrigger>
         <MenubarContent className="font-funnel">
           <MenubarItem
-            disabled={
-              !textEditor.editor
-                ?.can()
-                .setLink({ href: "https://www.example.com" })
-            }
+            disabled={editor
+              ?.can()
+              .setLink({ href: "https://www.example.com" })}
             onSelect={editorDialogue.addLinkDialogue}
             className="cursor-pointer transition-all duration-300"
           >
@@ -175,9 +172,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
-            disabled={
-              !textEditor.editor?.can().setImage({ src: "/iu-placeholder.png" })
-            }
+            disabled={editor?.can().setImage({ src: "/iu-placeholder.png" })}
             onSelect={editorDialogue.uploadImageDialogue}
             className="cursor-pointer transition-all duration-300"
           >
@@ -187,11 +182,9 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
-            disabled={
-              !textEditor.editor?.can().setYoutubeVideo({
-                src: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
-              })
-            }
+            disabled={editor?.can().setYoutubeVideo({
+              src: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+            })}
             onSelect={editorDialogue.youtubeVideoDialogue}
             className="cursor-pointer transition-all duration-300"
           >

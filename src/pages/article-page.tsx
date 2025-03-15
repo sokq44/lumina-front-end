@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import parse from "html-react-parser";
 import { Link, useLocation } from "react-router-dom";
 import { formatDate } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -10,6 +11,8 @@ import GoBackArrow from "@/components/ui/go-back-arrow";
 import LoadingScreen from "@/components/wraps/loading-screen";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { generateHTML } from "@tiptap/react";
+import { extensions } from "@/lib/editor-extensions/extensions";
 
 const ArticlePage = () => {
   const { toast } = useToast();
@@ -33,6 +36,9 @@ const ArticlePage = () => {
       </Container>
     );
   }
+
+  const content = generateHTML(JSON.parse(article?.content || ""), extensions);
+  console.log(content);
 
   return (
     <MediaQuery>
@@ -64,12 +70,7 @@ const ArticlePage = () => {
                 </span>
               </Container>
             </Container>
-            <Container
-              className="mt-4"
-              dangerouslySetInnerHTML={{
-                __html: article?.content || "",
-              }}
-            />
+            <Container className="mt-4">{parse(content)}</Container>
           </Container>
         </Container>
       </More>
@@ -107,12 +108,7 @@ const ArticlePage = () => {
               </span>
             </Container>
           </Container>
-          <Container
-            className="mt-6 px-2"
-            dangerouslySetInnerHTML={{
-              __html: article?.content || "",
-            }}
-          />
+          <Container className="mt-6 px-2">{parse(content)}</Container>
         </Container>
       </Less>
     </MediaQuery>

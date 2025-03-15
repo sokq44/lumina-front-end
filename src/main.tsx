@@ -30,6 +30,8 @@ import PasswordChangePage from "@/pages/password-change-page";
 // TODO: play with the colours of the app a little bit (find the best theme)
 // TODO: improve layouts of the emails sent when changing password or verifying
 
+// FIXME: Loading JSON content for the articles except for the plain HTML
+
 const router = createBrowserRouter([
   {
     path: "/",

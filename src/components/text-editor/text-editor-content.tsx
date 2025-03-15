@@ -17,17 +17,16 @@ interface TextEditorContentProps {
 
 const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
   const { toast } = useToast();
-  const textEditor = useTextEditor();
   const assetUploader = useUploadAsset();
-  const articleGetter = useGetArticle(textEditor.article?.id);
+  const { editor, article, setArticle, finishArticle } = useTextEditor();
+  const articleGetter = useGetArticle(article?.id);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const bannerRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    window.addEventListener("beforeunload", textEditor.finishArticle);
-    return () =>
-      window.removeEventListener("beforeunload", textEditor.finishArticle);
+    window.addEventListener("beforeunload", finishArticle);
+    return () => window.removeEventListener("beforeunload", finishArticle);
   }, []);
 
   useEffect(() => {
@@ -51,19 +50,19 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
       const url = assetUploader.url;
       if (url) {
         const newArticle = {
-          ...textEditor.article,
+          ...article,
           banner: url,
         } as Article;
-        textEditor.setArticle(newArticle);
+        setArticle(newArticle);
       }
     }
-  }, [assetUploader.error, assetUploader.url, toast]);
+  }, [assetUploader.error]);
 
   useEffect(() => {
-    if (articleGetter.article && titleRef.current) {
+    if (articleGetter.article && titleRef.current && editor) {
       titleRef.current.value = articleGetter.article.title;
-      textEditor.editor?.commands.setContent(articleGetter.article.content);
-      textEditor.setArticle(articleGetter.article);
+      editor.commands.setContent(JSON.parse(articleGetter.article.content));
+      setArticle(articleGetter.article);
     }
   }, [articleGetter.article]);
 
@@ -73,41 +72,38 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
     if (url && error === null) {
       const newArticle = {
-        ...textEditor.article,
+        ...article,
         banner: assetUploader.url,
       } as Article;
-      textEditor.setArticle(newArticle);
+      setArticle(newArticle);
     }
-  }, [assetUploader.url, assetUploader.error]);
+  }, [assetUploader.error]);
 
   const changeTitle = () => {
     if (titleRef.current) {
-      const newArticle = {
-        ...textEditor.article,
-        title: titleRef.current.value,
-      } as Article;
-      if (newArticle) textEditor.setArticle(newArticle);
+      const title = titleRef.current.value;
+      const updated = { ...article, title } as Article;
+      if (updated) setArticle(updated);
     }
   };
 
   const focusEditor = () => {
-    textEditor.editor?.commands.focus();
+    if (editor) editor.commands.focus();
   };
 
   const onBannerChange = async () => {
     const banner = bannerRef.current?.files?.[0];
-    if (banner) {
-      await assetUploader.upload(banner);
-    }
+    if (banner) await assetUploader.upload(banner);
   };
 
-  const formattedDate = textEditor.article?.created_at
-    ? new Date(textEditor.article.created_at).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-    : "";
+  const getFormattedDate = (date: Date | undefined) => {
+    if (!date) return "";
+    return new Date(date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
 
   if (!articleGetter.isLoading) {
     return (
@@ -116,11 +112,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           <Container className="relative mb-8 group">
             <img
               onClick={() => bannerRef.current?.click()}
-              src={
-                textEditor.article?.banner
-                  ? textEditor.article?.banner
-                  : "/default-banner.png"
-              }
+              src={article?.banner || "/default-banner.png"}
               className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 cursor-pointer group-hover:brightness-[0.7] group-hover:blur-[1px]"
             />
             <Input
@@ -145,23 +137,23 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
             className="text-5xl font-bold bg-transparent w-full ProseMirror"
             onInput={changeTitle}
           />
-          {textEditor.article?.user && (
+          {article?.user && (
             <span className="text-sm text-muted-foreground ">
               Written by&nbsp;
               <Link
-                to={`/user/${textEditor.article?.user}`}
+                to={`/user/${article?.user}`}
                 className="sliding-link font-semibold"
               >
-                @{textEditor.article?.user}
+                @{article?.user}
               </Link>{" "}
-              on the {formattedDate}
+              on the {getFormattedDate(article.created_at)}
             </span>
           )}
         </Container>
         <EditorToolbar>
           <EditorContent
             onClick={focusEditor}
-            editor={textEditor.editor ?? null}
+            editor={editor || null}
             className="min-h-svh w-full mx-auto hover:cursor-text"
           />
         </EditorToolbar>
