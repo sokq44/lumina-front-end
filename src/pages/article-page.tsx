@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import parse from "html-react-parser";
 import { Link, useLocation } from "react-router-dom";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getArticleContent } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import Container from "@/components/ui/container";
 import { useGetArticle } from "@/hooks/articles";
@@ -12,7 +11,11 @@ import LoadingScreen from "@/components/wraps/loading-screen";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { generateHTML } from "@tiptap/react";
-import { extensions } from "@/lib/editor-extensions/extensions";
+import {
+  extensions,
+  extensionToElement,
+} from "@/lib/editor-extensions/extensions";
+import parse from "html-react-parser";
 
 const ArticlePage = () => {
   const { toast } = useToast();
@@ -29,6 +32,11 @@ const ArticlePage = () => {
     }
   }, [error, toast]);
 
+  const getContent = () => {
+    const html = generateHTML(getArticleContent(article), extensions);
+    return parse(html, { replace: (node) => extensionToElement(node) });
+  };
+
   if (isLoading) {
     return (
       <Container className="w-screen h-screen">
@@ -36,9 +44,6 @@ const ArticlePage = () => {
       </Container>
     );
   }
-
-  const content = generateHTML(JSON.parse(article?.content || ""), extensions);
-  console.log(content);
 
   return (
     <MediaQuery>
@@ -70,7 +75,7 @@ const ArticlePage = () => {
                 </span>
               </Container>
             </Container>
-            <Container className="mt-4">{parse(content)}</Container>
+            <Container className="mt-4">{getContent()}</Container>
           </Container>
         </Container>
       </More>
@@ -108,7 +113,7 @@ const ArticlePage = () => {
               </span>
             </Container>
           </Container>
-          <Container className="mt-6 px-2">{parse(content)}</Container>
+          <Container className="mt-6 px-2">{getContent()}</Container>
         </Container>
       </Less>
     </MediaQuery>

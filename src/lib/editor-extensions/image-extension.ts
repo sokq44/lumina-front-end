@@ -7,6 +7,8 @@ const ImageExtension = Node.create({
 
   group: "block",
 
+  atom: true,
+
   parseHTML() {
     return [
       {

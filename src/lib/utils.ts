@@ -1,6 +1,8 @@
 import { AxiosError } from "axios";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Article } from "./api";
+import { JSONContent } from "@tiptap/react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,4 +24,10 @@ export function formatDate(date: Date | undefined): string {
         year: "numeric",
       })
     : "";
+}
+
+export function getArticleContent(article: Article | null): JSONContent {
+  const raw = article?.content || "";
+  const parsed = raw ? JSON.parse(raw) : { type: "doc", content: [] };
+  return parsed as JSONContent;
 }
