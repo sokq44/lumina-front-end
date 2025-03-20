@@ -8,8 +8,9 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Img from "@/components/ui/image";
 import Informative from "@/components/inform-badge/informative";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
   article: Article;
@@ -37,7 +38,7 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4">
-          <img
+          <Img
             src={article?.banner ? article?.banner : "/default-banner.png"}
             className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-sm group-hover:brightness-[0.75] transition-all duration-300"
           />

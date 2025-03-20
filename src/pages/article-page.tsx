@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { formatDate, getArticleContent } from "@/lib/utils";
+import { extensionToElement, formatDate, getArticleContent } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import Container from "@/components/ui/container";
 import { useGetArticle } from "@/hooks/articles";
@@ -11,11 +11,9 @@ import LoadingScreen from "@/components/wraps/loading-screen";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { generateHTML } from "@tiptap/react";
-import {
-  extensions,
-  extensionToElement,
-} from "@/lib/editor-extensions/extensions";
+import { extensions } from "@/lib/editor-extensions/extensions";
 import parse from "html-react-parser";
+import Img from "@/components/ui/image";
 
 const ArticlePage = () => {
   const { toast } = useToast();
@@ -52,7 +50,7 @@ const ArticlePage = () => {
         <GoBackArrow position="top-left" />
         <Container className="w-screen h-screen flex justify-center">
           <Container className="w-[60rem] h-full flex flex-col p-4 xl:w-[65rem]">
-            <img
+            <Img
               src={article?.banner ? article?.banner : "/default-banner.png"}
               className="w-full h-auto aspect-7/4 my-8 rounded-lg brightness-90 shadow-md"
             />
@@ -83,7 +81,7 @@ const ArticlePage = () => {
         <ThemeSwitch position="top-right" />
         <GoBackArrow position="top-left" />
         <Container className="w-full pt-16 px-2">
-          <img
+          <Img
             src={article?.banner ? article?.banner : "/default-banner.png"}
             className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-md"
           />

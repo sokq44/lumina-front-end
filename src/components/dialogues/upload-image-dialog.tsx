@@ -16,6 +16,8 @@ import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { useEditorDialogue } from "@/hooks/editor-dialogue";
+import Img from "../ui/image";
+import { insertImage } from "@/lib/editor-extensions/image-extension";
 
 const UploadImageDialogue = () => {
   const { toast } = useToast();
@@ -52,12 +54,8 @@ const UploadImageDialogue = () => {
         description: assetUploader.error,
       });
     } else if (assetUploader.error === null) {
-      if (assetUploader.url) {
-        textEditor.editor
-          ?.chain()
-          .focus()
-          .setImage({ src: assetUploader.url })
-          .run();
+      if (assetUploader.url && textEditor.editor) {
+        insertImage(textEditor.editor, { src: assetUploader.url });
       }
     }
   }, [assetUploader.error]);
@@ -106,7 +104,7 @@ const UploadImageDialogue = () => {
             Pick an image in order to upload it.
           </DialogDescription>
         </DialogHeader>
-        <img
+        <Img
           className="max-h-52 w-auto mx-auto my-1 rounded-md bg-gray-400"
           src={source}
         />

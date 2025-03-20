@@ -25,8 +25,6 @@ import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import ImageExtension from "@/lib/editor-extensions/image-extension";
 
 import type { Extensions } from "@tiptap/react";
-import { DOMNode, Element } from "html-react-parser";
-import ImageNodeView from "@/components/node-views/image-node-view";
 
 export const extensions: Extensions = [
   Text,
@@ -67,10 +65,3 @@ export const extensions: Extensions = [
   }),
   Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
 ];
-
-export function extensionToElement(node: DOMNode) {
-  const element = node as unknown as Element;
-  if (element.name === "image-extension") {
-    return <ImageNodeView />;
-  }
-}

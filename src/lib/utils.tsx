@@ -3,6 +3,8 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Article } from "./api";
 import { JSONContent } from "@tiptap/react";
+import ImageArticleSection from "@/components/node-views/image-article-section";
+import { DOMNode, Element } from "html-react-parser";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -30,4 +32,19 @@ export function getArticleContent(article: Article | null): JSONContent {
   const raw = article?.content || "";
   const parsed = raw ? JSON.parse(raw) : { type: "doc", content: [] };
   return parsed as JSONContent;
+}
+
+export function extensionToElement(node: DOMNode) {
+  const element = node as unknown as Element;
+
+  if (element.name === "image-extension") {
+    const { src, label, className } = element.attribs;
+    return (
+      <ImageArticleSection
+        src={src}
+        label={label}
+        sectionClassName={className}
+      />
+    );
+  }
 }

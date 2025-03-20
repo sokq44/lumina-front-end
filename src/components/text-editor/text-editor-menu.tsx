@@ -160,9 +160,9 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
         <MenubarTrigger className="cursor-pointer">Add</MenubarTrigger>
         <MenubarContent className="font-funnel">
           <MenubarItem
-            disabled={editor
-              ?.can()
-              .setLink({ href: "https://www.example.com" })}
+            disabled={
+              !editor?.can().setLink({ href: "https://www.example.com" })
+            }
             onSelect={editorDialogue.addLinkDialogue}
             className="cursor-pointer transition-all duration-300"
           >
@@ -172,7 +172,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
-            disabled={editor?.can().setImage({ src: "/iu-placeholder.png" })}
+            disabled={!editor?.can().insertContent({ type: "imageExtension" })}
             onSelect={editorDialogue.uploadImageDialogue}
             className="cursor-pointer transition-all duration-300"
           >
@@ -182,9 +182,11 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
-            disabled={editor?.can().setYoutubeVideo({
-              src: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
-            })}
+            disabled={
+              !editor?.can().setYoutubeVideo({
+                src: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+              })
+            }
             onSelect={editorDialogue.youtubeVideoDialogue}
             className="cursor-pointer transition-all duration-300"
           >
