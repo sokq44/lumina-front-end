@@ -5,6 +5,8 @@ import ImageNodeView from "@/components/node-views/image-node-view";
 export interface ImageExtensionAttributes {
   src?: string;
   label?: string;
+  width: number;
+  height: number;
   className?: string;
 }
 
@@ -29,8 +31,11 @@ const ImageExtension = Node.create({
       label: {
         default: "",
       },
+      imageWidth: {
+        default: 100,
+      },
       className: {
-        default: "my-4 mr-auto w-[480px] h-[320px]",
+        default: "h-auto mx-auto",
       },
     };
   },

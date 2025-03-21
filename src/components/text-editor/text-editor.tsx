@@ -25,10 +25,7 @@ interface TextEditorProps {
 const TextEditor: FC<TextEditorProps> = ({ article }) => {
   const editor = useEditor({
     extensions: extensions,
-    content: `
-      <span>Contents of your article...<span>
-      <image-extension></image-extension>
-    `,
+    content: "<p>Contents of your article...<p>",
   });
 
   if (!editor) {

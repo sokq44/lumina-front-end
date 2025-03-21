@@ -112,7 +112,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
     if (bannerInputRef.current) bannerInputRef.current.click();
   };
 
-  if (!articleGetter.isLoading && article) {
+  if (!articleGetter.isLoading) {
     return (
       <Container className={cn("flex flex-col mt-4", className)}>
         <Container className="flex flex-col mb-10">
@@ -124,7 +124,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
             ) : (
               <Img
                 ref={bannerImgRef}
-                src={article.banner}
+                src={article ? article.banner : "/default-banner.png"}
                 onClick={clickBanner}
                 className="w-full h-full aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 cursor-pointer group-hover:brightness-[0.7] group-hover:blur-[1px]"
                 // {...bannerAnimation}
@@ -155,7 +155,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
             className="text-5xl font-bold bg-transparent w-full ProseMirror"
             onInput={changeTitle}
           />
-          {article.user && (
+          {article && (
             <span className="text-sm text-muted-foreground ">
               Written by&nbsp;
               <Link
