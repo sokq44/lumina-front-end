@@ -11,6 +11,8 @@ const InformBadger: FC<InformBadgerProps> = ({ children }) => {
   const [label, setLabel] = useState<string | null>(null);
   const { x, y } = useMousePosition();
 
+  console.log(x, y, screen.width);
+
   return (
     <InformBadgeContext.Provider
       value={{
@@ -20,8 +22,14 @@ const InformBadger: FC<InformBadgerProps> = ({ children }) => {
     >
       {label !== null && (
         <Badge
-          className="fixed z-50 inform-badge fade-in"
-          style={{ left: `${x + 10}px`, top: `${y + 10}px` }}
+          className="fixed z-50 inform-badge fade-in w-fit whitespace-nowrap max-w-[200px]"
+          style={{
+            left: `${x < screen.width / 1.4 ? x + 10 : x - 5}px`,
+            top: `${y + 10}px`,
+            transform: `${
+              x < screen.width / 1.1 ? "translateX(0)" : "translateX(-100%)"
+            }`,
+          }}
         >
           {label}
         </Badge>
