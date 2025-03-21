@@ -11,11 +11,11 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { CornerUpLeft } from "lucide-react";
-import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
+import Authorized from "@/components/wraps/authorized";
 import ThemeSwitch from "@/components/theme/theme-switch";
 import TextEditor from "@/components/text-editor/text-editor";
-import Authorized from "@/components/wraps/authorized";
 
 export default function WritingPage() {
   const navigate = useNavigate();

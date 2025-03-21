@@ -1,6 +1,6 @@
 import { Editor, mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import ImageNodeView from "@/components/node-views/image-node-view";
+import ImageNodeView from "@/components/node-views/image/image-node-view";
 
 export interface ImageExtensionAttributes {
   src?: string;

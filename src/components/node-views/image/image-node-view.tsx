@@ -9,10 +9,15 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const spectrum = [250, 325, 400, 475, 550, 625, 700, 775, 850];
 
-const ImageNodeView: FC<NodeViewProps> = ({ node, updateAttributes }) => {
+const ImageNodeView: FC<NodeViewProps> = ({
+  node,
+  updateAttributes,
+  getPos,
+}) => {
   const { editor } = useTextEditor();
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isSelected, setIsSelected] = useState<boolean>(false);
   const [width, setWidth] = useState<number>(node.attrs.imageWidth);
 
   const initialXRef = useRef<number>(0);
@@ -25,6 +30,22 @@ const ImageNodeView: FC<NodeViewProps> = ({ node, updateAttributes }) => {
       labelRef.current.value = node.attrs.label;
     }
   }, [node.attrs.label]);
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const handleSelectionChange = () => {
+      const { from, to } = editor.state.selection;
+      const nodePos = getPos();
+
+      setIsSelected(from <= nodePos && to >= nodePos);
+    };
+
+    editor.on("selectionUpdate", handleSelectionChange);
+    return () => {
+      editor.off("selectionUpdate", handleSelectionChange);
+    };
+  }, [editor, getPos]);
 
   const startDragging = (initialX: number, direction: "left" | "right") => {
     isDraggingRef.current = true;
@@ -105,7 +126,7 @@ const ImageNodeView: FC<NodeViewProps> = ({ node, updateAttributes }) => {
             "flex justify-center mb-0 rounded-lg"
           )}
         >
-          <Container className="flex flex-col">
+          <Container className="flex flex-col cursor-pointer">
             <Container className="flex items-center gap-x-1">
               <Container
                 onMouseDown={(e) => startDragging(e.clientX, "left")}
@@ -117,8 +138,8 @@ const ImageNodeView: FC<NodeViewProps> = ({ node, updateAttributes }) => {
                 src={node.attrs.src}
                 width={width}
                 className={cn(
-                  "select-none h-auto rounded-lg border-opacity-0 transition-all duration-300",
-                  isDragging && "border-opacity-1 shadow-md shadow-purple-500"
+                  "select-none h-auto rounded-lg transition-all duration-300",
+                  (isSelected || isDragging) && "shadow-lg shadow-purple-500"
                 )}
               />
               <Container

@@ -3,7 +3,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Article } from "./api";
 import { JSONContent } from "@tiptap/react";
-import ImageArticleSection from "@/components/node-views/image-article-section";
+import ImageArticleSection from "@/components/node-views/image/image-article-section";
 import { DOMNode, Element } from "html-react-parser";
 
 export function cn(...inputs: ClassValue[]) {
@@ -38,12 +38,12 @@ export function extensionToElement(node: DOMNode) {
   const element = node as unknown as Element;
 
   if (element.name === "image-extension") {
-    const { src, label, className } = element.attribs;
+    const { src, label, imagewidth } = element.attribs;
     return (
       <ImageArticleSection
         src={src}
         label={label}
-        sectionClassName={className}
+        width={parseInt(imagewidth)}
       />
     );
   }
