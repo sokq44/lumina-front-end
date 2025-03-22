@@ -172,7 +172,6 @@
       @apply bg-muted-foreground opacity-25 left-0 right-0 top-0 bottom-0 pointer-events-none absolute z-10;
       content: "";
     }
-    
   }
 
   .tip-tap-link {
@@ -182,18 +181,7 @@
   .tip-tap-image {
     @apply w-full h-auto my-4 rounded-lg;
   }
-  
-  div[data-youtube-video] {
-    @apply cursor-move pr-6;
 
-    iframe {
-      @apply w-full max-h-[300px] outline-none border border-black rounded-lg sm:min-h-[480px] sm:w-[640px];
-    }
-
-    &.ProseMirror-selectednode iframe {
-      @apply outline-4 outline-purple-500 outline-offset-0 transition-all duration-150;
-    }
-  }
 
   .ProseMirror:focus {
     @apply outline-none;

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { insertYoutube } from "@/lib/editor-extensions/youtube-extenstion";
 
 const AddYTVideoDialogue = () => {
   const textEditor = useTextEditor();
@@ -43,7 +44,7 @@ const AddYTVideoDialogue = () => {
 
     const value = inputRef.current?.value;
     if (value && textEditor.editor) {
-      textEditor.editor.chain().focus().setYoutubeVideo({ src: url }).run();
+      insertYoutube(textEditor.editor, { src: url });
     }
   };
 

@@ -10,12 +10,6 @@ import TextEditorContent from "@/components/text-editor/text-editor-content";
 import TextEditorProvider from "@/components/text-editor/text-editor-provider";
 import EditorDialogueProvider from "@/components/dialogues/editor-dialogue-provider";
 
-// TODO: resizable youtube videos
-// TODO: cursor change for resizing tables
-// TODO: tracking changes within an article
-// TODO: define prohibited protocols and urls for the Link extension
-// TODO: more user-friendly process of uploading pictures, banner image and profile image (lazy loading)
-
 interface TextEditorProps {
   article: Article;
 }
@@ -23,7 +17,7 @@ interface TextEditorProps {
 const TextEditor: FC<TextEditorProps> = ({ article }) => {
   const editor = useEditor({
     extensions: extensions,
-    content: "<p>Contents of your article...<p>",
+    content: "<p>Contents of your article...<p><br />",
   });
 
   if (!editor) {

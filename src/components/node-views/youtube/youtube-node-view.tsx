@@ -1,18 +1,17 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, getEmbedUrl } from "@/lib/utils";
 import { useTextEditor } from "@/hooks/text-editor";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import Img from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
 import Resizable from "@/components/ui/resizable";
 
-const ImageNodeView: FC<NodeViewProps> = ({
+const YoutubeNodeView: FC<NodeViewProps> = ({
   node,
   getPos,
   updateAttributes,
 }) => {
-  const { src, label, imageWidth, className } = node.attrs;
+  const { src, label, iframeWidth, className } = node.attrs;
 
   const { editor } = useTextEditor();
 
@@ -20,7 +19,7 @@ const ImageNodeView: FC<NodeViewProps> = ({
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   const labelRef = useRef<HTMLInputElement>(null);
-  const imageWidthRef = useRef<number>(imageWidth);
+  const iframeWidthRef = useRef<number>(iframeWidth);
 
   useEffect(() => {
     if (labelRef.current && label) {
@@ -68,11 +67,11 @@ const ImageNodeView: FC<NodeViewProps> = ({
   const stopDragging = () => {
     setIsDragging(false);
     changeCursor("auto");
-    updateAttributes({ imageWidth: imageWidthRef.current });
+    updateAttributes({ iframeWidth: iframeWidthRef.current });
   };
 
   const changeWidth = (w: number) => {
-    imageWidthRef.current = w;
+    iframeWidthRef.current = w;
   };
 
   return (
@@ -82,20 +81,19 @@ const ImageNodeView: FC<NodeViewProps> = ({
           id="node-view-section"
           className={cn(className, "flex justify-center mb-0 rounded-lg")}
         >
-          <Container
-            id="resizable-section"
-            className="flex flex-col cursor-pointer"
-          >
+          <Container id="resizable-section" className="flex flex-col">
             <Resizable
-              initialWidth={imageWidth}
+              initialWidth={iframeWidth}
+              heightModifier={2 / 3}
               onStartDragging={startDragging}
               onChangeWidth={changeWidth}
               onStopDragging={stopDragging}
             >
-              <Img
-                src={src}
+              <iframe
+                allowFullScreen
+                src={getEmbedUrl(src)}
                 className={cn(
-                  "select-none h-auto rounded-lg transition-all duration-300",
+                  "w-full h-full select-none rounded-lg transition-all duration-300",
                   (isSelected || isDragging) && "shadow-md shadow-purple-500"
                 )}
               />
@@ -113,4 +111,4 @@ const ImageNodeView: FC<NodeViewProps> = ({
   );
 };
 
-export default ImageNodeView;
+export default YoutubeNodeView;

@@ -1,23 +1,23 @@
 import { Editor, mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import ImageNodeView from "@/components/node-views/image/image-node-view";
+import YoutubeNodeView from "@/components/node-views/youtube/youtube-node-view";
 
-export interface ImageExtensionAttributes {
+export interface YoutubeExtensionAttributes {
   src?: string;
   label?: string;
   width?: number;
   className?: string;
 }
 
-const ImageExtension = Node.create({
-  name: "image-extension",
+const YoutubeExtension = Node.create({
+  name: "youtube-extension",
   group: "block",
   atom: true,
 
   parseHTML() {
     return [
       {
-        tag: "image-extension",
+        tag: "youtube-extension",
       },
     ];
   },
@@ -30,7 +30,7 @@ const ImageExtension = Node.create({
       label: {
         default: "",
       },
-      imageWidth: {
+      iframeWidth: {
         default: 550,
       },
       className: {
@@ -40,20 +40,23 @@ const ImageExtension = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["image-extension", mergeAttributes(HTMLAttributes)];
+    return ["youtube-extension", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ImageNodeView);
+    return ReactNodeViewRenderer(YoutubeNodeView);
   },
 });
 
-export function insertImage(editor: Editor, attrs: ImageExtensionAttributes) {
+export function insertYoutube(
+  editor: Editor,
+  attrs: YoutubeExtensionAttributes
+) {
   editor
     .chain()
     .focus()
-    .insertContent({ type: "image-extension", attrs })
+    .insertContent({ type: "youtube-extension", attrs })
     .run();
 }
 
-export default ImageExtension;
+export default YoutubeExtension;

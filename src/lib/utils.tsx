@@ -5,6 +5,7 @@ import { Article } from "./api";
 import { JSONContent } from "@tiptap/react";
 import ImageArticleSection from "@/components/node-views/image/image-article-section";
 import { DOMNode, Element } from "html-react-parser";
+import YoutubeArticleSection from "@/components/node-views/youtube/youtube-article-section";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -46,5 +47,21 @@ export function extensionToElement(node: DOMNode) {
         width={parseInt(imagewidth)}
       />
     );
+  } else if (element.name === "youtube-extension") {
+    const { src, label, iframewidth } = element.attribs;
+    return (
+      <YoutubeArticleSection
+        src={src}
+        label={label}
+        width={parseInt(iframewidth)}
+      />
+    );
   }
+}
+
+export function getEmbedUrl(url: string) {
+  const match = url.match(
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : "";
 }

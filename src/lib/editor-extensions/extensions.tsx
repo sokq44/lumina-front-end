@@ -5,7 +5,6 @@ import Table from "@tiptap/extension-table";
 import Image from "@tiptap/extension-image";
 import Italic from "@tiptap/extension-italic";
 import Heading from "@tiptap/extension-heading";
-import Youtube from "@tiptap/extension-youtube";
 import Document from "@tiptap/extension-document";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
@@ -23,6 +22,7 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 
 import ImageExtension from "@/lib/editor-extensions/image-extension";
+import YoutubeExtension from "@/lib/editor-extensions/youtube-extenstion";
 
 import type { Extensions } from "@tiptap/react";
 
@@ -46,9 +46,7 @@ export const extensions: Extensions = [
   OrderedList,
   HorizontalRule,
   ImageExtension,
-  Youtube.configure({
-    nocookie: true,
-  }),
+  YoutubeExtension,
   Image.configure({
     HTMLAttributes: {
       class: "tip-tap-image",

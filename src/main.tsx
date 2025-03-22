@@ -24,13 +24,38 @@ import InformBadger from "@/components/inform-badge/inform-badger";
 import "./index.css";
 import PasswordChangePage from "@/pages/password-change-page";
 
-// TODO: Logo design.
-// TODO: dialog upon logging out
-// TODO: preview of the profile picture before uploading (profile-page)
-// TODO: play with the colours of the app a little bit (find the best theme)
-// TODO: improve layouts of the emails sent when changing password or verifying
-
-// FIXME: Loading JSON content for the articles except for the plain HTML
+/**
+ * <=== GENERAL ===>
+ *
+ * @todo logo design
+ *
+ * @todo dialogue when logging out
+ *
+ * @todo preview of the profile picture before uploading (profile-page)
+ *
+ * @todo play with the colours of the app a little bit (find the best theme)
+ *
+ * @todo improve layouts of the page informing that email was sent when changing password or verifying
+ *
+ * @fixme loading JSON content for the articles except for the plain HTML
+ *
+ * <===============>
+ *
+ * <=== TEXT EDITOR ===>
+ *
+ * @todo cursor change for resizing tables
+ *
+ * @todo tracking changes within an article
+ *
+ * @todo define prohibited protocols and urls for the Link extension
+ *
+ * @todo more user-friendly process of uploading pictures, banner image and profile image (lazy loading)
+ *
+ * @todo make text editor independent from article related hooks (saving, deleting, etc.
+ *       should be done on the article-writing page and later passed to the text editor component)
+ *
+ * <===================>
+ */
 
 const router = createBrowserRouter([
   {

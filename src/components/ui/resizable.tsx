@@ -5,6 +5,7 @@ import { FC, ReactNode, useRef, useState } from "react";
 interface ResizableProps {
   children: ReactNode;
   initialWidth: number;
+  heightModifier?: number;
   onStartDragging?: () => void;
   onChangeWidth?: (width: number) => void;
   onStopDragging?: () => void;
@@ -15,6 +16,7 @@ const spectrum = [250, 325, 400, 475, 550, 625, 700, 775, 850];
 const Resizable: FC<ResizableProps> = ({
   children,
   initialWidth,
+  heightModifier,
   onStartDragging,
   onChangeWidth,
   onStopDragging,
@@ -26,6 +28,8 @@ const Resizable: FC<ResizableProps> = ({
   const startDragging = (initialX: number, direction: "left" | "right") => {
     isDraggingRef.current = true;
     initialXRef.current = initialX;
+
+    console.log("Should change cursor to ew-resize");
 
     changeCursor("ew-resize");
     if (onStartDragging) onStartDragging();
@@ -92,8 +96,11 @@ const Resizable: FC<ResizableProps> = ({
         <GripVertical size={16} />
       </Container>
       <Container
-        style={{ width: `${width}px` }}
-        className="h-auto transition-all duration-200"
+        style={{
+          width: `${width}px`,
+          height: heightModifier ? `${width * heightModifier}px` : "auto",
+        }}
+        className="transition-all duration-200"
       >
         {children}
       </Container>
