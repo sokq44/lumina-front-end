@@ -17,12 +17,6 @@ interface TextEditorContentProps {
   className?: string;
 }
 
-// const bannerAnimation = {
-//   initial: { opacity: 0 },
-//   animate: { opacity: 1 },
-//   transition: { duration: 0.2 },
-// };
-
 const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
   const { toast } = useToast();
   const assetUploader = useUploadAsset();
@@ -63,7 +57,6 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           banner: url,
         } as Article;
         setArticle(newArticle);
-        console.log("another rerender");
       }
     }
   }, [assetUploader.error]);
@@ -127,7 +120,6 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
                 src={article ? article.banner : "/default-banner.png"}
                 onClick={clickBanner}
                 className="w-full h-full aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 cursor-pointer group-hover:brightness-[0.7] group-hover:blur-[1px]"
-                // {...bannerAnimation}
               />
             )}
             <Input

@@ -5,31 +5,28 @@ import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import Img from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
-const spectrum = [250, 325, 400, 475, 550, 625, 700, 775, 850];
+import Resizable from "@/components/ui/resizable";
 
 const ImageNodeView: FC<NodeViewProps> = ({
   node,
-  updateAttributes,
   getPos,
+  updateAttributes,
 }) => {
+  const { src, label, imageWidth, className } = node.attrs;
+
   const { editor } = useTextEditor();
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<boolean>(false);
-  const [width, setWidth] = useState<number>(node.attrs.imageWidth);
 
-  const initialXRef = useRef<number>(0);
-  const isDraggingRef = useRef<boolean>(false);
   const labelRef = useRef<HTMLInputElement>(null);
-  const imageWidthRef = useRef<number>(node.attrs.imageWidth);
+  const imageWidthRef = useRef<number>(imageWidth);
 
   useEffect(() => {
-    if (labelRef.current && node.attrs.label) {
-      labelRef.current.value = node.attrs.label;
+    if (labelRef.current && label) {
+      labelRef.current.value = label;
     }
-  }, [node.attrs.label]);
+  }, [label]);
 
   useEffect(() => {
     if (!editor) return;
@@ -47,73 +44,35 @@ const ImageNodeView: FC<NodeViewProps> = ({
     };
   }, [editor, getPos]);
 
-  const startDragging = (initialX: number, direction: "left" | "right") => {
-    isDraggingRef.current = true;
-    initialXRef.current = initialX;
-
-    setIsDragging(true);
-    editor?.commands.blur();
-    changeCursor("ew-resize");
-
-    document.addEventListener("mouseup", stopDragging);
-    if (direction === "left") {
-      document.addEventListener("mousemove", dragLeft);
-    } else if (direction === "right") {
-      document.addEventListener("mousemove", dragRight);
-    }
-  };
-
-  const stopDragging = () => {
-    isDraggingRef.current = false;
-
-    changeCursor("auto");
-    setIsDragging(false);
-    updateAttributes({ imageWidth: imageWidthRef.current });
-
-    document.removeEventListener("mousemove", dragRight);
-    document.removeEventListener("mousemove", dragLeft);
-    document.removeEventListener("mouseUp", stopDragging);
-  };
-
-  const dragRight = (event: MouseEvent) => {
-    if (isDraggingRef.current && initialXRef.current) {
-      changeWidth(width + (event.clientX - initialXRef.current));
-    }
-  };
-
-  const dragLeft = (event: MouseEvent) => {
-    if (isDraggingRef.current && initialXRef.current) {
-      changeWidth(width + (initialXRef.current - event.clientX));
-    }
-  };
-
-  const changeWidth = (stretch: number) => {
-    if (stretch < 250 || stretch > 900) return;
-
-    let currentMax = spectrum[0];
-    for (const max of spectrum) {
-      if (stretch >= max) {
-        currentMax = max;
-      }
-    }
-
-    if (currentMax !== imageWidthRef.current) {
-      setWidth(currentMax);
-      imageWidthRef.current = currentMax;
-    }
-  };
-
   const changeCursor = (cursor: string) => {
-    document.body.style.cursor = cursor;
     const imageNodeView = document.getElementById("ImageNodeViewSection");
+    const resizableSection = document.getElementById("resizable-section");
     if (imageNodeView) imageNodeView.style.cursor = cursor;
+    if (resizableSection) resizableSection.style.cursor = cursor;
+    document.body.style.cursor = cursor;
   };
 
   const changeLabel = () => {
-    if (!labelRef.current) return;
+    if (labelRef.current) {
+      const label = labelRef.current.value;
+      updateAttributes({ label });
+    }
+  };
 
-    const label = labelRef.current.value;
-    updateAttributes({ label });
+  const startDragging = () => {
+    setIsDragging(true);
+    editor?.commands.blur();
+    changeCursor("ew-resize");
+  };
+
+  const stopDragging = () => {
+    setIsDragging(false);
+    changeCursor("auto");
+    updateAttributes({ imageWidth: imageWidthRef.current });
+  };
+
+  const changeWidth = (w: number) => {
+    imageWidthRef.current = w;
   };
 
   return (
@@ -121,34 +80,26 @@ const ImageNodeView: FC<NodeViewProps> = ({
       <Container className="w-full my-4">
         <Container
           id="ImageNodeViewSection"
-          className={cn(
-            node.attrs.className,
-            "flex justify-center mb-0 rounded-lg"
-          )}
+          className={cn(className, "flex justify-center mb-0 rounded-lg")}
         >
-          <Container className="flex flex-col cursor-pointer">
-            <Container className="flex items-center gap-x-1">
-              <Container
-                onMouseDown={(e) => startDragging(e.clientX, "left")}
-                className="h-1/5 flex items-center bg-muted-foreground/20 mx-0 rounded cursor-ew-resize hover:bg-muted-foreground/40 transition-all duration-300"
-              >
-                <ChevronLeft size={16} />
-              </Container>
+          <Container
+            id="resizable-section"
+            className="flex flex-col cursor-pointer"
+          >
+            <Resizable
+              initialWidth={imageWidth}
+              onStartDragging={startDragging}
+              onChangeWidth={changeWidth}
+              onStopDragging={stopDragging}
+            >
               <Img
-                src={node.attrs.src}
-                width={width}
+                src={src}
                 className={cn(
                   "select-none h-auto rounded-lg transition-all duration-300",
-                  (isSelected || isDragging) && "shadow-lg shadow-purple-500"
+                  (isSelected || isDragging) && "shadow-md shadow-purple-500"
                 )}
               />
-              <Container
-                onMouseDown={(e) => startDragging(e.clientX, "right")}
-                className="h-1/5 flex items-center bg-muted-foreground/20 mx-0 rounded cursor-ew-resize hover:bg-muted-foreground/40 transition-all duration-300"
-              >
-                <ChevronRight size={16} />
-              </Container>
-            </Container>
+            </Resizable>
             <Input
               placeholder="Image Label"
               ref={labelRef}

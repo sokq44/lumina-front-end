@@ -10,9 +10,7 @@ import TextEditorContent from "@/components/text-editor/text-editor-content";
 import TextEditorProvider from "@/components/text-editor/text-editor-provider";
 import EditorDialogueProvider from "@/components/dialogues/editor-dialogue-provider";
 
-// TODO: resizable images
 // TODO: resizable youtube videos
-// TODO: dialog for setting a link
 // TODO: cursor change for resizing tables
 // TODO: tracking changes within an article
 // TODO: define prohibited protocols and urls for the Link extension

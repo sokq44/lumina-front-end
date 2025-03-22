@@ -11,8 +11,6 @@ const InformBadger: FC<InformBadgerProps> = ({ children }) => {
   const [label, setLabel] = useState<string | null>(null);
   const { x, y } = useMousePosition();
 
-  console.log(x, y, screen.width);
-
   return (
     <InformBadgeContext.Provider
       value={{
