@@ -6,27 +6,42 @@ import { TextEditorContext } from "@/hooks/text-editor";
 interface TextEditorProviderProps {
   editor: Editor | undefined;
   article: Article | undefined;
+  onSave: (article: Article | undefined) => void;
+  onRemove: (article: Article | undefined) => void;
+  onBannerChange: (file: File | undefined) => void;
   children: React.ReactNode;
 }
 
 const TextEditorProvider: FC<TextEditorProviderProps> = ({
-  article: initialArticle,
+  article,
   editor,
+  onSave,
+  onRemove,
+  onBannerChange,
   children,
 }) => {
-  const [article, setArticle] = useState<Article | undefined>(() => {
-    if (initialArticle) return initialArticle;
+  const [currentArticle, setCurrentArticle] = useState<Article | undefined>(
+    () => {
+      if (article) return article;
 
-    const temp = localStorage.getItem("curr_article");
-    if (!temp || temp === "undefined") return undefined;
-
-    return JSON.parse(temp) as Article;
-  });
+      const temp = localStorage.getItem("curr_article");
+      return !temp || temp === "undefined"
+        ? undefined
+        : (JSON.parse(temp) as Article);
+    }
+  );
 
   const finishArticle = () => {
     localStorage.removeItem("curr_article");
-    setArticle(undefined);
   };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", finishArticle);
+    return () => {
+      window.removeEventListener("beforeunload", finishArticle);
+      finishArticle();
+    };
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("curr_article", JSON.stringify(article));
@@ -34,7 +49,15 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
 
   return (
     <TextEditorContext.Provider
-      value={{ editor, article, setArticle, finishArticle }}
+      value={{
+        editor: editor,
+        article: currentArticle,
+        onSave: onSave,
+        onRemove: onRemove,
+        setArticle: setCurrentArticle,
+        onBannerChange: onBannerChange,
+        finishArticle: finishArticle,
+      }}
     >
       {children}
     </TextEditorContext.Provider>

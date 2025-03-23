@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useTextEditor } from "@/hooks/text-editor";
-import { useRemoveArticle } from "@/hooks/articles";
+import { useEditorDialogue } from "@/hooks/editor-dialogue";
 import {
   Dialog,
   DialogClose,
@@ -9,18 +9,14 @@ import {
   DialogHeader,
   DialogFooter,
   DialogContent,
-  DialogDescription,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { useEditorDialogue } from "@/hooks/editor-dialogue";
 
 const DeleteArticleDialogue = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const textEditor = useTextEditor();
-  const articleRemover = useRemoveArticle();
   const editorDialogue = useEditorDialogue();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -32,7 +28,6 @@ const DeleteArticleDialogue = () => {
         "delete-article-dialogue",
         handleOpen
       );
-
       return () => {
         editorDialogue.eventTarget?.removeEventListener(
           "delete-article-dialogue",
@@ -42,22 +37,17 @@ const DeleteArticleDialogue = () => {
     }
   }, [editorDialogue.eventTarget]);
 
-  useEffect(() => {
-    if (articleRemover.error) {
+  const deleteArticle = async () => {
+    if (textEditor.article) {
+      textEditor.onRemove(textEditor.article);
+    } else {
       toast({
         variant: "destructive",
-        title: "Problem With Deleting",
-        description: articleRemover.error,
+        title: "Problem With Removing",
+        description:
+          "There was an unexpected error while trying to remove this article.",
       });
-    } else if (articleRemover.error === null) {
-      textEditor.finishArticle();
-      navigate("/user/my-articles");
     }
-  }, [articleRemover.error, toast, navigate]);
-
-  const deleteArticle = async () => {
-    const id = textEditor.article?.id;
-    if (id) await articleRemover.remove(id);
   };
 
   return (
@@ -75,11 +65,7 @@ const DeleteArticleDialogue = () => {
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button
-              variant="destructive"
-              disabled={articleRemover.isLoading}
-              onClick={deleteArticle}
-            >
+            <Button variant="destructive" onClick={deleteArticle}>
               Delete
             </Button>
           </DialogClose>

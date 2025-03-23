@@ -65,3 +65,16 @@ export function getEmbedUrl(url: string) {
   );
   return match ? `https://www.youtube.com/embed/${match[1]}` : "";
 }
+
+export function getArticleWidthId(id: string): Article {
+  return {
+    id: id,
+    user: "",
+    title: "",
+    banner: "",
+    content: "",
+    public: false,
+    user_image: "",
+    created_at: new Date(0),
+  } as Article;
+}

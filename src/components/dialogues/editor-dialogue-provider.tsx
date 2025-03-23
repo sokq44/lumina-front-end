@@ -1,10 +1,10 @@
 import { FC, ReactNode } from "react";
 import { EditorDialogueContext } from "@/hooks/editor-dialogue";
+import AddLinkDialogue from "@/components/dialogues/add-link-dialogue";
 import UploadImageDialogue from "@/components/dialogues/upload-image-dialog";
+import AddYTVideoDialogue from "@/components/dialogues/add-yt-video-dialogue";
 import DeleteArticleDialogue from "@/components/dialogues/delete-article-dialogue";
 import ArticleVisibilityDialogue from "@/components/dialogues/article-visibility-dialogue";
-import AddLinkDialogue from "./add-link-dialogue";
-import AddYTVideoDialogue from "./add-yt-video-dialogue";
 
 const eventTarget = new EventTarget();
 

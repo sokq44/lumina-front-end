@@ -1,10 +1,9 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Article } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useTextEditor } from "@/hooks/text-editor";
 import { useEditorDialogue } from "@/hooks/editor-dialogue";
-import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
 import {
   Link,
   Plus,
@@ -29,38 +28,8 @@ import { MenubarProps } from "@radix-ui/react-menubar";
 const TextEditorMenu: FC<MenubarProps> = (props) => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const articleRemover = useRemoveArticle();
   const editorDialogue = useEditorDialogue();
-  const { editor, article, setArticle, finishArticle } = useTextEditor();
-  const articleSaver = useSaveArticle(article?.id);
-
-  useEffect(() => {
-    if (articleSaver.error) {
-      toast({
-        variant: "destructive",
-        title: "Problem With Saving",
-        description:
-          articleSaver.error ||
-          "There was an unexpected error while saving your article.",
-      });
-    }
-  }, [articleSaver.error, toast]);
-
-  useEffect(() => {
-    if (articleSaver.id) {
-      const updated = {
-        ...article,
-        id: articleSaver.id,
-      } as Article;
-
-      setArticle(updated);
-
-      navigate(".", {
-        replace: true,
-        state: { article: updated },
-      });
-    }
-  }, [articleSaver.id]);
+  const { editor, article, onSave, finishArticle } = useTextEditor();
 
   const saveChanges = async () => {
     if (!editor || !article) return;
@@ -82,14 +51,14 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
       });
     } else {
       const updated = { ...article, content } as Article;
-
       if (updated) {
-        await articleSaver.save(updated);
+        onSave(updated);
+      } else {
         toast({
-          variant: "success",
-          title: "Changes Applied",
+          variant: "destructive",
+          title: "Problem With Saving",
           description:
-            "All the changes You've made have been applied to the article.",
+            "An unexpected error has occurred while trying to save the article. Please, try again later.",
         });
       }
     }
@@ -118,7 +87,6 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           <MenubarSeparator />
           <MenubarItem
             onClick={saveChanges}
-            disabled={articleSaver.isLoading || articleRemover.isLoading}
             className="cursor-pointer transition-all duration-300"
           >
             Save Article
@@ -127,10 +95,8 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
+            disabled={!article?.id}
             onClick={editorDialogue.articleVisibilityDialogue}
-            disabled={
-              articleSaver.isLoading || articleRemover.isLoading || !article?.id
-            }
             className="cursor-pointer transition-all duration-300"
           >
             {article?.public ? "Public" : "Private"}
@@ -143,10 +109,8 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
+            disabled={!article?.id}
             onClick={editorDialogue.deleteArticleDialogue}
-            disabled={
-              articleSaver.isLoading || articleRemover.isLoading || !article?.id
-            }
             className="text-destructive cursor-pointer transition-all duration-300 hover:text-destructive"
           >
             Delete Article
