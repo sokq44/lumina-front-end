@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
-import { EditorDialogueContext } from "@/hooks/editor-dialogue";
+import { DialogueContext } from "@/hooks/dialogue";
+import LogoutDialogue from "@/components/dialogues/logout-dialogoue";
 import AddLinkDialogue from "@/components/dialogues/add-link-dialogue";
 import UploadImageDialogue from "@/components/dialogues/upload-image-dialog";
 import AddYTVideoDialogue from "@/components/dialogues/add-yt-video-dialogue";
@@ -8,31 +9,36 @@ import ArticleVisibilityDialogue from "@/components/dialogues/article-visibility
 
 const eventTarget = new EventTarget();
 
-const uploadImageDialogue = () => {
+function logoutDialogue() {
+  eventTarget.dispatchEvent(new Event("logout-dialogue"));
+}
+
+function uploadImageDialogue() {
   eventTarget.dispatchEvent(new Event("upload-image-dialogue"));
-};
+}
 
-const youtubeVideoDialogue = () => {
+function youtubeVideoDialogue() {
   eventTarget.dispatchEvent(new Event("add-yt-video-dialogue"));
-};
+}
 
-const addLinkDialogue = () => {
+function addLinkDialogue() {
   eventTarget.dispatchEvent(new Event("add-link-dialogue"));
-};
+}
 
-const articleVisibilityDialogue = () => {
+function articleVisibilityDialogue() {
   eventTarget.dispatchEvent(new Event("article-visibility-dialogue"));
-};
+}
 
-const deleteArticleDialogue = () => {
+function deleteArticleDialogue() {
   eventTarget.dispatchEvent(new Event("delete-article-dialogue"));
-};
+}
 
-const EditorDialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
+const DialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <EditorDialogueContext.Provider
+    <DialogueContext.Provider
       value={{
         eventTarget,
+        logoutDialogue,
         addLinkDialogue,
         uploadImageDialogue,
         youtubeVideoDialogue,
@@ -40,14 +46,15 @@ const EditorDialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
         articleVisibilityDialogue,
       }}
     >
+      <LogoutDialogue />
       <AddLinkDialogue />
       <AddYTVideoDialogue />
       <UploadImageDialogue />
       <DeleteArticleDialogue />
       <ArticleVisibilityDialogue />
       {children}
-    </EditorDialogueContext.Provider>
+    </DialogueContext.Provider>
   );
 };
 
-export default EditorDialogueProvider;
+export default DialogueProvider;

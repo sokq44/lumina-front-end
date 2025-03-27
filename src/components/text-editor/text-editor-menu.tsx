@@ -3,7 +3,7 @@ import { Article } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useTextEditor } from "@/hooks/text-editor";
-import { useEditorDialogue } from "@/hooks/editor-dialogue";
+import { useDialogue } from "@/hooks/dialogue";
 import {
   Link,
   Plus,
@@ -28,7 +28,7 @@ import { MenubarProps } from "@radix-ui/react-menubar";
 const TextEditorMenu: FC<MenubarProps> = (props) => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const editorDialogue = useEditorDialogue();
+  const dialogs = useDialogue();
   const { editor, article, onSave, finishArticle } = useTextEditor();
 
   const saveChanges = async () => {
@@ -96,7 +96,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!article?.id}
-            onClick={editorDialogue.articleVisibilityDialogue}
+            onClick={dialogs.articleVisibilityDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             {article?.public ? "Public" : "Private"}
@@ -110,7 +110,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!article?.id}
-            onClick={editorDialogue.deleteArticleDialogue}
+            onClick={dialogs.deleteArticleDialogue}
             className="text-destructive cursor-pointer transition-all duration-300 hover:text-destructive"
           >
             Delete Article
@@ -127,7 +127,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             disabled={
               !editor?.can().setLink({ href: "https://www.example.com" })
             }
-            onSelect={editorDialogue.addLinkDialogue}
+            onSelect={dialogs.addLinkDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Link
@@ -137,7 +137,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!editor?.can().insertContent({ type: "image-extension" })}
-            onSelect={editorDialogue.uploadImageDialogue}
+            onSelect={dialogs.uploadImageDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Image
@@ -149,7 +149,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             disabled={
               !editor?.can().insertContent({ type: "youtube-extension" })
             }
-            onSelect={editorDialogue.youtubeVideoDialogue}
+            onSelect={dialogs.youtubeVideoDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Youtbe

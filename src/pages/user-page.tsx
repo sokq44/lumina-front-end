@@ -1,56 +1,42 @@
-import { useEffect } from "react";
-import { useLogout } from "@/hooks/user";
-import { useToast } from "@/hooks/use-toast";
-import { userMenuItems } from "@/lib/menu-items";
-import Container from "@/components/ui/container";
+import { MenuItem, userMenuItems } from "@/lib/menu-items";
+import { useDialogue } from "@/hooks/dialogue";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
+import UserSidebar from "@/components/ui/user-sidebar";
 import Authorized from "@/components/wraps/authorized";
 import ThemeSwitch from "@/components/theme/theme-switch";
-import UserSidebar from "@/components/ui/user-sidebar";
-import { useTheme } from "@/components/theme/theme-provider";
-import LoadingScreen from "@/components/wraps/loading-screen";
 import { LogOut, PanelBottom, SunMoon } from "lucide-react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useTheme } from "@/components/theme/theme-provider";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 export default function UserPage() {
-  const { toast } = useToast();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-  const { logout, isLoading, error } = useLogout();
-
-  useEffect(() => {
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Logout Error",
-        description: error,
-      });
-    }
-  }, [error]);
+  const { logoutDialogue } = useDialogue();
 
   const updatedMenuItems = userMenuItems.concat([
     {
       title: "Logout",
       icon: LogOut,
-      action: () => logout().then(() => navigate("/login")),
+      url: "",
+      action: logoutDialogue,
     },
   ]);
 
-  if (isLoading) {
-    <Container className="w-screen h-screen">
-      <LoadingScreen>Loggin you out...</LoadingScreen>
-    </Container>;
-  }
+  const onItemClick = (item: MenuItem) => {
+    if (item.action) item.action();
+    if (item.url) navigate(item.url);
+  };
 
   return (
     <Authorized onFail={() => navigate("/login")}>
       <MediaQuery>
         <More>
           <SidebarProvider>
-            <UserSidebar items={updatedMenuItems} />
+            <UserSidebar items={updatedMenuItems} onItemClick={onItemClick} />
             <Container className="flex flex-col h-screen w-screen">
               <Container className="flex items-center w-full bg-background h-14 justify-between">
                 <SidebarTrigger className="ml-2 w-10 h-10 rounded-md text-primary bg-secondary/50 dark:bg-secondary/70 cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300" />
@@ -66,15 +52,14 @@ export default function UserPage() {
           <Drawer>
             <DrawerContent className="flex flex-col gap-y-10 px-4 items-center justify-center my-8 font-funnel">
               {updatedMenuItems.map((item) => (
-                <Link
+                <Button
                   key={item.title}
-                  to={item.url ? item.url : ""}
                   className="flex"
-                  onClick={item.action ? item.action : undefined}
+                  onClick={() => onItemClick(item)}
                 >
                   <item.icon className="mr-2" />
                   <span>{item.title}</span>
-                </Link>
+                </Button>
               ))}
               <Button
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}

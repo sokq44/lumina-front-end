@@ -1,6 +1,6 @@
 import { FormEventHandler, useEffect, useRef, useState } from "react";
 import { useTextEditor } from "@/hooks/text-editor";
-import { useEditorDialogue } from "@/hooks/editor-dialogue";
+import { useDialogue } from "@/hooks/dialogue";
 import {
   Dialog,
   DialogTitle,
@@ -16,28 +16,25 @@ import { insertYoutube } from "@/lib/editor-extensions/youtube-extenstion";
 
 const AddYTVideoDialogue = () => {
   const textEditor = useTextEditor();
-  const editorDialogue = useEditorDialogue();
+  const dialogs = useDialogue();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState<string>("");
 
   useEffect(() => {
-    if (!editorDialogue.eventTarget) return;
+    if (!dialogs.eventTarget) return;
 
     const openDialog = () => triggerRef.current?.click();
-    editorDialogue.eventTarget.addEventListener(
-      "add-yt-video-dialogue",
-      openDialog
-    );
+    dialogs.eventTarget.addEventListener("add-yt-video-dialogue", openDialog);
 
     return () => {
-      editorDialogue.eventTarget?.removeEventListener(
+      dialogs.eventTarget?.removeEventListener(
         "add-yt-video-dialogue",
         openDialog
       );
     };
-  }, [editorDialogue.eventTarget]);
+  }, [dialogs.eventTarget]);
 
   const handleLinkAddition: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -66,7 +63,11 @@ const AddYTVideoDialogue = () => {
             onInput={handleInputChange}
           />
           <DialogClose asChild>
-            <Button type="submit" disabled={!url}>
+            <Button
+              type="submit"
+              disabled={!url}
+              className="transition-all duration-300"
+            >
               Add
             </Button>
           </DialogClose>

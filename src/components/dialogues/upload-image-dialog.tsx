@@ -2,6 +2,8 @@ import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUploadAsset } from "@/hooks/assets";
 import { useTextEditor } from "@/hooks/text-editor";
+import { useDialogue } from "@/hooks/dialogue";
+import { insertImage } from "@/lib/editor-extensions/image-extension";
 import {
   Dialog,
   DialogTitle,
@@ -11,54 +13,54 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import Container from "@/components/ui/container";
-import { Button } from "@/components/ui/button";
+import Img from "@/components/ui/image";
 import { LoaderCircle } from "lucide-react";
-import { useEditorDialogue } from "@/hooks/editor-dialogue";
-import Img from "../ui/image";
-import { insertImage } from "@/lib/editor-extensions/image-extension";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
 
-const UploadImageDialogue = () => {
+export default function UploadImageDialogue() {
   const { toast } = useToast();
-  const textEditor = useTextEditor();
-  const assetUploader = useUploadAsset();
-  const editorDialogue = useEditorDialogue();
+  const dialogs = useDialogue();
+  const { editor } = useTextEditor();
+  const { upload, url, isLoading, error } = useUploadAsset();
+
+  const [source, setSource] = useState<string>("/iu-holder.webp");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const [source, setSource] = useState<string>("/iu-holder.webp");
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (editorDialogue.eventTarget) {
+    if (dialogs.eventTarget) {
       const handleOpen = () => triggerRef.current?.click();
-      editorDialogue.eventTarget.addEventListener(
-        "upload-image-dialogue",
-        handleOpen
-      );
+      dialogs.eventTarget.addEventListener("upload-image-dialogue", handleOpen);
 
       return () => {
-        editorDialogue.eventTarget?.removeEventListener(
+        dialogs.eventTarget?.removeEventListener(
           "upload-image-dialogue",
           handleOpen
         );
       };
     }
-  }, [editorDialogue.eventTarget]);
+  }, [dialogs.eventTarget]);
 
   useEffect(() => {
-    if (assetUploader.error) {
+    if (error) {
       toast({
         variant: "destructive",
         title: "Problem with Uploading",
-        description: assetUploader.error,
+        description: error,
       });
-    } else if (assetUploader.error === null) {
-      if (assetUploader.url && textEditor.editor) {
-        insertImage(textEditor.editor, { src: assetUploader.url });
+    } else if (error === null) {
+      if (url && editor) {
+        setTimeout(() => {
+          insertImage(editor, { src: url });
+          closeRef.current?.click();
+        }, 0);
       }
     }
-  }, [assetUploader.error]);
+  }, [error]);
 
   const imageChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const files = event.target?.files;
@@ -72,16 +74,14 @@ const UploadImageDialogue = () => {
   const uploadImage = async () => {
     const files = inputRef.current?.files;
 
-    if (files) {
-      if (files?.length < 1) {
-        toast({
-          variant: "destructive",
-          title: "Problem with Uploading",
-          description: "No file selected",
-        });
-      }
-
-      await assetUploader.upload(files[0]);
+    if (files && files.length === 1) {
+      upload(files[0]);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Problem with Uploading",
+        description: "Exactly one file must be selected.",
+      });
     }
   };
 
@@ -108,7 +108,7 @@ const UploadImageDialogue = () => {
           className="max-h-52 w-auto mx-auto my-1 rounded-md bg-gray-400"
           src={source}
         />
-        <Container className="flex gap-x-2">
+        <Container className="flex gap-x-2 justify-center">
           <Input
             ref={inputRef}
             type="file"
@@ -118,33 +118,24 @@ const UploadImageDialogue = () => {
           />
           <Container
             onClick={() => inputRef.current?.click()}
-            className="flex items-center pl-2 w-full border rounded-sm text-sm text-muted-foreground transition-all duration-300 cursor-pointer hover:bg-muted"
+            className="w-80 py-2 pl-2 border rounded-sm text-sm text-muted-foreground overflow-hidden whitespace-nowrap text-ellipsis transition-all duration-300 cursor-pointer hover:bg-muted"
           >
-            {inputRef.current?.value
-              ? inputRef.current?.value.split(/[/\\]/).pop()
-              : "Pick an Image"}
+            <span className="my-auto text-sm">
+              {inputRef.current?.value
+                ? inputRef.current?.value.split(/[/\\]/).pop()
+                : "Pick an Image"}
+            </span>
           </Container>
-          <DialogClose asChild>
-            <Button
-              variant={
-                assetUploader.isLoading || !inputRef.current?.value
-                  ? "ghost"
-                  : "default"
-              }
-              onClick={uploadImage}
-              disabled={assetUploader.isLoading || !inputRef.current?.value}
-            >
-              {assetUploader.isLoading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                "Upload"
-              )}
-            </Button>
-          </DialogClose>
+          <Button
+            onClick={uploadImage}
+            disabled={isLoading || !inputRef.current?.value}
+            className="transition-all duration-300"
+          >
+            {isLoading ? <LoaderCircle className="animate-spin" /> : "Upload"}
+          </Button>
+          <DialogClose ref={closeRef} />
         </Container>
       </DialogContent>
     </Dialog>
   );
-};
-
-export default UploadImageDialogue;
+}

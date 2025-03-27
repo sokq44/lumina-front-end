@@ -29,8 +29,6 @@ const Resizable: FC<ResizableProps> = ({
     isDraggingRef.current = true;
     initialXRef.current = initialX;
 
-    console.log("Should change cursor to ew-resize");
-
     changeCursor("ew-resize");
     if (onStartDragging) onStartDragging();
 

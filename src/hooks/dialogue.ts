@@ -1,7 +1,8 @@
 import { createContext, useContext } from "react";
 
-export const EditorDialogueContext = createContext<{
+export const DialogueContext = createContext<{
   eventTarget: EventTarget | undefined;
+  logoutDialogue: (() => void) | undefined;
   addLinkDialogue: (() => void) | undefined;
   uploadImageDialogue: (() => void) | undefined;
   youtubeVideoDialogue: (() => void) | undefined;
@@ -9,6 +10,7 @@ export const EditorDialogueContext = createContext<{
   articleVisibilityDialogue: (() => void) | undefined;
 }>({
   eventTarget: undefined,
+  logoutDialogue: undefined,
   addLinkDialogue: undefined,
   uploadImageDialogue: undefined,
   youtubeVideoDialogue: undefined,
@@ -16,4 +18,4 @@ export const EditorDialogueContext = createContext<{
   articleVisibilityDialogue: undefined,
 });
 
-export const useEditorDialogue = () => useContext(EditorDialogueContext);
+export const useDialogue = () => useContext(DialogueContext);

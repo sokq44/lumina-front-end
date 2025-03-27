@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
 import { MenuItem } from "@/lib/menu-items";
 import {
   Sidebar,
@@ -12,12 +11,14 @@ import {
 } from "@/components/ui/sidebar";
 import Container from "@/components/ui/container";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "./button";
 
 interface UserSidebarProps {
   items: MenuItem[];
+  onItemClick: (item: MenuItem) => void;
 }
 
-const UserSidebar: FC<UserSidebarProps> = ({ items }) => {
+const UserSidebar: FC<UserSidebarProps> = ({ items, onItemClick }) => {
   return (
     <Sidebar className="border-none">
       <Container className="flex w-full h-full">
@@ -32,13 +33,14 @@ const UserSidebar: FC<UserSidebarProps> = ({ items }) => {
                         asChild
                         className="w-32 p-2 text-base transition-all duration-300"
                       >
-                        <Link
-                          to={item.url ? item.url : ""}
-                          onClick={item.action ? item.action : undefined}
+                        <Button
+                          variant={"ghost"}
+                          onClick={() => onItemClick(item)}
+                          className="justify-start font-normal"
                         >
                           <item.icon />
                           <span>{item.title}</span>
-                        </Link>
+                        </Button>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}

@@ -4,9 +4,9 @@ import { Article } from "@/lib/api";
 import { extensions } from "@/lib/editor-extensions/extensions";
 import Container from "@/components/ui/container";
 import TextEditorMenu from "@/components/text-editor/text-editor-menu";
+import DialogueProvider from "@/components/dialogues/dialogue-provider";
 import TextEditorContent from "@/components/text-editor/text-editor-content";
 import TextEditorProvider from "@/components/text-editor/text-editor-provider";
-import EditorDialogueProvider from "@/components/dialogues/editor-dialogue-provider";
 
 interface TextEditorProps {
   article: Article | undefined;
@@ -38,12 +38,12 @@ const TextEditor: FC<TextEditorProps> = ({
       onRemove={onRemove}
       onBannerChange={onBannerChange}
     >
-      <EditorDialogueProvider>
+      <DialogueProvider>
         <Container className="w-[50rem] flex flex-col h-full mx-4 mt-6">
           <TextEditorMenu className="fixed top-4 left-1/2 transform -translate-x-1/2 w-[48rem] z-50 text-foreground bg-zinc-200 border-zinc-300 dark:bg-zinc-800 dark:border-zinc-600" />
           <TextEditorContent className="mt-16" />
         </Container>
-      </EditorDialogueProvider>
+      </DialogueProvider>
     </TextEditorProvider>
   );
 };

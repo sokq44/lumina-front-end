@@ -14,22 +14,21 @@ import NotFoundPage from "./pages/not-found-page";
 import MyArticlesPage from "./pages/my-articles-page";
 import VerifyEmailPage from "@/pages/verify-email-page";
 import EmailVerifiedPage from "@/pages/email-verified-page";
+import PasswordChangePage from "@/pages/password-change-page";
 import SuggestedArticlesPage from "@/pages/suggested-articles-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
 
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import InformBadger from "@/components/inform-badge/inform-badger";
+import DialogueProvider from "@/components/dialogues/dialogue-provider";
 
-import "./index.css";
-import PasswordChangePage from "@/pages/password-change-page";
+import "@/index.css";
 
 /**
  * <=== GENERAL ===>
  *
  * @todo logo design
- *
- * @todo dialogue when logging out
  *
  * @todo preview of the profile picture before uploading (profile-page)
  *
@@ -43,16 +42,11 @@ import PasswordChangePage from "@/pages/password-change-page";
  *
  * <=== TEXT EDITOR ===>
  *
- * @todo cursor change for resizing tables
- *
  * @todo tracking changes within an article
  *
  * @todo define prohibited protocols and urls for the Link extension
  *
  * @todo more user-friendly process of uploading pictures, banner image and profile image (lazy loading)
- *
- * @todo make text editor independent from article related hooks (saving, deleting, etc.
- *       should be done on the article-writing page and later passed to the text editor component)
  *
  * <===================>
  */
@@ -80,7 +74,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/user",
-    element: <UserPage />,
+    element: (
+      <DialogueProvider>
+        <UserPage />
+      </DialogueProvider>
+    ),
     children: [
       {
         path: "articles",
@@ -137,8 +135,8 @@ createRoot(document.getElementById("root")!).render(
     <main className="font-funnel">
       <ThemeProvider>
         <InformBadger>
-          <RouterProvider router={router} />
           <Toaster />
+          <RouterProvider router={router} />
         </InformBadger>
       </ThemeProvider>
     </main>

@@ -216,6 +216,10 @@
   }
 }
 
+.ProseMirror:focus {
+  outline: none;
+}
+
 .sliding-link {
   background-image: linear-gradient(currentColor, currentColor);
   background-size: 0% 1px;

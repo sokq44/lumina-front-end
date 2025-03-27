@@ -9,34 +9,34 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { useEditorDialogue } from "@/hooks/editor-dialogue";
+import { useDialogue } from "@/hooks/dialogue";
 import { useTextEditor } from "@/hooks/text-editor";
 import { Article } from "@/lib/api";
 import { useEffect, useRef } from "react";
 
 const ArticleVisibilityDialogue = () => {
   const textEditor = useTextEditor();
-  const editorDialogue = useEditorDialogue();
+  const dialogs = useDialogue();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (editorDialogue.eventTarget) {
+    if (dialogs.eventTarget) {
       const handleOpen = () => triggerRef?.current?.click();
 
-      editorDialogue.eventTarget.addEventListener(
+      dialogs.eventTarget.addEventListener(
         "article-visibility-dialogue",
         handleOpen
       );
 
       return () => {
-        editorDialogue.eventTarget?.removeEventListener(
+        dialogs.eventTarget?.removeEventListener(
           "article-visibility-dialogue",
           handleOpen
         );
       };
     }
-  }, [editorDialogue.eventTarget]);
+  }, [dialogs.eventTarget]);
 
   const changeVisibility = async () => {
     const previousArticle = textEditor.article;

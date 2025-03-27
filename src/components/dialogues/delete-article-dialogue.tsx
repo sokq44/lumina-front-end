@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useTextEditor } from "@/hooks/text-editor";
-import { useEditorDialogue } from "@/hooks/editor-dialogue";
+import { useDialogue } from "@/hooks/dialogue";
 import {
   Dialog,
   DialogClose,
@@ -17,25 +17,25 @@ import { Button } from "@/components/ui/button";
 const DeleteArticleDialogue = () => {
   const { toast } = useToast();
   const textEditor = useTextEditor();
-  const editorDialogue = useEditorDialogue();
+  const dialogs = useDialogue();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (editorDialogue.eventTarget) {
+    if (dialogs.eventTarget) {
       const handleOpen = () => triggerRef.current?.click();
-      editorDialogue.eventTarget.addEventListener(
+      dialogs.eventTarget.addEventListener(
         "delete-article-dialogue",
         handleOpen
       );
       return () => {
-        editorDialogue.eventTarget?.removeEventListener(
+        dialogs.eventTarget?.removeEventListener(
           "delete-article-dialogue",
           handleOpen
         );
       };
     }
-  }, [editorDialogue.eventTarget]);
+  }, [dialogs.eventTarget]);
 
   const deleteArticle = async () => {
     if (textEditor.article) {

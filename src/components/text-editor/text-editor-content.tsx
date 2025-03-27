@@ -59,8 +59,8 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
             ref={bannerInputRef}
             type="file"
             accept="image/*"
-            className="hidden"
             onChange={changeBanner}
+            className="hidden"
           />
           <span
             onClick={clickBanner}
@@ -74,11 +74,11 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           type="text"
           maxLength={25}
           placeholder="Title"
-          className="text-5xl font-bold bg-transparent w-full border-none px-0 py-1 h-auto rounded-none"
           onInput={changeTitle}
+          className="text-5xl font-bold bg-transparent w-full border-none px-0 py-1 h-auto rounded-none"
         />
         {article?.user && article?.created_at && (
-          <span className="text-sm text-muted-foreground ">
+          <span className="text-sm text-muted-foreground">
             Written by&nbsp;
             <Link
               to={`/user/${article.user}`}
@@ -94,7 +94,10 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
         <EditorContent
           onClick={() => editor?.commands.focus()}
           editor={editor || null}
-          className="min-h-svh w-full mx-auto hover:cursor-text"
+          style={{
+            outline: "none",
+          }}
+          className="min-h-svh w-full mx-auto hover:cursor-text focuse:outline-none focus-visible:outline-none focus:border-none focus-visible:border-none"
         />
       </EditorToolbar>
     </Container>
