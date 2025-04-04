@@ -1,17 +1,15 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useUploadAsset } from "@/hooks/assets";
-import { useTextEditor } from "@/hooks/text-editor";
 import { useDialogue } from "@/hooks/dialogue";
-import { insertImage } from "@/lib/editor-extensions/image-extension";
+import { useUploadAsset } from "@/hooks/assets";
 import {
   Dialog,
-  DialogTitle,
   DialogClose,
+  DialogTitle,
   DialogHeader,
+  DialogTrigger,
   DialogContent,
   DialogDescription,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import Img from "@/components/ui/image";
 import { LoaderCircle } from "lucide-react";
@@ -19,29 +17,32 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 
-export default function UploadImageDialogue() {
+const ProfilePictureDialogue = () => {
   const { toast } = useToast();
   const dialogues = useDialogue();
-  const { editor } = useTextEditor();
-  const { upload, url, isLoading, error } = useUploadAsset();
+  const { url, upload, isLoading, error } = useUploadAsset();
 
-  const [source, setSource] = useState<string>("/iu-holder.webp");
+  const [source, setSource] = useState<string>("/default-profile-picture.png");
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    return () => setSource("/default-profile-picture.png");
+  }, []);
 
   useEffect(() => {
     if (dialogues.eventTarget) {
       const handleOpen = () => triggerRef.current?.click();
       dialogues.eventTarget.addEventListener(
-        "upload-image-dialogue",
+        "change-profile-picture",
         handleOpen
       );
 
       return () => {
         dialogues.eventTarget?.removeEventListener(
-          "upload-image-dialogue",
+          "change-profile-picture",
           handleOpen
         );
       };
@@ -56,10 +57,15 @@ export default function UploadImageDialogue() {
         description: error,
       });
     } else if (error === null) {
-      if (url && editor) {
+      if (url) {
         setTimeout(() => {
-          insertImage(editor, { src: url });
+          dialogues.eventTarget?.dispatchEvent(
+            new CustomEvent("profile-picture-changed", {
+              detail: { picture: url },
+            })
+          );
           closeRef.current?.click();
+          setSource("/default-profile-picture.png");
         }, 0);
       }
     }
@@ -82,27 +88,18 @@ export default function UploadImageDialogue() {
     } else {
       toast({
         variant: "destructive",
-        title: "Problem with Uploading",
+        title: "Couldn't Change Profile Picture",
         description: "Exactly one file must be selected.",
       });
     }
   };
 
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      setSource("/iu-holder.webp");
-      if (inputRef.current) {
-        inputRef.current.value = "";
-      }
-    }
-  };
-
   return (
-    <Dialog onOpenChange={(open) => handleOpenChange(open)}>
+    <Dialog>
       <DialogTrigger ref={triggerRef}></DialogTrigger>
       <DialogContent className="font-funnel">
         <DialogHeader>
-          <DialogTitle>Upload an Image</DialogTitle>
+          <DialogTitle>Upload a Profile Picture</DialogTitle>
           <DialogDescription>
             Pick an image in order to upload it.
           </DialogDescription>
@@ -141,4 +138,6 @@ export default function UploadImageDialogue() {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default ProfilePictureDialogue;

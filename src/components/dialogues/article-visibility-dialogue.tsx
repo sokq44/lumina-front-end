@@ -16,27 +16,27 @@ import { useEffect, useRef } from "react";
 
 const ArticleVisibilityDialogue = () => {
   const textEditor = useTextEditor();
-  const dialogs = useDialogue();
+  const dialogues = useDialogue();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (dialogs.eventTarget) {
+    if (dialogues.eventTarget) {
       const handleOpen = () => triggerRef?.current?.click();
 
-      dialogs.eventTarget.addEventListener(
+      dialogues.eventTarget.addEventListener(
         "article-visibility-dialogue",
         handleOpen
       );
 
       return () => {
-        dialogs.eventTarget?.removeEventListener(
+        dialogues.eventTarget?.removeEventListener(
           "article-visibility-dialogue",
           handleOpen
         );
       };
     }
-  }, [dialogs.eventTarget]);
+  }, [dialogues.eventTarget]);
 
   const changeVisibility = async () => {
     const previousArticle = textEditor.article;

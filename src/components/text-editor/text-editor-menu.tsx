@@ -28,7 +28,7 @@ import { MenubarProps } from "@radix-ui/react-menubar";
 const TextEditorMenu: FC<MenubarProps> = (props) => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const dialogs = useDialogue();
+  const dialogues = useDialogue();
   const { editor, article, onSave, finishArticle } = useTextEditor();
 
   const saveChanges = async () => {
@@ -96,7 +96,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!article?.id}
-            onClick={dialogs.articleVisibilityDialogue}
+            onClick={dialogues.articleVisibilityDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             {article?.public ? "Public" : "Private"}
@@ -110,7 +110,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!article?.id}
-            onClick={dialogs.deleteArticleDialogue}
+            onClick={dialogues.deleteArticleDialogue}
             className="text-destructive cursor-pointer transition-all duration-300 hover:text-destructive"
           >
             Delete Article
@@ -127,7 +127,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             disabled={
               !editor?.can().setLink({ href: "https://www.example.com" })
             }
-            onSelect={dialogs.addLinkDialogue}
+            onSelect={dialogues.addLinkDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Link
@@ -137,7 +137,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!editor?.can().insertContent({ type: "image-extension" })}
-            onSelect={dialogs.uploadImageDialogue}
+            onSelect={dialogues.uploadImageDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Image
@@ -149,7 +149,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             disabled={
               !editor?.can().insertContent({ type: "youtube-extension" })
             }
-            onSelect={dialogs.youtubeVideoDialogue}
+            onSelect={dialogues.youtubeVideoDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Youtbe

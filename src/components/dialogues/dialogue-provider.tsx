@@ -5,32 +5,13 @@ import AddLinkDialogue from "@/components/dialogues/add-link-dialogue";
 import UploadImageDialogue from "@/components/dialogues/upload-image-dialog";
 import AddYTVideoDialogue from "@/components/dialogues/add-yt-video-dialogue";
 import DeleteArticleDialogue from "@/components/dialogues/delete-article-dialogue";
+import ProfilePictureDialogue from "@/components/dialogues/profile-picture-dialogue";
 import ArticleVisibilityDialogue from "@/components/dialogues/article-visibility-dialogue";
 
 const eventTarget = new EventTarget();
 
-function logoutDialogue() {
-  eventTarget.dispatchEvent(new Event("logout-dialogue"));
-}
-
-function uploadImageDialogue() {
-  eventTarget.dispatchEvent(new Event("upload-image-dialogue"));
-}
-
-function youtubeVideoDialogue() {
-  eventTarget.dispatchEvent(new Event("add-yt-video-dialogue"));
-}
-
-function addLinkDialogue() {
-  eventTarget.dispatchEvent(new Event("add-link-dialogue"));
-}
-
-function articleVisibilityDialogue() {
-  eventTarget.dispatchEvent(new Event("article-visibility-dialogue"));
-}
-
-function deleteArticleDialogue() {
-  eventTarget.dispatchEvent(new Event("delete-article-dialogue"));
+function dispatch(name: string) {
+  eventTarget.dispatchEvent(new Event(name));
 }
 
 const DialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -38,12 +19,13 @@ const DialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
     <DialogueContext.Provider
       value={{
         eventTarget,
-        logoutDialogue,
-        addLinkDialogue,
-        uploadImageDialogue,
-        youtubeVideoDialogue,
-        deleteArticleDialogue,
-        articleVisibilityDialogue,
+        logoutDialogue: () => dispatch("logout-dialogue"),
+        addLinkDialogue: () => dispatch("upload-image-dialogue"),
+        uploadImageDialogue: () => dispatch("upload-image-dialogue"),
+        youtubeVideoDialogue: () => dispatch("add-yt-video-dialogue"),
+        deleteArticleDialogue: () => dispatch("delete-article-dialogue"),
+        profilePictureDialogue: () => dispatch("change-profile-picture"),
+        articleVisibilityDialogue: () => dispatch("article-visibility-dialogue"),
       }}
     >
       <LogoutDialogue />
@@ -51,6 +33,7 @@ const DialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
       <AddYTVideoDialogue />
       <UploadImageDialogue />
       <DeleteArticleDialogue />
+      <ProfilePictureDialogue />
       <ArticleVisibilityDialogue />
       {children}
     </DialogueContext.Provider>

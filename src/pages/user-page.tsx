@@ -37,12 +37,10 @@ export default function UserPage() {
         <More>
           <SidebarProvider>
             <UserSidebar items={updatedMenuItems} onItemClick={onItemClick} />
-            <Container className="flex flex-col h-screen w-screen">
-              <Container className="flex items-center w-full bg-background h-14 justify-between">
-                <SidebarTrigger className="ml-2 w-10 h-10 rounded-md text-primary bg-secondary/50 dark:bg-secondary/70 cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300" />
-                <ThemeSwitch className="relative" />
-              </Container>
-              <Container className="flex w-full bg-background h-full">
+            <Container className="h-screen w-screen">
+              <SidebarTrigger className="fixed top-0 m-2 w-10 h-10 rounded-md text-primary bg-gray-200 dark:bg-secondary/70 cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300" />
+              <ThemeSwitch position="top-right" />
+              <Container className="flex w-full h-full bg-background">
                 <Outlet />
               </Container>
             </Container>

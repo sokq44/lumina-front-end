@@ -31,8 +31,10 @@ const ArticlePage = () => {
   }, [error, toast]);
 
   const getContent = () => {
-    const html = generateHTML(getArticleContent(article), extensions);
-    return parse(html, { replace: (node) => extensionToElement(node) });
+    if (article) {
+      const html = generateHTML(getArticleContent(article), extensions);
+      return parse(html, { replace: (node) => extensionToElement(node) });
+    }
   };
 
   if (isLoading) {

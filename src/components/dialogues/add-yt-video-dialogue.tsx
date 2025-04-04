@@ -16,25 +16,25 @@ import { insertYoutube } from "@/lib/editor-extensions/youtube-extenstion";
 
 const AddYTVideoDialogue = () => {
   const textEditor = useTextEditor();
-  const dialogs = useDialogue();
+  const dialogues = useDialogue();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState<string>("");
 
   useEffect(() => {
-    if (!dialogs.eventTarget) return;
+    if (!dialogues.eventTarget) return;
 
     const openDialog = () => triggerRef.current?.click();
-    dialogs.eventTarget.addEventListener("add-yt-video-dialogue", openDialog);
+    dialogues.eventTarget.addEventListener("add-yt-video-dialogue", openDialog);
 
     return () => {
-      dialogs.eventTarget?.removeEventListener(
+      dialogues.eventTarget?.removeEventListener(
         "add-yt-video-dialogue",
         openDialog
       );
     };
-  }, [dialogs.eventTarget]);
+  }, [dialogues.eventTarget]);
 
   const handleLinkAddition: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();

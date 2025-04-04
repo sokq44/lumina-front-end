@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { User } from "@/lib/api";
 import { modifyUserFormSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { useUploadAsset } from "@/hooks/assets";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useGetUser, useModifyUser } from "@/hooks/user";
@@ -16,24 +15,44 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { ImageUp, LoaderCircle } from "lucide-react";
+import { useDialogue } from "@/hooks/dialogue";
+
+type ModifyUserForm = z.infer<typeof modifyUserFormSchema>;
 
 const ProfilePage = () => {
+  const { toast } = useToast();
   const userGetter = useGetUser();
   const userModifier = useModifyUser();
-  const assetUploader = useUploadAsset();
-  const { toast } = useToast();
+  const { profilePictureDialogue, eventTarget } = useDialogue();
 
   const [modifying, setModifying] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(userGetter.user);
-  const pictureInputRef = useRef<HTMLInputElement>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const form = useForm<z.infer<typeof modifyUserFormSchema>>({
+  const form = useForm<ModifyUserForm>({
     resolver: zodResolver(modifyUserFormSchema),
     defaultValues: {
       username: "",
       email: "",
     },
   });
+
+  useEffect(() => {
+    const changed = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const newUser = {
+        ...currentUser,
+        image: customEvent.detail.picture,
+      } as User;
+      setCurrentUser(newUser);
+      userModifier.modify(newUser);
+    };
+
+    eventTarget?.addEventListener("profile-picture-changed", changed);
+
+    return () => {
+      eventTarget?.removeEventListener("profile-picture-changed", changed);
+    };
+  }, [eventTarget]);
 
   useEffect(() => {
     if (userGetter.error) {
@@ -62,36 +81,14 @@ const ProfilePage = () => {
   }, [userModifier.error, toast]);
 
   useEffect(() => {
-    if (assetUploader.error) {
-      toast({
-        variant: "destructive",
-        title: "Problem With Uploading Image",
-        description: assetUploader.error,
-      });
-    }
-  }, [assetUploader.error, toast]);
-
-  useEffect(() => {
     if (userGetter.user) {
-      setCurrentUser({
-        ...(currentUser as User),
-        image: userGetter.user.image,
-      });
+      setCurrentUser(userGetter.user);
       form.setValue("username", userGetter.user.username);
       form.setValue("email", userGetter.user.email);
     }
   }, [userGetter.user]);
 
-  useEffect(() => {
-    if (assetUploader.url) {
-      setCurrentUser({
-        ...(currentUser as User),
-        image: assetUploader.url,
-      });
-    }
-  }, [assetUploader.url]);
-
-  const onSubmit = async (values: z.infer<typeof modifyUserFormSchema>) => {
+  const onSubmit = async (values: ModifyUserForm) => {
     if (modifying && currentUser) {
       await userModifier.modify({
         username: values.username,
@@ -103,9 +100,7 @@ const ProfilePage = () => {
     setModifying((prev) => !prev);
   };
 
-  const onError = async (
-    errors: FieldErrors<z.infer<typeof modifyUserFormSchema>>
-  ) => {
+  const onError = (errors: FieldErrors<ModifyUserForm>) => {
     const message: string = Object.entries(errors).map(
       (entry) => (entry[1].message as string) ?? entry
     )[0];
@@ -119,18 +114,12 @@ const ProfilePage = () => {
     }
   };
 
-  const onPictureChange = async () => {
-    const file = pictureInputRef.current?.files?.[0];
-    if (file) await assetUploader.upload(file);
-  };
-
   const onCancelModifying = async () => {
     setModifying(false);
     setCurrentUser(userGetter.user);
   };
 
-  const isLoading =
-    userModifier.isLoading || userGetter.isLoading || assetUploader.isLoading;
+  const isLoading = userModifier.isLoading || userGetter.isLoading;
 
   return (
     <Container className="h-full w-full flex flex-col gap-4 items-center lg:justify-center">
@@ -145,31 +134,17 @@ const ProfilePage = () => {
               />
             </AvatarFallback>
           </Avatar>
-          <Input
-            ref={pictureInputRef}
-            type="file"
-            accept="image/*"
-            disabled={!modifying}
-            onChange={onPictureChange}
-            className="hidden"
-          />
           <Button
             variant="secondary"
             disabled={isLoading}
-            onClick={() => pictureInputRef.current?.click()}
+            onClick={profilePictureDialogue}
             className={cn(
               modifying ? "visible" : "hidden",
               " gap-x-2 p-3 transition-all duration-300"
             )}
           >
-            {assetUploader.isLoading ? (
-              "Uploading..."
-            ) : (
-              <>
-                <ImageUp />
-                <span>Select a Picture</span>
-              </>
-            )}
+            <ImageUp />
+            <span>Change Profile Picture</span>
           </Button>
         </Container>
         <Form {...form}>

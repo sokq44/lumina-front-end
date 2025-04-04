@@ -15,28 +15,28 @@ import { Button } from "@/components/ui/button";
 
 const AddLinkDialogue = () => {
   const textEditor = useTextEditor();
-  const dialogs = useDialogue();
+  const dialogues = useDialogue();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState<string>("");
 
   useEffect(() => {
-    if (!dialogs.eventTarget) return;
+    if (!dialogues.eventTarget) return;
 
     const openDialog = () => triggerRef.current?.click();
-    dialogs.eventTarget.addEventListener(
+    dialogues.eventTarget.addEventListener(
       "add-link-dialogue",
       openDialog
     );
 
     return () => {
-      dialogs.eventTarget?.removeEventListener(
+      dialogues.eventTarget?.removeEventListener(
         "add-link-dialogue",
         openDialog
       );
     };
-  }, [dialogs.eventTarget]);
+  }, [dialogues.eventTarget]);
 
   const handleLinkAddition: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
