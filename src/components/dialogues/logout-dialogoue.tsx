@@ -58,9 +58,9 @@ export default function LogoutDialogue() {
       <DialogTrigger ref={triggerRef} />
       <DialogContent className="font-funnel">
         <DialogHeader>
-          <DialogTitle>Upload an Image</DialogTitle>
+          <DialogTitle>Loggin Out</DialogTitle>
           <DialogDescription>
-            Pick an image in order to upload it.
+            Are you sure you want to log out?
           </DialogDescription>
         </DialogHeader>
         <Container className="flex gap-x-2 justify-end">

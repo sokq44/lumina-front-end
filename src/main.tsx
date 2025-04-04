@@ -5,6 +5,7 @@ import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import MainPage from "@/pages/main-page";
 import UserPage from "@/pages/user-page";
 import LoginPage from "@/pages/login-page";
+import ErrorPage from "@/pages/error-page";
 import ArticlePage from "@/pages/article-page";
 import ProfilePage from "@/pages/profile-page";
 import WritingPage from "@/pages/writing-page";
@@ -25,7 +26,6 @@ import InformBadger from "@/components/inform-badge/inform-badger";
 import DialogueProvider from "@/components/dialogues/dialogue-provider";
 
 import "@/index.css";
-import ErrorPage from "./pages/error-page";
 
 /**
  * <=== GENERAL ===>
