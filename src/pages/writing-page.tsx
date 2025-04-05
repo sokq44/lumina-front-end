@@ -1,4 +1,13 @@
 import { useEffect, useState } from "react";
+import { Article } from "@/lib/api";
+import { getArticleWidthId } from "@/lib/utils";
+import {
+  useGetArticle,
+  useSaveArticle,
+  useRemoveArticle,
+} from "@/hooks/articles";
+import { useToast } from "@/hooks/use-toast";
+import { useUploadAsset } from "@/hooks/assets";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Dialog,
@@ -16,16 +25,7 @@ import Container from "@/components/ui/container";
 import Authorized from "@/components/wraps/authorized";
 import ThemeSwitch from "@/components/theme/theme-switch";
 import TextEditor from "@/components/text-editor/text-editor";
-import {
-  useGetArticle,
-  useRemoveArticle,
-  useSaveArticle,
-} from "@/hooks/articles";
-import { useToast } from "@/hooks/use-toast";
-import { Article } from "@/lib/api";
-import { getArticleWidthId } from "@/lib/utils";
 import LoadingScreen from "@/components/wraps/loading-screen";
-import { useUploadAsset } from "@/hooks/assets";
 
 export default function WritingPage() {
   const { state } = useLocation();
@@ -69,8 +69,8 @@ export default function WritingPage() {
         title: "Problem With Rertieving",
         description: articleGetter.error,
       });
-    } else if (articleGetter.error === null) {
-      if (articleGetter.article) setArticle(articleGetter.article);
+    } else if (articleGetter.error === null && articleGetter.article) {
+      setArticle(articleGetter.article);
     }
   }, [articleGetter.error, articleGetter.article]);
 
@@ -95,15 +95,8 @@ export default function WritingPage() {
         title: "Problem With Uploading An Asset",
         description: assetUploader.error,
       });
-    } else if (assetUploader.error === null) {
-      const url = assetUploader.url;
-      if (url) {
-        const newArticle = {
-          ...article,
-          banner: url,
-        } as Article;
-        setArticle(newArticle);
-      }
+    } else if (assetUploader.error === null && assetUploader.url) {
+      setArticle({ ...article, banner: assetUploader.url } as Article);
     }
   }, [assetUploader.error]);
 
@@ -115,15 +108,12 @@ export default function WritingPage() {
   }, [articleSaver.id]);
 
   const onSave = (article: Article | undefined) => {
+    console.log(article);
     if (article) articleSaver.save(article);
   };
 
   const onRemove = (article: Article | undefined) => {
     if (article) articleRemover.remove(article.id);
-  };
-
-  const onBannerChange = (file: File | undefined) => {
-    if (file) assetUploader.upload(file);
   };
 
   const finishWriting = () => {
@@ -169,12 +159,7 @@ export default function WritingPage() {
           </DialogContent>
         </Dialog>
         <ThemeSwitch position="top-right" />
-        <TextEditor
-          article={article}
-          onSave={onSave}
-          onRemove={onRemove}
-          onBannerChange={onBannerChange}
-        />
+        <TextEditor article={article} onSave={onSave} onRemove={onRemove} />
       </Container>
     </Authorized>
   );

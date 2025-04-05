@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Article } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -26,10 +26,44 @@ import {
 import { MenubarProps } from "@radix-ui/react-menubar";
 
 const TextEditorMenu: FC<MenubarProps> = (props) => {
+  const {
+    eventTarget,
+    addLinkDialogue,
+    uploadImageDialogue,
+    youtubeVideoDialogue,
+    deleteArticleDialogue,
+    articleVisibilityDialogue,
+  } = useDialogue();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const dialogues = useDialogue();
-  const { editor, article, onSave, finishArticle } = useTextEditor();
+  const { editor, article, setArticle, onSave, finishArticle } =
+    useTextEditor();
+
+  useEffect(() => {
+    if (eventTarget) {
+      const handleVisibilityChanged = (event: Event) => {
+        const customEvent = event as CustomEvent;
+        if (article) {
+          const newArticle = {
+            ...article,
+            public: customEvent.detail.public,
+          };
+          setArticle(newArticle);
+          onSave(newArticle);
+        }
+      };
+      eventTarget.addEventListener(
+        "visibility-changed",
+        handleVisibilityChanged
+      );
+      return () => {
+        eventTarget.removeEventListener(
+          "visibility-changed",
+          handleVisibilityChanged
+        );
+      };
+    }
+  }, [eventTarget]);
 
   const saveChanges = async () => {
     if (!editor || !article) return;
@@ -96,7 +130,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!article?.id}
-            onClick={dialogues.articleVisibilityDialogue}
+            onClick={articleVisibilityDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             {article?.public ? "Public" : "Private"}
@@ -110,7 +144,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!article?.id}
-            onClick={dialogues.deleteArticleDialogue}
+            onClick={deleteArticleDialogue}
             className="text-destructive cursor-pointer transition-all duration-300 hover:text-destructive"
           >
             Delete Article
@@ -127,7 +161,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             disabled={
               !editor?.can().setLink({ href: "https://www.example.com" })
             }
-            onSelect={dialogues.addLinkDialogue}
+            onSelect={addLinkDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Link
@@ -137,7 +171,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
           </MenubarItem>
           <MenubarItem
             disabled={!editor?.can().insertContent({ type: "image-extension" })}
-            onSelect={dialogues.uploadImageDialogue}
+            onSelect={uploadImageDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Image
@@ -149,7 +183,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             disabled={
               !editor?.can().insertContent({ type: "youtube-extension" })
             }
-            onSelect={dialogues.youtubeVideoDialogue}
+            onSelect={youtubeVideoDialogue}
             className="cursor-pointer transition-all duration-300"
           >
             Youtbe

@@ -1,17 +1,16 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useDialogue } from "@/hooks/dialogue";
 import { useUploadAsset } from "@/hooks/assets";
 import { useTextEditor } from "@/hooks/text-editor";
-import { useDialogue } from "@/hooks/dialogue";
-import { insertImage } from "@/lib/editor-extensions/image-extension";
 import {
   Dialog,
   DialogTitle,
   DialogClose,
   DialogHeader,
+  DialogTrigger,
   DialogContent,
   DialogDescription,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import Img from "@/components/ui/image";
 import { LoaderCircle } from "lucide-react";
@@ -19,13 +18,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 
-export default function UploadImageDialogue() {
+const ChangeBannerDialogue = () => {
   const { toast } = useToast();
-  const { eventTarget } = useDialogue();
   const { editor } = useTextEditor();
+  const { eventTarget } = useDialogue();
   const { upload, url, isLoading, error } = useUploadAsset();
 
-  const [source, setSource] = useState<string>("/iu-holder.webp");
+  const [source, setSource] = useState<string>("/default-banner.png");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -34,9 +33,9 @@ export default function UploadImageDialogue() {
   useEffect(() => {
     if (eventTarget) {
       const handleOpen = () => triggerRef.current?.click();
-      eventTarget.addEventListener("upload-image-dialogue", handleOpen);
+      eventTarget.addEventListener("change-banner-dialogue", handleOpen);
       return () => {
-        eventTarget?.removeEventListener("upload-image-dialogue", handleOpen);
+        eventTarget?.removeEventListener("change-banner-dialogue", handleOpen);
       };
     }
   }, [eventTarget]);
@@ -51,7 +50,10 @@ export default function UploadImageDialogue() {
     } else if (error === null) {
       if (url && editor) {
         setTimeout(() => {
-          insertImage(editor, { src: url });
+          const event = new CustomEvent("banner-changed", {
+            detail: { banner: url },
+          });
+          eventTarget?.dispatchEvent(event);
           closeRef.current?.click();
         }, 0);
       }
@@ -83,7 +85,7 @@ export default function UploadImageDialogue() {
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      setSource("/iu-holder.webp");
+      setSource("/default-banner.png");
       if (inputRef.current) {
         inputRef.current.value = "";
       }
@@ -95,13 +97,13 @@ export default function UploadImageDialogue() {
       <DialogTrigger ref={triggerRef}></DialogTrigger>
       <DialogContent className="font-funnel">
         <DialogHeader>
-          <DialogTitle>Upload an Image</DialogTitle>
+          <DialogTitle>Change The Banner</DialogTitle>
           <DialogDescription>
-            Pick an image in order to upload it.
+            Pick an image in order change the banner of this article.
           </DialogDescription>
         </DialogHeader>
         <Img
-          className="max-h-52 w-auto mx-auto my-1 rounded-md bg-gray-400"
+          className="w-full max-w-[24rem] aspect-[7/4] mx-auto my-1 rounded-md bg-gray-400"
           src={source}
         />
         <Container className="flex gap-x-2 justify-center">
@@ -134,4 +136,6 @@ export default function UploadImageDialogue() {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default ChangeBannerDialogue;

@@ -12,15 +12,9 @@ interface TextEditorProps {
   article: Article | undefined;
   onSave: (aticle: Article | undefined) => void;
   onRemove: (article: Article | undefined) => void;
-  onBannerChange: (file: File | undefined) => void;
 }
 
-const TextEditor: FC<TextEditorProps> = ({
-  article,
-  onSave,
-  onRemove,
-  onBannerChange,
-}) => {
+const TextEditor: FC<TextEditorProps> = ({ article, onSave, onRemove }) => {
   const editor = useEditor({
     extensions: extensions,
     content: "<p>Contents of your article...<p><br />",
@@ -36,7 +30,6 @@ const TextEditor: FC<TextEditorProps> = ({
       article={article}
       onSave={onSave}
       onRemove={onRemove}
-      onBannerChange={onBannerChange}
     >
       <DialogueProvider>
         <Container className="w-[50rem] flex flex-col h-full mx-4 mt-6">

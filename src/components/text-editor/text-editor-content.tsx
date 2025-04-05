@@ -8,17 +8,38 @@ import Img from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
 import EditorToolbar from "@/components/text-editor/editor-toolbar";
+import { useDialogue } from "@/hooks/dialogue";
 
 interface TextEditorContentProps {
   className?: string;
 }
 
 const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
-  const { editor, article, onBannerChange, setArticle } = useTextEditor();
+  const { editor, article, setArticle, onSave } = useTextEditor();
+  const { eventTarget, changeBannerDialogue } = useDialogue();
 
   const titleRef = useRef<HTMLInputElement>(null);
   const bannerImgRef = useRef<HTMLImageElement>(null);
-  const bannerInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (eventTarget) {
+      const handleBannerChanged = (event: Event) => {
+        const customEvent = event as CustomEvent;
+        if (article && customEvent.detail.banner) {
+          const newArticle = {
+            ...article,
+            banner: customEvent.detail.banner,
+          };
+          setArticle(newArticle);
+          onSave(newArticle);
+        }
+      };
+      eventTarget.addEventListener("banner-changed", handleBannerChanged);
+      return () => {
+        eventTarget.removeEventListener("benner-changed", handleBannerChanged);
+      };
+    }
+  }, [eventTarget]);
 
   useEffect(() => {
     if (article && editor) {
@@ -36,13 +57,8 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
     }
   };
 
-  const changeBanner = async () => {
-    const file = bannerInputRef.current?.files?.[0];
-    onBannerChange(file);
-  };
-
   const clickBanner = () => {
-    if (bannerInputRef.current) bannerInputRef.current?.click();
+    if (changeBannerDialogue) changeBannerDialogue();
   };
 
   return (
@@ -54,13 +70,6 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
             src={article?.banner ? article.banner : "/default-banner.png"}
             onClick={clickBanner}
             className="w-full h-full aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 cursor-pointer group-hover:brightness-[0.7] group-hover:blur-[1px]"
-          />
-          <Input
-            ref={bannerInputRef}
-            type="file"
-            accept="image/*"
-            onChange={changeBanner}
-            className="hidden"
           />
           <span
             onClick={clickBanner}

@@ -11,42 +11,34 @@ import {
 } from "@/components/ui/dialog";
 import { useDialogue } from "@/hooks/dialogue";
 import { useTextEditor } from "@/hooks/text-editor";
-import { Article } from "@/lib/api";
 import { useEffect, useRef } from "react";
 
 const ArticleVisibilityDialogue = () => {
-  const textEditor = useTextEditor();
-  const dialogues = useDialogue();
+  const { article } = useTextEditor();
+  const { eventTarget } = useDialogue();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (dialogues.eventTarget) {
+    if (eventTarget) {
       const handleOpen = () => triggerRef?.current?.click();
-
-      dialogues.eventTarget.addEventListener(
-        "article-visibility-dialogue",
-        handleOpen
-      );
-
+      eventTarget.addEventListener("article-visibility-dialogue", handleOpen);
       return () => {
-        dialogues.eventTarget?.removeEventListener(
+        eventTarget?.removeEventListener(
           "article-visibility-dialogue",
           handleOpen
         );
       };
     }
-  }, [dialogues.eventTarget]);
+  }, [eventTarget]);
 
   const changeVisibility = async () => {
-    const previousArticle = textEditor.article;
-    if (previousArticle) {
-      const newArticle = {
-        ...(previousArticle as Article),
-        public: !previousArticle.public,
-      };
-
-      textEditor.setArticle(newArticle);
+    if (eventTarget) {
+      eventTarget.dispatchEvent(
+        new CustomEvent("visibility-changed", {
+          detail: { public: !article?.public },
+        })
+      );
     }
   };
 
@@ -57,7 +49,7 @@ const ArticleVisibilityDialogue = () => {
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
           <DialogDescription>
-            {textEditor.article?.public
+            {article?.public
               ? "After you confirm and save, this article will be marked as private, which means only you will be able to see it."
               : "After you confirm and save, this article will be marked as public, which means everyone will be able to read it."}
           </DialogDescription>

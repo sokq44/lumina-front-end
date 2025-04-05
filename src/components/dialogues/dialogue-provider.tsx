@@ -4,6 +4,7 @@ import LogoutDialogue from "@/components/dialogues/logout-dialogoue";
 import AddLinkDialogue from "@/components/dialogues/add-link-dialogue";
 import UploadImageDialogue from "@/components/dialogues/upload-image-dialog";
 import AddYTVideoDialogue from "@/components/dialogues/add-yt-video-dialogue";
+import ChangeBannerDialogue from "@/components/dialogues/change-banner-dialogue";
 import DeleteArticleDialogue from "@/components/dialogues/delete-article-dialogue";
 import ProfilePictureDialogue from "@/components/dialogues/profile-picture-dialogue";
 import ArticleVisibilityDialogue from "@/components/dialogues/article-visibility-dialogue";
@@ -23,15 +24,18 @@ const DialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
         addLinkDialogue: () => dispatch("upload-image-dialogue"),
         uploadImageDialogue: () => dispatch("upload-image-dialogue"),
         youtubeVideoDialogue: () => dispatch("add-yt-video-dialogue"),
+        changeBannerDialogue: () => dispatch("change-banner-dialogue"),
         deleteArticleDialogue: () => dispatch("delete-article-dialogue"),
         profilePictureDialogue: () => dispatch("change-profile-picture"),
-        articleVisibilityDialogue: () => dispatch("article-visibility-dialogue"),
+        articleVisibilityDialogue: () =>
+          dispatch("article-visibility-dialogue"),
       }}
     >
       <LogoutDialogue />
       <AddLinkDialogue />
       <AddYTVideoDialogue />
       <UploadImageDialogue />
+      <ChangeBannerDialogue />
       <DeleteArticleDialogue />
       <ProfilePictureDialogue />
       <ArticleVisibilityDialogue />

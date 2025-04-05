@@ -8,7 +8,6 @@ interface TextEditorProviderProps {
   article: Article | undefined;
   onSave: (article: Article | undefined) => void;
   onRemove: (article: Article | undefined) => void;
-  onBannerChange: (file: File | undefined) => void;
   children: React.ReactNode;
 }
 
@@ -17,7 +16,6 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
   editor,
   onSave,
   onRemove,
-  onBannerChange,
   children,
 }) => {
   const [currentArticle, setCurrentArticle] = useState<Article | undefined>(
@@ -55,7 +53,6 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
         onSave: onSave,
         onRemove: onRemove,
         setArticle: setCurrentArticle,
-        onBannerChange: onBannerChange,
         finishArticle: finishArticle,
       }}
     >

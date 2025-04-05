@@ -7,7 +7,6 @@ export const TextEditorContext = createContext<{
   article: Article | undefined;
   onSave: (article: Article | undefined) => void;
   onRemove: (article: Article | undefined) => void;
-  onBannerChange: (file: File | undefined) => void;
   setArticle: (article: Article | undefined) => void;
   finishArticle: () => void;
 }>({
@@ -15,7 +14,6 @@ export const TextEditorContext = createContext<{
   article: undefined,
   onSave: () => {},
   onRemove: () => {},
-  onBannerChange: () => {},
   setArticle: () => {},
   finishArticle: () => {},
 });

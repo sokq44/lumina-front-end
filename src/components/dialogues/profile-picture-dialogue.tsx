@@ -65,7 +65,6 @@ const ProfilePictureDialogue = () => {
             })
           );
           closeRef.current?.click();
-          setSource("/default-profile-picture.png");
         }, 0);
       }
     }
@@ -94,8 +93,17 @@ const ProfilePictureDialogue = () => {
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setSource("/iu-holder.webp");
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={(open) => handleOpenChange(open)}>
       <DialogTrigger ref={triggerRef}></DialogTrigger>
       <DialogContent className="font-funnel">
         <DialogHeader>
