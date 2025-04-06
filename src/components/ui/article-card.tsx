@@ -9,7 +9,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import Img from "@/components/ui/image";
-import Informative from "@/components/inform-badge/informative";
+import Informative from "@/components/ui/informative";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {

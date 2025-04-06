@@ -1,6 +1,6 @@
 import { FC, ReactNode, useState } from "react";
-import { InformBadgeContext } from "@/hooks/inform-badge";
-import { useMousePosition } from "@/hooks/mouse-position";
+import { InformBadgeContext } from "@/hooks/use-inform-badge";
+import { useMousePosition } from "@/hooks/use-mouse-position";
 import { Badge } from "@/components/ui/badge";
 
 interface InformBadgerProps {

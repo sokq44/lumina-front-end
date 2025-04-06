@@ -4,9 +4,9 @@ import { Article } from "@/lib/api";
 import { extensions } from "@/lib/editor-extensions/extensions";
 import Container from "@/components/ui/container";
 import TextEditorMenu from "@/components/text-editor/text-editor-menu";
-import DialogueProvider from "@/components/dialogues/dialogue-provider";
+import DialogueProvider from "@/components/providers/dialogue-provider";
 import TextEditorContent from "@/components/text-editor/text-editor-content";
-import TextEditorProvider from "@/components/text-editor/text-editor-provider";
+import TextEditorProvider from "@/components/providers/text-editor-provider";
 
 interface TextEditorProps {
   article: Article | undefined;

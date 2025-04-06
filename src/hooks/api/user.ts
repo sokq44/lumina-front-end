@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { client, User } from "@/lib/api";
 import { grabErrorMessage } from "@/lib/utils";
 
-export function useRegister(): {
+export function useUserRegistrar(): {
   register: (username: string, email: string, password: string) => void;
   attempts: number;
   isLoading: boolean;
@@ -38,7 +38,7 @@ export function useRegister(): {
   return { register, attempts, isLoading, error };
 }
 
-export function useLogin(): {
+export function useUserAuthenticator(): {
   login: (email: string, password: string) => void;
   isLoading: boolean;
   error: string | undefined | null;
@@ -67,7 +67,7 @@ export function useLogin(): {
   return { login, isLoading, error };
 }
 
-export function useLoggedIn(): {
+export function useUserValidator(): {
   isLoggedIn: boolean | undefined;
   isLoading: boolean;
   error: string | undefined | null;
@@ -100,7 +100,7 @@ export function useLoggedIn(): {
   return { isLoggedIn, isLoading, error };
 }
 
-export function useLogout(): {
+export function useSessionTerminator(): {
   logout: () => Promise<void>;
   isLoading: boolean;
   error: string | undefined | null;
@@ -126,7 +126,7 @@ export function useLogout(): {
   return { logout, isLoading, error };
 }
 
-export function useVerifyUser(token: string | undefined): {
+export function useUserVerifier(token: string | undefined): {
   isLoading: boolean;
   error: string | undefined | null;
 } {
@@ -160,7 +160,7 @@ export function useVerifyUser(token: string | undefined): {
   return { isLoading, error };
 }
 
-export function usePasswordChangeInit(): {
+export function usePasswordChangeInitializer(): {
   init: (token: string) => void;
   attempts: number;
   isLoading: boolean;
@@ -190,7 +190,7 @@ export function usePasswordChangeInit(): {
   return { init, attempts, isLoading, error };
 }
 
-export function useChangePassword(token: string | undefined): {
+export function usePasswordChanger(token: string | undefined): {
   change: (password: string) => void;
   isLoading: boolean;
   error: string | undefined | null;
@@ -221,7 +221,7 @@ export function useChangePassword(token: string | undefined): {
   return { change, isLoading, error };
 }
 
-export function usePasswordChangeValid(token: string | undefined): {
+export function usePasswordChangeValidator(token: string | undefined): {
   valid: boolean | undefined;
   isLoading: boolean;
   error: string | undefined | null;
@@ -259,7 +259,7 @@ export function usePasswordChangeValid(token: string | undefined): {
   return { valid, isLoading, error };
 }
 
-export function useGetUser(): {
+export function useUserGetter(): {
   user: User | null;
   getUser: () => void;
   isLoading: boolean;
@@ -292,7 +292,7 @@ export function useGetUser(): {
   return { user, getUser, isLoading, error };
 }
 
-export function useModifyUser(): {
+export function useUserModifier(): {
   modify: (user: User) => void;
   isLoading: boolean;
   error: string | undefined | null;

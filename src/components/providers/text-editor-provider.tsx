@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Editor } from "@tiptap/react";
 import { Article } from "@/lib/api";
-import { TextEditorContext } from "@/hooks/text-editor";
+import { TextEditorContext } from "@/hooks/use-text-editor";
 
 interface TextEditorProviderProps {
   editor: Editor | undefined;

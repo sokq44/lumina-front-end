@@ -18,4 +18,10 @@ export const TextEditorContext = createContext<{
   finishArticle: () => {},
 });
 
-export const useTextEditor = () => useContext(TextEditorContext);
+export const useTextEditor = () => {
+  const context = useContext(TextEditorContext);
+  if (!context) {
+    throw new Error("useTextEditor must be used within a TextEditorProvider");
+  }
+  return context;
+};

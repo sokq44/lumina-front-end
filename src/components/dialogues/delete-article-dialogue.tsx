@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useTextEditor } from "@/hooks/text-editor";
-import { useDialogue } from "@/hooks/dialogue";
+import { useTextEditor } from "@/hooks/use-text-editor";
+import { useDialogue } from "@/hooks/use-dialogue";
 import {
   Dialog,
   DialogClose,

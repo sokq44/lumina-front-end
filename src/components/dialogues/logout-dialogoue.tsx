@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLogout } from "@/hooks/user";
+import { useSessionTerminator } from "@/hooks/api/user";
 import { useToast } from "@/hooks/use-toast";
-import { useDialogue } from "@/hooks/dialogue";
+import { useDialogue } from "@/hooks/use-dialogue";
 import {
   Dialog,
   DialogTitle,
@@ -20,7 +20,7 @@ export default function LogoutDialogue() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const dialogues = useDialogue();
-  const { logout, error, isLoading } = useLogout();
+  const { logout, error, isLoading } = useSessionTerminator();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);

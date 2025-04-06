@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useGetSuggestedArticles } from "@/hooks/articles";
 import { useToast } from "@/hooks/use-toast";
+import { useSuggestedArticlesGetter } from "@/hooks/api/articles";
 import Container from "@/components/ui/container";
 import ArticleCard from "@/components/ui/article-card";
-import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import LoadingScreen from "@/components/wraps/loading-screen";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 
 const SuggestedArticlesPage = () => {
   const { toast } = useToast();
-  const { articles, isLoading, error } = useGetSuggestedArticles();
+  const { articles, isLoading, error } = useSuggestedArticlesGetter();
 
   useEffect(() => {
     if (error) {

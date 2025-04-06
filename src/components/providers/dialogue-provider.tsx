@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { DialogueContext } from "@/hooks/dialogue";
+import { DialogueContext } from "@/hooks/use-dialogue";
 import LogoutDialogue from "@/components/dialogues/logout-dialogoue";
 import AddLinkDialogue from "@/components/dialogues/add-link-dialogue";
 import UploadImageDialogue from "@/components/dialogues/upload-image-dialog";
@@ -21,7 +21,7 @@ const DialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
       value={{
         eventTarget,
         logoutDialogue: () => dispatch("logout-dialogue"),
-        addLinkDialogue: () => dispatch("upload-image-dialogue"),
+        addLinkDialogue: () => dispatch("add-link-dialogue"),
         uploadImageDialogue: () => dispatch("upload-image-dialogue"),
         youtubeVideoDialogue: () => dispatch("add-yt-video-dialogue"),
         changeBannerDialogue: () => dispatch("change-banner-dialogue"),

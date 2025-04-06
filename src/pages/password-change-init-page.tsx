@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
-import { z } from "zod";
-import { passwordChangeInitSchema } from "@/lib/schemas";
+import {
+  PasswordChangeInitForm,
+  passwordChangeInitSchema,
+} from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { usePasswordChangeInit } from "@/hooks/user";
+import { usePasswordChangeInitializer } from "@/hooks/api/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import GoBackArrow from "@/components/ui/go-back-arrow";
 import { LoaderCircle, MailQuestion } from "lucide-react";
 
 const PasswordChangeInitPage = () => {
-  const { init, attempts, isLoading, error } = usePasswordChangeInit();
   const { toast } = useToast();
+  const { init, attempts, isLoading, error } = usePasswordChangeInitializer();
   const [sentMessage, setSentMessage] = useState<string>("");
 
-  const form = useForm<z.infer<typeof passwordChangeInitSchema>>({
+  const form = useForm<PasswordChangeInitForm>({
     resolver: zodResolver(passwordChangeInitSchema),
     defaultValues: {
       email: "",
@@ -39,12 +41,9 @@ const PasswordChangeInitPage = () => {
     }
   }, [error, attempts, form, toast]);
 
-  const onSubmit = async (v: z.infer<typeof passwordChangeInitSchema>) =>
-    init(v.email);
+  const onSubmit = async (v: PasswordChangeInitForm) => init(v.email);
 
-  const onError = async (
-    errors: FieldErrors<z.infer<typeof passwordChangeInitSchema>>
-  ) => {
+  const onError = async (errors: FieldErrors<PasswordChangeInitForm>) => {
     const message: string = Object.entries(errors).map(
       (entry) => (entry[1].message as string) ?? entry
     )[0];

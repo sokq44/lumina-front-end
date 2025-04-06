@@ -1,6 +1,6 @@
 import { FormEventHandler, useEffect, useRef, useState } from "react";
-import { useTextEditor } from "@/hooks/text-editor";
-import { useDialogue } from "@/hooks/dialogue";
+import { useTextEditor } from "@/hooks/use-text-editor";
+import { useDialogue } from "@/hooks/use-dialogue";
 import {
   Dialog,
   DialogTitle,

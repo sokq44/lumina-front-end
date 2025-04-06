@@ -12,4 +12,10 @@ export const DialogueContext = createContext<{
   articleVisibilityDialogue?: () => void;
 }>({});
 
-export const useDialogue = () => useContext(DialogueContext);
+export const useDialogue = () => {
+  const context = useContext(DialogueContext);
+  if (!context) {
+    throw new Error("useDialogue must be used within a DialogueProvider");
+  }
+  return context;
+};

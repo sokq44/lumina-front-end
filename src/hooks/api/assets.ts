@@ -2,7 +2,7 @@ import { useState } from "react";
 import { client } from "@/lib/api";
 import { dummyTimeout, grabErrorMessage } from "@/lib/utils";
 
-export function useUploadAsset(): {
+export function useAssetUploader(): {
   url: string | null;
   upload: (file: File) => void;
   attempts: number;

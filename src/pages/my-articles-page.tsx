@@ -1,31 +1,30 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { PenLine } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useGetArticles } from "@/hooks/articles";
+import { useArticlesGetter } from "@/hooks/api/articles";
+import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import ArticleCard from "@/components/ui/article-card";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { PenLine } from "lucide-react";
-import { Less, MediaQuery, More } from "@/components/wraps/media-query";
-import { Button } from "@/components/ui/button";
 import LoadingScreen from "@/components/wraps/loading-screen";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 
 const MyArticlesPage = () => {
-  const navigate = useNavigate();
-  const articlesGetter = useGetArticles();
   const { toast } = useToast();
+  const { articles, error, isLoading } = useArticlesGetter();
 
   useEffect(() => {
-    if (articlesGetter.error) {
+    if (error) {
       toast({
         variant: "destructive",
         title: "Problem With Saving",
-        description: articlesGetter.error,
+        description: error,
       });
     }
-  }, [articlesGetter.error, toast, navigate]);
+  }, [error]);
 
-  if (articlesGetter.isLoading) {
+  if (isLoading) {
     return (
       <Container className="w-screen h-screen">
         <LoadingScreen>Retrieving Articles...</LoadingScreen>
@@ -37,7 +36,7 @@ const MyArticlesPage = () => {
     <MediaQuery>
       <More>
         <Container className="flex flex-col items-center justify-center gap-y-8 w-full h-full">
-          {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
+          {articles && articles.length > 0 ? (
             <Container className="grid grid-cols-4 gap-x-12 gap-y-8 items-center px-4 2xl:grid-cols-5">
               <Link
                 to={"/writing"}
@@ -52,7 +51,7 @@ const MyArticlesPage = () => {
                   </CardDescription>
                 </Card>
               </Link>
-              {articlesGetter.articles.map((article, index) => (
+              {articles.map((article, index) => (
                 <Link
                   to={"/writing"}
                   state={{ article: article }}
@@ -82,9 +81,9 @@ const MyArticlesPage = () => {
         </Container>
       </More>
       <Less>
-        {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
+        {articles && articles.length > 0 ? (
           <Container className="w-full h-full flex flex-col items-center gap-y-4 px-2">
-            {articlesGetter.articles.map((article, index) => (
+            {articles.map((article, index) => (
               <Link
                 to={"/user/writing"}
                 state={{ article: article }}

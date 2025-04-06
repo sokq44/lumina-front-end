@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Container from "@/components/ui/container";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Link } from "react-router-dom";
 

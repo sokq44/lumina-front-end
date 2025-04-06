@@ -57,6 +57,7 @@ export const extensions: Extensions = [
     HTMLAttributes: {
       class: "tip-tap-link",
     },
+    shouldAutoLink: (url) => url.startsWith("https://"),
   }),
   Table.configure({
     resizable: true,

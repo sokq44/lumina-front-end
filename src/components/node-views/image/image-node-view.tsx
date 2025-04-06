@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useTextEditor } from "@/hooks/text-editor";
+import { useTextEditor } from "@/hooks/use-text-editor";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import Img from "@/components/ui/image";
 import { Input } from "@/components/ui/input";

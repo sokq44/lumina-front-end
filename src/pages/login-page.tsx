@@ -1,24 +1,21 @@
 import { useEffect } from "react";
-import { z } from "zod";
-import { loginFormSchema } from "@/lib/schemas";
-import { useLogin } from "@/hooks/user";
+import { LoginForm, loginFormSchema } from "@/lib/schemas";
+import { useUserAuthenticator } from "@/hooks/api/user";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
-import { Circle, LoaderCircle, LogIn } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import Authorized from "@/components/wraps/authorized";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import SlidingLink from "@/components/ui/sliding-link";
 import GoBackArrow from "@/components/ui/go-back-arrow";
-
-type LoginForm = z.infer<typeof loginFormSchema>;
+import { Circle, LoaderCircle, LogIn } from "lucide-react";
 
 const LoginPage = () => {
-  const { login, isLoading, error } = useLogin();
+  const { login, isLoading, error } = useUserAuthenticator();
   const { toast } = useToast();
   const navigate = useNavigate();
 

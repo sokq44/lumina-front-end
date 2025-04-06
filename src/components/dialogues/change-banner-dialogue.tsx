@@ -1,8 +1,8 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useDialogue } from "@/hooks/dialogue";
-import { useUploadAsset } from "@/hooks/assets";
-import { useTextEditor } from "@/hooks/text-editor";
+import { useDialogue } from "@/hooks/use-dialogue";
+import { useAssetUploader } from "@/hooks/api/assets";
+import { useTextEditor } from "@/hooks/use-text-editor";
 import {
   Dialog,
   DialogTitle,
@@ -22,7 +22,7 @@ const ChangeBannerDialogue = () => {
   const { toast } = useToast();
   const { editor } = useTextEditor();
   const { eventTarget } = useDialogue();
-  const { upload, url, isLoading, error } = useUploadAsset();
+  const { upload, url, isLoading, error } = useAssetUploader();
 
   const [source, setSource] = useState<string>("/default-banner.png");
 

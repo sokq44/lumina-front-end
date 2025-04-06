@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerFormSchema } from "@/lib/schemas";
-import { useRegister } from "@/hooks/user";
+import { RegisterForm, registerFormSchema } from "@/lib/schemas";
+import { useUserRegistrar } from "@/hooks/api/user";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useForm, FieldErrors } from "react-hook-form";
@@ -11,15 +10,13 @@ import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import SlidingLink from "@/components/ui/sliding-link";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import GoBackArrow from "@/components/ui/go-back-arrow";
-
-type RegisterForm = z.infer<typeof registerFormSchema>;
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { register, attempts, isLoading, error } = useRegister();
+  const { register, attempts, isLoading, error } = useUserRegistrar();
 
   const [email, setEmail] = useState<string>("");
 

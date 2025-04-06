@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect } from "react";
-import { useLoggedIn } from "@/hooks/user";
+import { useUserValidator } from "@/hooks/api/user";
 import Container from "@/components/ui/container";
 import LoadingScreen from "@/components/wraps/loading-screen";
 
@@ -10,7 +10,7 @@ interface AuthorizedProps {
 }
 
 const Authorized: FC<AuthorizedProps> = ({ onSuccess, onFail, children }) => {
-  const { isLoggedIn, isLoading } = useLoggedIn();
+  const { isLoggedIn, isLoading } = useUserValidator();
 
   useEffect(() => {
     if (isLoggedIn === false) {

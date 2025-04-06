@@ -1,34 +1,33 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { changePasswordFormSchema } from "@/lib/schemas";
+import { ChangePasswordForm, changePasswordFormSchema } from "@/lib/schemas";
 import {
-  useLogout,
-  useChangePassword,
-  usePasswordChangeValid,
-} from "@/hooks/user";
+  usePasswordChanger,
+  useSessionTerminator,
+  usePasswordChangeValidator,
+} from "@/hooks/api/user";
 import { useToast } from "@/hooks/use-toast";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import { KeyRound, LoaderCircle } from "lucide-react";
 
 const PasswordChangePage = () => {
-  const logout = useLogout();
   const { toast } = useToast();
   const { token } = useParams();
   const navigate = useNavigate();
-  const changePassword = useChangePassword(token);
-  const changePasswordValid = usePasswordChangeValid(token);
+  const sessionTerminator = useSessionTerminator();
+  const passwordChanger = usePasswordChanger(token);
+  const passwordChangeValidator = usePasswordChangeValidator(token);
 
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
-  const form = useForm<z.infer<typeof changePasswordFormSchema>>({
+  const form = useForm<ChangePasswordForm>({
     resolver: zodResolver(changePasswordFormSchema),
     defaultValues: {
       password: "",
@@ -41,43 +40,41 @@ const PasswordChangePage = () => {
   }, [token, navigate]);
 
   useEffect(() => {
-    if (changePasswordValid.error) {
+    if (passwordChangeValidator.error) {
       setTitle("Password Change Error");
       setMessage(
-        changePasswordValid.error ||
+        passwordChangeValidator.error ||
           "We encountered a problem while veifying this password change request. Please try again later."
       );
     }
-  }, [changePasswordValid.error, toast]);
+  }, [passwordChangeValidator.error, toast]);
 
   useEffect(() => {
-    if (changePassword.error) {
+    if (passwordChanger.error) {
       form.reset();
       toast({
         variant: "destructive",
         title: "Password Change Error",
         description:
-          changePassword.error ||
+          passwordChanger.error ||
           "We encountered a problem while changing your password. Please try again later.",
       });
-    } else if (changePassword.error === null) {
+    } else if (passwordChanger.error === null) {
       setTitle("Password Changed");
       setMessage(
         "Your password has been successfully updated. You may now close this window and log in with your new password."
       );
     }
-  }, [changePassword.error, toast, form]);
+  }, [passwordChanger.error]);
 
-  const onSubmit = async (values: z.infer<typeof changePasswordFormSchema>) => {
+  const onSubmit = async (values: ChangePasswordForm) => {
     if (token) {
-      await logout.logout();
-      await changePassword.change(values.password);
+      await sessionTerminator.logout();
+      await passwordChanger.change(values.password);
     }
   };
 
-  const onError = async (
-    errors: FieldErrors<z.infer<typeof changePasswordFormSchema>>
-  ) => {
+  const onError = async (errors: FieldErrors<ChangePasswordForm>) => {
     const message: string = Object.entries(errors).map(
       (entry) => (entry[1].message as string) ?? entry
     )[0];
@@ -93,8 +90,6 @@ const PasswordChangePage = () => {
     }
   };
 
-  const anyError = changePassword.error || changePasswordValid.error;
-
   return (
     <Container className="bg-background flex items-center justify-center h-screen">
       <ThemeSwitch position="top-right" />
@@ -104,7 +99,9 @@ const PasswordChangePage = () => {
             <>
               <span
                 className={cn(
-                  anyError ? "text-destructive" : "text-success",
+                  passwordChanger.error || passwordChangeValidator.error
+                    ? "text-destructive"
+                    : "text-success",
                   "text-xl font-bold text-center tracking-wide leading-relaxed px-4"
                 )}
               >
@@ -125,14 +122,14 @@ const PasswordChangePage = () => {
                 autoComplete="off"
               >
                 <Input
-                  disabled={changePassword.isLoading}
+                  disabled={passwordChanger.isLoading}
                   type="password"
                   placeholder="Enter new password"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("password")}
                 />
                 <Input
-                  disabled={changePassword.isLoading}
+                  disabled={passwordChanger.isLoading}
                   type="password"
                   placeholder="Confirm new password"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
@@ -140,14 +137,14 @@ const PasswordChangePage = () => {
                 />
                 <Button
                   variant={
-                    changePassword.isLoading
+                    passwordChanger.isLoading
                       ? "formSubmitAwaiting"
                       : "formSubmit"
                   }
                   type="submit"
                   className="w-full text-secondary transition-all duration-300"
                 >
-                  {changePassword.isLoading ? (
+                  {passwordChanger.isLoading ? (
                     <LoaderCircle
                       size={24}
                       className="animate-spin text-secondary"

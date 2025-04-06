@@ -1,7 +1,7 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useDialogue } from "@/hooks/dialogue";
-import { useUploadAsset } from "@/hooks/assets";
+import { useDialogue } from "@/hooks/use-dialogue";
+import { useAssetUploader } from "@/hooks/api/assets";
 import {
   Dialog,
   DialogClose,
@@ -20,7 +20,7 @@ import Container from "@/components/ui/container";
 const ProfilePictureDialogue = () => {
   const { toast } = useToast();
   const dialogues = useDialogue();
-  const { url, upload, isLoading, error } = useUploadAsset();
+  const { url, upload, isLoading, error } = useAssetUploader();
 
   const [source, setSource] = useState<string>("/default-profile-picture.png");
 

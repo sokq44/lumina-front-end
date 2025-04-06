@@ -9,8 +9,8 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { useDialogue } from "@/hooks/dialogue";
-import { useTextEditor } from "@/hooks/text-editor";
+import { useDialogue } from "@/hooks/use-dialogue";
+import { useTextEditor } from "@/hooks/use-text-editor";
 import { useEffect, useRef } from "react";
 
 const ArticleVisibilityDialogue = () => {

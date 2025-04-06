@@ -21,9 +21,9 @@ import PasswordChangeInitPage from "@/pages/password-change-init-page";
 
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/theme/theme-provider";
-import InformBadger from "@/components/inform-badge/inform-badger";
-import DialogueProvider from "@/components/dialogues/dialogue-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import InformBadger from "@/components/providers/inform-badger";
+import DialogueProvider from "@/components/providers/dialogue-provider";
 
 import "@/index.css";
 
@@ -42,9 +42,9 @@ import "@/index.css";
  *
  * @todo tracking changes within an article
  *
- * @todo define prohibited protocols and urls for the Link extension
+ * migration to tailwind 4 and update of the packages
  *
- * @todo more user-friendly process of uploading pictures, banner image and profile image (lazy loading)
+ * @todo define prohibited protocols and urls for the Link extension (done)
  *
  * <===================>
  */
@@ -114,7 +114,12 @@ const router = createBrowserRouter([
         path: "account",
         element: (
           <Link to={"/password"}>
-            <Button variant="secondary">Change your password</Button>
+            <Button
+              variant="secondary"
+              className="cursor-pointer transition-all duration-300"
+            >
+              Change your password
+            </Button>
           </Link>
         ),
         errorElement: <ErrorPage />,

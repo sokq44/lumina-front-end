@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { useInformBadge } from "@/hooks/inform-badge";
+import { useInformBadge } from "@/hooks/use-inform-badge";
 import Container from "@/components/ui/container";
 
 interface InformativeProps {

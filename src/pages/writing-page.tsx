@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { Article } from "@/lib/api";
 import { getArticleWidthId } from "@/lib/utils";
 import {
-  useGetArticle,
-  useSaveArticle,
-  useRemoveArticle,
-} from "@/hooks/articles";
+  useArticleSaver,
+  useArticleGetter,
+  useArticleRemover,
+} from "@/hooks/api/articles";
 import { useToast } from "@/hooks/use-toast";
-import { useUploadAsset } from "@/hooks/assets";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Dialog,
@@ -23,7 +22,7 @@ import { CornerUpLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import Authorized from "@/components/wraps/authorized";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import TextEditor from "@/components/text-editor/text-editor";
 import LoadingScreen from "@/components/wraps/loading-screen";
 
@@ -34,10 +33,9 @@ export default function WritingPage() {
 
   const [article, setArticle] = useState<Article | undefined>(undefined);
 
-  const assetUploader = useUploadAsset();
-  const articleRemover = useRemoveArticle();
-  const articleSaver = useSaveArticle(state.article?.id);
-  const articleGetter = useGetArticle(state.article?.id);
+  const articleRemover = useArticleRemover();
+  const articleSaver = useArticleSaver(state.article?.id);
+  const articleGetter = useArticleGetter(state.article?.id);
 
   useEffect(() => {
     if (state == null) navigate(-1);
@@ -87,18 +85,6 @@ export default function WritingPage() {
       navigate("/user/my-articles");
     }
   }, [articleRemover.error]);
-
-  useEffect(() => {
-    if (assetUploader.error) {
-      toast({
-        variant: "destructive",
-        title: "Problem With Uploading An Asset",
-        description: assetUploader.error,
-      });
-    } else if (assetUploader.error === null && assetUploader.url) {
-      setArticle({ ...article, banner: assetUploader.url } as Article);
-    }
-  }, [assetUploader.error]);
 
   useEffect(() => {
     if (articleSaver.id && !article) {

@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Article } from "./api";
+import { Article } from "@/lib/api";
 import { JSONContent } from "@tiptap/react";
 import ImageArticleSection from "@/components/node-views/image/image-article-section";
 import { DOMNode, Element } from "html-react-parser";

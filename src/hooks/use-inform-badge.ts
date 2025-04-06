@@ -12,9 +12,7 @@ export const InformBadgeContext = createContext<
 export const useInformBadge = () => {
   const context = useContext(InformBadgeContext);
   if (!context) {
-    throw new Error(
-      "useInformBadge must be used within an InformBadgeProvider"
-    );
+    throw new Error("useInformBadge must be used within an InformBadger");
   }
   return context;
 };

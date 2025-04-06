@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
-import { useVerifyUser } from "@/hooks/user";
+import { useUserVerifier } from "@/hooks/api/user";
 import { MailCheck, MailX } from "lucide-react";
 import Container from "@/components/ui/container";
 import SlidingLink from "@/components/ui/sliding-link";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import { cn } from "@/lib/utils";
 import LoadingScreen from "@/components/wraps/loading-screen";
 
 const EmailVerifiedPage = () => {
-  const { token } = useParams();
   const { toast } = useToast();
-  const { error, isLoading } = useVerifyUser(token);
+  const { token } = useParams();
+  const { error, isLoading } = useUserVerifier(token);
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");

@@ -1,28 +1,25 @@
-import { useEffect, useState } from "react";
-import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { User } from "@/lib/api";
-import { modifyUserFormSchema } from "@/lib/schemas";
-import { useToast } from "@/hooks/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldErrors, useForm } from "react-hook-form";
-import { useGetUser, useModifyUser } from "@/hooks/user";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Container from "@/components/ui/container";
+import { useDialogue } from "@/hooks/use-dialogue";
 import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldErrors, useForm } from "react-hook-form";
+import { useUserGetter, useUserModifier } from "@/hooks/api/user";
+import { ModifyUserForm, modifyUserFormSchema } from "@/lib/schemas";
+import { ImageUp, LoaderCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { ImageUp, LoaderCircle } from "lucide-react";
-import { useDialogue } from "@/hooks/dialogue";
-
-type ModifyUserForm = z.infer<typeof modifyUserFormSchema>;
 
 const ProfilePage = () => {
   const { toast } = useToast();
-  const userGetter = useGetUser();
-  const userModifier = useModifyUser();
+  const userGetter = useUserGetter();
+  const userModifier = useUserModifier();
   const { profilePictureDialogue, eventTarget } = useDialogue();
 
   const [modifying, setModifying] = useState<boolean>(false);
@@ -37,21 +34,30 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
-    const changed = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const newUser = {
-        ...currentUser,
-        image: customEvent.detail.picture,
-      } as User;
-      setCurrentUser(newUser);
-      userModifier.modify(newUser);
-    };
-
-    eventTarget?.addEventListener("profile-picture-changed", changed);
-
-    return () => {
-      eventTarget?.removeEventListener("profile-picture-changed", changed);
-    };
+    if (eventTarget) {
+      const changed = (event: Event) => {
+        setTimeout(() => {
+          const customEvent = event as CustomEvent;
+          setCurrentUser((prevUser) => {
+            if (prevUser) {
+              userModifier.modify({
+                ...prevUser,
+                image: customEvent.detail.picture,
+              } as User);
+              return {
+                ...prevUser,
+                image: customEvent.detail.picture,
+              };
+            }
+            return prevUser;
+          });
+        }, 0);
+      };
+      eventTarget.addEventListener("profile-picture-changed", changed);
+      return () => {
+        eventTarget.removeEventListener("profile-picture-changed", changed);
+      };
+    }
   }, [eventTarget]);
 
   useEffect(() => {
@@ -140,7 +146,7 @@ const ProfilePage = () => {
             onClick={profilePictureDialogue}
             className={cn(
               modifying ? "visible" : "hidden",
-              " gap-x-2 p-3 transition-all duration-300"
+              " gap-x-2 p-3 cursor-pointer transition-all duration-300"
             )}
           >
             <ImageUp />
@@ -198,7 +204,7 @@ const ProfilePage = () => {
                   variant="secondary"
                   disabled={isLoading}
                   onClick={onCancelModifying}
-                  className="w-full transition-all duration-300"
+                  className="w-full cursor-pointer transition-all duration-300"
                 >
                   Cancel
                 </Button>
@@ -207,7 +213,7 @@ const ProfilePage = () => {
                 disabled={isLoading}
                 type="submit"
                 variant={modifying ? "default" : "secondary"}
-                className="w-full transition-all duration-300"
+                className="w-full cursor-pointer transition-all duration-300"
               >
                 {modifying ? (
                   userModifier.isLoading ? (

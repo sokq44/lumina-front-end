@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useTextEditor } from "@/hooks/text-editor";
+import { useTextEditor } from "@/hooks/use-text-editor";
 import { ContextMenuItemProps } from "@radix-ui/react-context-menu";
 import {
   ContextMenuItem,

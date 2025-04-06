@@ -5,12 +5,12 @@ import { Link, useLocation } from "react-router-dom";
 import { extensions } from "@/lib/editor-extensions/extensions";
 import { extensionToElement, formatDate, getArticleContent } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { useGetArticle } from "@/hooks/articles";
+import { useArticleGetter } from "@/hooks/api/articles";
 import Img from "@/components/ui/image";
 import { Badge } from "@/components/ui/badge";
 import Container from "@/components/ui/container";
 import GoBackArrow from "@/components/ui/go-back-arrow";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import LoadingScreen from "@/components/wraps/loading-screen";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -18,7 +18,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 const ArticlePage = () => {
   const { toast } = useToast();
   const { state } = useLocation();
-  const { article, isLoading, error } = useGetArticle(state.article.id);
+  const { article, isLoading, error } = useArticleGetter(state.article.id);
 
   useEffect(() => {
     if (error) {

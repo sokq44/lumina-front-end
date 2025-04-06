@@ -1,13 +1,13 @@
 import { MenuItem, userMenuItems } from "@/lib/menu-items";
-import { useDialogue } from "@/hooks/dialogue";
+import { useDialogue } from "@/hooks/use-dialogue";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import UserSidebar from "@/components/ui/user-sidebar";
 import Authorized from "@/components/wraps/authorized";
-import ThemeSwitch from "@/components/theme/theme-switch";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import { LogOut, PanelBottom, SunMoon } from "lucide-react";
-import { useTheme } from "@/components/theme/theme-provider";
+import { useTheme } from "@/components/providers/theme-provider";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
@@ -37,8 +37,8 @@ export default function UserPage() {
         <More>
           <SidebarProvider>
             <UserSidebar items={updatedMenuItems} onItemClick={onItemClick} />
+            <SidebarTrigger className="fixed top-0 z-50 m-2 w-10 h-10 rounded-md text-primary cursor-pointer transition-all duration-300 hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15" />
             <Container className="h-screen w-screen">
-              <SidebarTrigger className="fixed top-0 m-2 w-10 h-10 rounded-md text-primary bg-gray-200 dark:bg-secondary/70 cursor-pointer hover:bg-secondary dark:hover:bg-primary/15 transition-all duration-300" />
               <ThemeSwitch position="top-right" />
               <Container className="flex w-full h-full bg-background">
                 <Outlet />

@@ -2,8 +2,8 @@ import { FC, useEffect } from "react";
 import { Article } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { useTextEditor } from "@/hooks/text-editor";
-import { useDialogue } from "@/hooks/dialogue";
+import { useTextEditor } from "@/hooks/use-text-editor";
+import { useDialogue } from "@/hooks/use-dialogue";
 import {
   Link,
   Plus,

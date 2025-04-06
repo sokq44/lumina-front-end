@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Article, client } from "@/lib/api";
 import { grabErrorMessage } from "@/lib/utils";
 
-export function useSaveArticle(articleId?: string): {
+export function useArticleSaver(articleId?: string): {
   save: (article: Article) => Promise<void>;
   id: string;
   isLoading: boolean;
@@ -39,7 +39,7 @@ export function useSaveArticle(articleId?: string): {
   return { save, id, isLoading, error };
 }
 
-export function useGetArticles(): {
+export function useArticlesGetter(): {
   articles: Article[] | null;
   isLoading: boolean;
   error: string | undefined | null;
@@ -73,7 +73,7 @@ export function useGetArticles(): {
   return { articles, isLoading, error };
 }
 
-export function useGetArticle(articleId?: string): {
+export function useArticleGetter(articleId?: string): {
   article: Article | null;
   isLoading: boolean;
   error: string | undefined | null;
@@ -111,7 +111,7 @@ export function useGetArticle(articleId?: string): {
   return { article, isLoading, error };
 }
 
-export function useRemoveArticle(): {
+export function useArticleRemover(): {
   remove: (id: string) => Promise<void>;
   isLoading: boolean;
   error: string | undefined | null;
@@ -140,7 +140,11 @@ export function useRemoveArticle(): {
   return { remove, isLoading, error };
 }
 
-export function useGetSuggestedArticles() {
+export function useSuggestedArticlesGetter(): {
+  articles: Article[] | null;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
   const canFetch = useRef<boolean>(true);
   const [articles, setArticles] = useState<Article[] | null>(null);
   const [error, setError] = useState<string | undefined | null>(undefined);

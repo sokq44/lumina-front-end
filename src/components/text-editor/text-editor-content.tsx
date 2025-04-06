@@ -2,13 +2,13 @@ import { FC, useEffect, useRef } from "react";
 import { cn, formatDate } from "@/lib/utils";
 import { Article } from "@/lib/api";
 import { EditorContent } from "@tiptap/react";
-import { useTextEditor } from "@/hooks/text-editor";
+import { useTextEditor } from "@/hooks/use-text-editor";
 import { Link } from "react-router-dom";
 import Img from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
 import EditorToolbar from "@/components/text-editor/editor-toolbar";
-import { useDialogue } from "@/hooks/dialogue";
+import { useDialogue } from "@/hooks/use-dialogue";
 
 interface TextEditorContentProps {
   className?: string;

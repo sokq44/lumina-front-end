@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { MenuItem } from "@/lib/menu-items";
 import {
   Sidebar,
@@ -8,6 +8,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarGroupContent,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Container from "@/components/ui/container";
 import { Separator } from "@/components/ui/separator";
@@ -19,8 +20,14 @@ interface UserSidebarProps {
 }
 
 const UserSidebar: FC<UserSidebarProps> = ({ items, onItemClick }) => {
+  const { setOpen } = useSidebar();
+
+  useEffect(() => {
+    setOpen(false);
+  }, []);
+
   return (
-    <Sidebar className="border-none">
+    <Sidebar className="border-none min-w-[14rem]">
       <Container className="flex w-full h-full">
         <Container className="flex flex-col w-full">
           <SidebarContent>
@@ -31,11 +38,14 @@ const UserSidebar: FC<UserSidebarProps> = ({ items, onItemClick }) => {
                     <SidebarMenuItem className="list-none" key={item.title}>
                       <SidebarMenuButton
                         asChild
-                        className="w-32 p-2 text-base transition-all duration-300"
+                        className="w-32 p-2 text-base cursor-pointer transition-all duration-300"
                       >
                         <Button
                           variant={"ghost"}
-                          onClick={() => onItemClick(item)}
+                          onClick={() => {
+                            onItemClick(item);
+                            setOpen(false);
+                          }}
                           className="justify-start font-normal"
                         >
                           <item.icon />

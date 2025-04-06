@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { getMenuItem } from "@/lib/text-editor";
-import { useTextEditor } from "@/hooks/text-editor";
+import { useTextEditor } from "@/hooks/use-text-editor";
 import {
   ContextMenuItem,
   ContextMenuShortcut,

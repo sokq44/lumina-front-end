@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { cn, getEmbedUrl } from "@/lib/utils";
-import { useTextEditor } from "@/hooks/text-editor";
+import { useTextEditor } from "@/hooks/use-text-editor";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";

@@ -11,6 +11,7 @@ export const loginFormSchema = z.object({
     .min(1, { message: "This field is required." }),
   password: z.string().min(1, { message: "Password is required." }),
 });
+export type LoginForm = z.infer<typeof loginFormSchema>;
 
 export const registerFormSchema = z
   .object({
@@ -29,6 +30,7 @@ export const registerFormSchema = z
     message: "Passwords don't match.",
     path: ["repeatPass"],
   });
+export type RegisterForm = z.infer<typeof registerFormSchema>;
 
 export const passwordChangeInitSchema = z.object({
   email: z
@@ -36,6 +38,7 @@ export const passwordChangeInitSchema = z.object({
     .email({ message: "Invalid email address" })
     .min(1, { message: "This field is required" }),
 });
+export type PasswordChangeInitForm = z.infer<typeof passwordChangeInitSchema>;
 
 export const changePasswordFormSchema = z
   .object({
@@ -49,6 +52,7 @@ export const changePasswordFormSchema = z
     message: "Passwords don't match",
     path: ["repeat"],
   });
+export type ChangePasswordForm = z.infer<typeof changePasswordFormSchema>;
 
 export const modifyUserFormSchema = z.object({
   username: z
@@ -57,3 +61,4 @@ export const modifyUserFormSchema = z.object({
     .max(50, { message: "Username can't be longer than 50 characters." }),
   email: z.string().email({ message: "Invalid e-mail address." }),
 });
+export type ModifyUserForm = z.infer<typeof modifyUserFormSchema>;

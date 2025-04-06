@@ -1,8 +1,8 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useUploadAsset } from "@/hooks/assets";
-import { useTextEditor } from "@/hooks/text-editor";
-import { useDialogue } from "@/hooks/dialogue";
+import { useAssetUploader } from "@/hooks/api/assets";
+import { useTextEditor } from "@/hooks/use-text-editor";
+import { useDialogue } from "@/hooks/use-dialogue";
 import { insertImage } from "@/lib/editor-extensions/image-extension";
 import {
   Dialog,
@@ -23,7 +23,7 @@ export default function UploadImageDialogue() {
   const { toast } = useToast();
   const { eventTarget } = useDialogue();
   const { editor } = useTextEditor();
-  const { upload, url, isLoading, error } = useUploadAsset();
+  const { upload, url, isLoading, error } = useAssetUploader();
 
   const [source, setSource] = useState<string>("/iu-holder.webp");
 
