@@ -42,10 +42,6 @@ import "@/index.css";
  *
  * @todo tracking changes within an article
  *
- * migration to tailwind 4 and update of the packages
- *
- * @todo define prohibited protocols and urls for the Link extension (done)
- *
  * <===================>
  */
 
