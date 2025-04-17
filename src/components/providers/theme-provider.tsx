@@ -49,7 +49,7 @@ const ThemeProvider = ({
 
       root.classList.add(systemTheme);
     } else {
-      root.classList.add(theme)
+      root.classList.add(theme);
     }
   }, [theme]);
 

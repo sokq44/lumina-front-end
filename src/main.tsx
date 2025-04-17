@@ -21,8 +21,8 @@ import PasswordChangeInitPage from "@/pages/password-change-init-page";
 
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/providers/theme-provider";
 import InformBadger from "@/components/providers/inform-badger";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import DialogueProvider from "@/components/providers/dialogue-provider";
 
 import "@/index.css";
@@ -37,12 +37,6 @@ import "@/index.css";
  * @todo improve layouts of the page informing that email was sent when changing password or verifying
  *
  * <===============>
- *
- * <=== TEXT EDITOR ===>
- *
- * @todo tracking changes within an article
- *
- * <===================>
  */
 
 const router = createBrowserRouter([

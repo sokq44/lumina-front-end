@@ -1,13 +1,17 @@
 import { createContext, useContext } from "react";
 import { Article } from "@/lib/api";
 import { Editor } from "@tiptap/react";
+import { getEmptyArticle } from "@/lib/utils";
 
 export const TextEditorContext = createContext<{
   editor: Editor | undefined;
   article: Article | undefined;
   onSave: (article: Article | undefined) => void;
   onRemove: (article: Article | undefined) => void;
-  setArticle: (article: Article | undefined) => void;
+  setArticle: (
+    prop: Article | undefined | ((prev: Article | undefined) => Article)
+  ) => void;
+  getArticle: () => Article;
   finishArticle: () => void;
 }>({
   editor: undefined,
@@ -15,6 +19,7 @@ export const TextEditorContext = createContext<{
   onSave: () => {},
   onRemove: () => {},
   setArticle: () => {},
+  getArticle: getEmptyArticle,
   finishArticle: () => {},
 });
 

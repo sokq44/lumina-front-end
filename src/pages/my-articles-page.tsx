@@ -18,7 +18,7 @@ const MyArticlesPage = () => {
     if (error) {
       toast({
         variant: "destructive",
-        title: "Problem With Saving",
+        title: "Problem With Retrieving the Article",
         description: error,
       });
     }

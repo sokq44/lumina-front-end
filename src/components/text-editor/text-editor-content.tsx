@@ -15,7 +15,7 @@ interface TextEditorContentProps {
 }
 
 const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
-  const { editor, article, setArticle, onSave } = useTextEditor();
+  const { editor, article, onSave, setArticle, getArticle } = useTextEditor();
   const { eventTarget, changeBannerDialogue } = useDialogue();
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -26,24 +26,26 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
       const handleBannerChanged = (event: Event) => {
         const customEvent = event as CustomEvent;
         if (article && customEvent.detail.banner) {
-          const newArticle = {
-            ...article,
+          const updated = {
+            ...getArticle(),
             banner: customEvent.detail.banner,
           };
-          setArticle(newArticle);
-          onSave(newArticle);
+          setArticle(updated);
+          onSave(updated);
         }
       };
       eventTarget.addEventListener("banner-changed", handleBannerChanged);
       return () => {
-        eventTarget.removeEventListener("benner-changed", handleBannerChanged);
+        eventTarget.removeEventListener("banner-changed", handleBannerChanged);
       };
     }
   }, [eventTarget]);
 
   useEffect(() => {
     if (article && editor) {
-      editor.commands.setContent(JSON.parse(article.content));
+      if (article.content) {
+        editor.commands.setContent(JSON.parse(article.content));
+      }
       if (titleRef.current instanceof HTMLInputElement) {
         titleRef.current.value = article.title;
       }
@@ -52,7 +54,10 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
   const changeTitle = () => {
     if (titleRef.current) {
-      const updated = { ...article, title: titleRef.current.value } as Article;
+      const updated = {
+        ...getArticle(),
+        title: titleRef.current.value,
+      } as Article;
       if (updated) setArticle(updated);
     }
   };
@@ -73,7 +78,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           />
           <span
             onClick={clickBanner}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0 text-3xl font-bold text-white cursor-pointer group-hover:opacity-100"
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 text-3xl font-bold text-white cursor-pointer group-hover:opacity-100"
           >
             Click To Change
           </span>
@@ -83,7 +88,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           type="text"
           maxLength={25}
           placeholder="Title"
-          onInput={changeTitle}
+          onChange={changeTitle}
           className="text-5xl font-bold bg-transparent w-full border-none px-0 py-1 h-auto rounded-none"
         />
         {article?.user && article?.created_at && (

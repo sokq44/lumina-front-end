@@ -12,9 +12,15 @@ interface TextEditorProps {
   article: Article | undefined;
   onSave: (aticle: Article | undefined) => void;
   onRemove: (article: Article | undefined) => void;
+  onModify: (article: Article | undefined) => void;
 }
 
-const TextEditor: FC<TextEditorProps> = ({ article, onSave, onRemove }) => {
+const TextEditor: FC<TextEditorProps> = ({
+  article,
+  onSave,
+  onRemove,
+  onModify,
+}) => {
   const editor = useEditor({
     extensions: extensions,
     content: "<p>Contents of your article...<p><br />",
@@ -29,6 +35,7 @@ const TextEditor: FC<TextEditorProps> = ({ article, onSave, onRemove }) => {
       editor={editor}
       article={article}
       onSave={onSave}
+      onModify={onModify}
       onRemove={onRemove}
     >
       <DialogueProvider>

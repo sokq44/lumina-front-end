@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Article } from "@/lib/api";
-import { getArticleWidthId } from "@/lib/utils";
+import { getArticleContent, getArticleWidthId } from "@/lib/utils";
 import {
   useArticleSaver,
   useArticleGetter,
@@ -27,10 +27,12 @@ import TextEditor from "@/components/text-editor/text-editor";
 import LoadingScreen from "@/components/wraps/loading-screen";
 
 export default function WritingPage() {
-  const { state } = useLocation();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
+  const quitDialogRef = useRef<HTMLButtonElement>(null);
+  const newArticleRef = useRef<Article | undefined>(undefined);
   const [article, setArticle] = useState<Article | undefined>(undefined);
 
   const articleRemover = useArticleRemover();
@@ -50,7 +52,8 @@ export default function WritingPage() {
           articleSaver.error ||
           "There was an unexpected error while saving your article.",
       });
-    } else if (articleSaver.error === null) {
+    } else if (articleSaver.error === null && newArticleRef.current) {
+      setArticle(newArticleRef.current);
       toast({
         variant: "success",
         title: "Changes Applied",
@@ -93,13 +96,33 @@ export default function WritingPage() {
     }
   }, [articleSaver.id]);
 
-  const onSave = (article: Article | undefined) => {
-    console.log(article);
-    if (article) articleSaver.save(article);
+  const onSave = (newArticle: Article | undefined) => {
+    if (newArticle) articleSaver.save(newArticle);
+  };
+
+  const onModify = (newArticle: Article | undefined) => {
+    if (newArticle) newArticleRef.current = newArticle;
   };
 
   const onRemove = (article: Article | undefined) => {
     if (article) articleRemover.remove(article.id);
+  };
+
+  const quit = () => {
+    const updated = newArticleRef.current;
+
+    if (!updated || !article) return;
+
+    const newContent = JSON.stringify(getArticleContent(updated));
+    const oldContent = JSON.stringify(getArticleContent(article));
+    const changesMade =
+      newContent !== oldContent ||
+      updated?.title !== article.title ||
+      updated?.public !== article.public ||
+      updated?.banner !== article.banner;
+
+    if (changesMade) quitDialogRef.current?.click();
+    else finishWriting();
   };
 
   const finishWriting = () => {
@@ -117,35 +140,40 @@ export default function WritingPage() {
 
   return (
     <Authorized onFail={() => navigate("/login")}>
+      <Dialog>
+        <DialogTrigger ref={quitDialogRef}></DialogTrigger>
+        <DialogContent className="font-funnel">
+          <DialogHeader>
+            <DialogTitle>Are you sure you want to quit?</DialogTitle>
+            <DialogDescription>
+              All the unsaved changes won't be applied.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button onClick={finishWriting}>Quit</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <Container className="flex items-center justify-center h-screen w-screen">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              variant="ghost"
-              className="fixed top-0 left-0 z-[100] m-2 p-2 rounded-md cursor-pointer transition-all duration-300"
-            >
-              <CornerUpLeft />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="font-funnel">
-            <DialogHeader>
-              <DialogTitle>Are you sure you want to quit?</DialogTitle>
-              <DialogDescription>
-                All the unsaved changes won't be applied.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <DialogClose asChild>
-                <Button onClick={finishWriting}>Quit</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Button
+          onClick={quit}
+          variant="ghost"
+          className="fixed top-0 left-0 z-[100] m-2 p-2 rounded-md cursor-pointer transition-all duration-300"
+        >
+          <CornerUpLeft />
+        </Button>
         <ThemeSwitch position="top-right" />
-        <TextEditor article={article} onSave={onSave} onRemove={onRemove} />
+        <TextEditor
+          article={article}
+          onSave={onSave}
+          onRemove={onRemove}
+          onModify={onModify}
+        />
       </Container>
     </Authorized>
   );

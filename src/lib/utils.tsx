@@ -78,3 +78,16 @@ export function getArticleWidthId(id: string): Article {
     created_at: new Date(0),
   } as Article;
 }
+
+export function getEmptyArticle(): Article {
+  return {
+    id: "",
+    user: "",
+    title: "",
+    banner: "",
+    content: "",
+    user_image: "",
+    public: false,
+    created_at: new Date(),
+  };
+}

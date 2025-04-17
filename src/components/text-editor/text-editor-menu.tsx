@@ -36,7 +36,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
   } = useDialogue();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { editor, article, setArticle, onSave, finishArticle } =
+  const { editor, article, onSave, setArticle, getArticle, finishArticle } =
     useTextEditor();
 
   useEffect(() => {
@@ -44,12 +44,13 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
       const handleVisibilityChanged = (event: Event) => {
         const customEvent = event as CustomEvent;
         if (article) {
-          const newArticle = {
-            ...article,
+          const updated = {
+            ...getArticle(),
             public: customEvent.detail.public,
-          };
-          setArticle(newArticle);
-          onSave(newArticle);
+          } as Article;
+
+          onSave(updated);
+          setArticle(updated);
         }
       };
       eventTarget.addEventListener(
@@ -66,7 +67,16 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
   }, [eventTarget]);
 
   const saveChanges = async () => {
-    if (!editor || !article) return;
+    if (!editor) return;
+
+    if (!article) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Saving",
+        description: "The article can not be saved.",
+      });
+      return;
+    }
 
     const title = article.title;
     const content = JSON.stringify(editor.getJSON());
