@@ -11,6 +11,7 @@ lerna-debug.log*
 dist
 dist-ssr
 .vite
+tsconfig.app.tsbuildinfo
 
 # Node.js modules
 node_modules
@@ -59,3 +60,6 @@ package-lock.json
 # MacOS
 *.AppleDouble
 *.LSOverride
+
+# Deployment
+deploy.sh

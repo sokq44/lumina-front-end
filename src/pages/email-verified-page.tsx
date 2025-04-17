@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
-import { useVerifyUser } from "@/hooks/user";
-import { LoaderCircle, MailCheck, MailX } from "lucide-react";
-import Container from "@/components/container";
-import SlidingLink from "@/components/sliding-link";
-import ThemeSwitch from "@/components/theme-switch";
+import { useUserVerifier } from "@/hooks/api/user";
+import { MailCheck, MailX } from "lucide-react";
+import Container from "@/components/ui/container";
+import SlidingLink from "@/components/ui/sliding-link";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import { cn } from "@/lib/utils";
+import LoadingScreen from "@/components/wraps/loading-screen";
 
 const EmailVerifiedPage = () => {
-  const { token } = useParams();
   const { toast } = useToast();
-  const { error, isLoading } = useVerifyUser(token);
+  const { token } = useParams();
+  const { error, isLoading } = useUserVerifier(token);
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -40,8 +41,8 @@ const EmailVerifiedPage = () => {
 
   if (isLoading) {
     return (
-      <Container className="bg-background flex items-center justify-center h-screen">
-        <LoaderCircle size={32} className="animate-spin text-primary" />
+      <Container className="w-screen h-screen">
+        <LoadingScreen>Verifying...</LoadingScreen>
       </Container>
     );
   }

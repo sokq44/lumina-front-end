@@ -1,10 +1,13 @@
 import { FC } from "react";
 import { getMenuItem } from "@/lib/text-editor";
-import { useTextEditor } from "@/hooks/text-editor";
-import { Button } from "@/components/ui/button";
-import Informative from "@/components/inform-badge/informative";
+import { useTextEditor } from "@/hooks/use-text-editor";
+import {
+  ContextMenuItem,
+  ContextMenuShortcut,
+} from "@/components/ui/context-menu";
+import { ContextMenuItemProps } from "@radix-ui/react-context-menu";
 
-interface TextEditorMenuItemProps {
+interface TextEditorMenuItemProps extends ContextMenuItemProps {
   variant: string;
 }
 
@@ -17,16 +20,20 @@ const TextEditorMenuItem: FC<TextEditorMenuItemProps> = ({ variant }) => {
 
   if (!item) return <span>Wrong Variant</span>;
 
+  const disabled = !item.canToggle();
+
   return (
-    <Informative label={item.label}>
-      <Button
-        variant={textEditor.editor?.isActive(variant) ? "default" : "ghost"}
-        onClick={() => item.toggle()}
-        className="p-2 w-9 h-9 hover:bg-secondary hover:text-primary dark:hover:bg-black"
-      >
-        <item.icon />
-      </Button>
-    </Informative>
+    <ContextMenuItem
+      disabled={disabled}
+      onClick={() => item.toggle()}
+      inset
+      className="cursor-pointer"
+    >
+      {item.label}
+      <ContextMenuShortcut>
+        <item.icon size={14} />
+      </ContextMenuShortcut>
+    </ContextMenuItem>
   );
 };
 

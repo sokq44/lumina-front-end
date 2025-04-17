@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerFormSchema } from "@/lib/schemas";
-import { useRegister } from "@/hooks/user";
+import { RegisterForm, registerFormSchema } from "@/lib/schemas";
+import { useUserRegistrar } from "@/hooks/api/user";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useForm, FieldErrors } from "react-hook-form";
-import { Circle, LoaderCircle, UserPlus } from "lucide-react";
+import { LoaderCircle, UserPlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import SlidingLink from "@/components/sliding-link";
-import ThemeSwitch from "@/components/theme-switch";
-import GoBackArrow from "@/components/go-back-arrow";
+import SlidingLink from "@/components/ui/sliding-link";
+import ThemeSwitch from "@/components/ui/theme-switch";
+import GoBackArrow from "@/components/ui/go-back-arrow";
+import Img from "@/components/ui/image";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { register, attempts, isLoading, error } = useRegister();
+  const { register, attempts, isLoading, error } = useUserRegistrar();
 
   const [email, setEmail] = useState<string>("");
 
-  const form = useForm<z.infer<typeof registerFormSchema>>({
+  const form = useForm<RegisterForm>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       username: "",
@@ -45,14 +45,12 @@ const RegisterPage = () => {
     }
   }, [attempts, error, navigate, toast, email]);
 
-  const onSubmit = (v: z.infer<typeof registerFormSchema>) => {
+  const onSubmit = (v: RegisterForm) => {
     register(v.username, v.email, v.password);
     setEmail(v.email);
   };
 
-  const onError = async (
-    errors: FieldErrors<z.infer<typeof registerFormSchema>>
-  ) => {
+  const onError = async (errors: FieldErrors<RegisterForm>) => {
     const message: string = Object.entries(errors).map(
       (entry) => (entry[1].message as string) ?? entry
     )[0];
@@ -73,8 +71,12 @@ const RegisterPage = () => {
       <ThemeSwitch position="top-right" />
       <Container className="flex w-full h-[34rem] md:w-[34rem] lg:w-[44rem] xl:w-[64rem]">
         <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl md:py-12">
-          {/* Logo Placeholder */}
-          <Circle strokeWidth="1px" fill="" size={84} />
+          <Container className="flex items-center justify-center gap-x-2 mb-2">
+            <Img src="logo.png" className="w-6" />
+            <span className="text-2xl text-[var(--logo)] font-bold">
+              Lumina
+            </span>
+          </Container>
 
           <span className="text-center font-medium text-muted-foreground mb-2 px-4">
             Create an account by filling in the details below.
@@ -115,7 +117,7 @@ const RegisterPage = () => {
             <Button
               variant={isLoading ? "formSubmitAwaiting" : "formSubmit"}
               type="submit"
-              className="w-full transition-all duration-300"
+              className="w-full bg-[var(--logo)] text-white transition-all duration-300 hover:bg-zinc-700"
             >
               {isLoading ? (
                 <LoaderCircle
@@ -134,8 +136,8 @@ const RegisterPage = () => {
             </SlidingLink>
           </form>
         </Container>
-        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
-          <UserPlus size={48} className="text-card" />
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-[var(--logo)] md:shadow-md bg-[var(--logo)] rounded-e-2xl">
+          <UserPlus size={48} className="text-white" />
         </Container>
       </Container>
     </Container>

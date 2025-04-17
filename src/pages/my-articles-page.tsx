@@ -1,49 +1,33 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useLoggedIn } from "@/hooks/user";
+import { Link } from "react-router-dom";
+import { PenLine } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useGetArticles } from "@/hooks/articles";
-import Container from "@/components/container";
-import ArticleCard from "@/components/article-card";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { LoaderCircle, PenLine } from "lucide-react";
-import { Less, MediaQuery, More } from "@/components/media-query";
+import { useArticlesGetter } from "@/hooks/api/articles";
 import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
+import ArticleCard from "@/components/ui/article-card";
+import LoadingScreen from "@/components/wraps/loading-screen";
+import { Less, MediaQuery, More } from "@/components/wraps/media-query";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 
 const MyArticlesPage = () => {
-  const navigate = useNavigate();
-  const loggedIn = useLoggedIn();
-  const articlesGetter = useGetArticles();
   const { toast } = useToast();
+  const { articles, error, isLoading } = useArticlesGetter();
 
   useEffect(() => {
-    if (loggedIn.error) navigate("/login");
-  }, [loggedIn.error, navigate]);
-
-  useEffect(() => {
-    if (articlesGetter.error) {
+    if (error) {
       toast({
         variant: "destructive",
-        title: "Problem With Saving",
-        description: articlesGetter.error,
+        title: "Problem With Retrieving the Article",
+        description: error,
       });
     }
-  }, [articlesGetter.error, toast, navigate]);
+  }, [error]);
 
-  if (loggedIn.isLoading) {
+  if (isLoading) {
     return (
-      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
-        <LoaderCircle size={24} className="animate-spin" />
-        <span className="ml-2 text-lg">Checking your login status...</span>
-      </Container>
-    );
-  }
-
-  if (articlesGetter.isLoading) {
-    return (
-      <Container className="bg-background flex items-center justify-center h-screen text-muted-foreground">
-        <LoaderCircle size={24} className="animate-spin" />
-        <span className="ml-2 text-lg">Retrieving articles...</span>
+      <Container className="w-screen h-screen">
+        <LoadingScreen>Retrieving Articles...</LoadingScreen>
       </Container>
     );
   }
@@ -52,14 +36,14 @@ const MyArticlesPage = () => {
     <MediaQuery>
       <More>
         <Container className="flex flex-col items-center justify-center gap-y-8 w-full h-full">
-          {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
-            <Container className="grid grid-cols-4 gap-x-12 gap-y-8 items-center px-4">
+          {articles && articles.length > 0 ? (
+            <Container className="grid grid-cols-4 gap-x-12 gap-y-8 items-center px-4 2xl:grid-cols-5">
               <Link
                 to={"/writing"}
                 state={{ article: undefined }}
                 className="h-full"
               >
-                <Card className="h-full flex flex-col items-center justify-center bg-card-foreground text-card border-0 transition-all duration-300 hover:cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
+                <Card className="h-full flex flex-col items-center justify-center bg-card-foreground text-card border-0 transition-all duration-300 cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
                   <CardTitle className="text-5xl font-bold">Create</CardTitle>
                   <CardDescription className="flex items-center text-inherit">
                     <PenLine size={12} className="mr-1" />
@@ -67,9 +51,9 @@ const MyArticlesPage = () => {
                   </CardDescription>
                 </Card>
               </Link>
-              {articlesGetter.articles.map((article, index) => (
+              {articles.map((article, index) => (
                 <Link
-                  to={"/user/writing"}
+                  to={"/writing"}
                   state={{ article: article }}
                   key={`article ${index}`}
                 >
@@ -97,9 +81,9 @@ const MyArticlesPage = () => {
         </Container>
       </More>
       <Less>
-        {articlesGetter.articles && articlesGetter.articles.length > 0 ? (
+        {articles && articles.length > 0 ? (
           <Container className="w-full h-full flex flex-col items-center gap-y-4 px-2">
-            {articlesGetter.articles.map((article, index) => (
+            {articles.map((article, index) => (
               <Link
                 to={"/user/writing"}
                 state={{ article: article }}

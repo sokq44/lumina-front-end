@@ -1,164 +1,121 @@
 import { FC, useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { Article } from "@/lib/api";
 import { EditorContent } from "@tiptap/react";
-import { useToast } from "@/hooks/use-toast";
-import { useUploadAsset } from "@/hooks/assets";
-import { useGetArticle } from "@/hooks/articles";
-import { useTextEditor } from "@/hooks/text-editor";
+import { useTextEditor } from "@/hooks/use-text-editor";
 import { Link } from "react-router-dom";
+import Img from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/container";
-import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
+import EditorToolbar from "@/components/text-editor/editor-toolbar";
+import { useDialogue } from "@/hooks/use-dialogue";
 
 interface TextEditorContentProps {
   className?: string;
 }
 
 const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
-  const { toast } = useToast();
-  const textEditor = useTextEditor();
-  const assetUploader = useUploadAsset();
-  const articleGetter = useGetArticle(textEditor.article?.id);
+  const { editor, article, onSave, setArticle, getArticle } = useTextEditor();
+  const { eventTarget, changeBannerDialogue } = useDialogue();
 
   const titleRef = useRef<HTMLInputElement>(null);
-  const bannerRef = useRef<HTMLInputElement>(null);
+  const bannerImgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    if (articleGetter.error) {
-      toast({
-        variant: "destructive",
-        title: "Problem With Rertieving",
-        description: articleGetter.error,
-      });
+    if (eventTarget) {
+      const handleBannerChanged = (event: Event) => {
+        const customEvent = event as CustomEvent;
+        if (article && customEvent.detail.banner) {
+          const updated = {
+            ...getArticle(),
+            banner: customEvent.detail.banner,
+          };
+          setArticle(updated);
+          onSave(updated);
+        }
+      };
+      eventTarget.addEventListener("banner-changed", handleBannerChanged);
+      return () => {
+        eventTarget.removeEventListener("banner-changed", handleBannerChanged);
+      };
     }
-  }, [articleGetter.error, toast]);
+  }, [eventTarget]);
 
   useEffect(() => {
-    if (assetUploader.error) {
-      toast({
-        variant: "destructive",
-        title: "Problem With Uploading An Asset",
-        description: assetUploader.error,
-      });
-    } else if (assetUploader.error === null) {
-      const url = assetUploader.url;
-      if (url) {
-        const newArticle = {
-          ...textEditor.article,
-          banner: url,
-        } as Article;
-        textEditor.setArticle(newArticle);
+    if (article && editor) {
+      if (article.content) {
+        editor.commands.setContent(JSON.parse(article.content));
+      }
+      if (titleRef.current instanceof HTMLInputElement) {
+        titleRef.current.value = article.title;
       }
     }
-  }, [assetUploader.error, assetUploader.url, toast]);
-
-  useEffect(() => {
-    if (articleGetter.article && titleRef.current) {
-      titleRef.current.value = articleGetter.article.title;
-      textEditor.editor?.commands.setContent(articleGetter.article.content);
-      textEditor.setArticle(articleGetter.article);
-    }
-  }, [articleGetter.article]);
-
-  useEffect(() => {
-    const url = assetUploader.url;
-    const error = assetUploader.error;
-
-    if (url && error === null) {
-      const newArticle = {
-        ...textEditor.article,
-        banner: assetUploader.url,
-      } as Article;
-      textEditor.setArticle(newArticle);
-    }
-  }, [assetUploader.url, assetUploader.error]);
+  }, [article]);
 
   const changeTitle = () => {
     if (titleRef.current) {
-      const newArticle = {
-        ...textEditor.article,
+      const updated = {
+        ...getArticle(),
         title: titleRef.current.value,
       } as Article;
-      if (newArticle) textEditor.setArticle(newArticle);
+      if (updated) setArticle(updated);
     }
   };
 
-  const focusEditor = () => {
-    textEditor.editor?.commands.focus();
+  const clickBanner = () => {
+    if (changeBannerDialogue) changeBannerDialogue();
   };
 
-  const onBannerChange = async () => {
-    const banner = bannerRef.current?.files?.[0];
-    if (banner) {
-      await assetUploader.upload(banner);
-    }
-  };
-
-  const formattedDate = textEditor.article?.created_at
-    ? new Date(textEditor.article.created_at).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-    : "";
-
-  if (!articleGetter.isLoading) {
-    return (
-      <Container className={cn("flex flex-col mt-4", className)}>
-        <Container className="flex flex-col mb-10">
-          <Container className="relative mb-8 group">
-            <img
-              src={
-                textEditor.article?.banner
-                  ? textEditor.article?.banner
-                  : "/default-banner.png"
-              }
-              className="w-full h-auto aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 group-hover:brightness-[0.7] group-hover:blur-[1px]"
-            />
-            <Input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={onBannerChange}
-              ref={bannerRef}
-            />
-            <Button
-              onClick={() => bannerRef.current?.click()}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100"
-            >
-              Change
-            </Button>
-          </Container>
-          <input
-            ref={titleRef}
-            type="text"
-            maxLength={25}
-            placeholder="Title"
-            className="text-5xl font-bold bg-transparent w-full ProseMirror"
-            onInput={changeTitle}
+  return (
+    <Container className={cn("flex flex-col mt-4", className)}>
+      <Container className="flex flex-col mb-10">
+        <Container className="w-full h-[28rem] relative mb-8 group">
+          <Img
+            ref={bannerImgRef}
+            src={article?.banner ? article.banner : "/default-banner.png"}
+            onClick={clickBanner}
+            className="w-full h-full aspect-7/4 rounded-lg brightness-90 shadow-md transition-all duration-300 cursor-pointer group-hover:brightness-[0.7] group-hover:blur-[1px]"
           />
-          {textEditor.article?.user && (
-            <span className="text-sm text-muted-foreground ">
-              Written by&nbsp;
-              <Link
-                to={`/user/${textEditor.article?.user}`}
-                className="sliding-link font-semibold"
-              >
-                @{textEditor.article?.user}
-              </Link>{" "}
-              on the {formattedDate}
-            </span>
-          )}
+          <span
+            onClick={clickBanner}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 text-3xl font-bold text-white cursor-pointer group-hover:opacity-100"
+          >
+            Click To Change
+          </span>
         </Container>
-        <EditorContent
-          onClick={focusEditor}
-          editor={textEditor.editor ?? null}
-          className="min-h-svh w-full mx-auto hover:cursor-text"
+        <Input
+          ref={titleRef}
+          type="text"
+          maxLength={25}
+          placeholder="Title"
+          onChange={changeTitle}
+          className="text-5xl font-bold bg-transparent w-full border-none px-0 py-1 h-auto rounded-none"
         />
+        {article?.user && article?.created_at && (
+          <span className="text-sm text-muted-foreground">
+            Written by&nbsp;
+            <Link
+              to={`/user/${article.user}`}
+              className="sliding-link font-semibold"
+            >
+              @{article.user}
+            </Link>
+            &nbsp;on the {formatDate(article.created_at)}
+          </span>
+        )}
       </Container>
-    );
-  }
+      <EditorToolbar>
+        <EditorContent
+          onClick={() => editor?.commands.focus()}
+          editor={editor || null}
+          style={{
+            outline: "none",
+          }}
+          className="min-h-svh w-full mx-auto hover:cursor-text focuse:outline-none focus-visible:outline-none focus:border-none focus-visible:border-none"
+        />
+      </EditorToolbar>
+    </Container>
+  );
 };
 
 export default TextEditorContent;

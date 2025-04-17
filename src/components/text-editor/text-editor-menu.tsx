@@ -1,70 +1,85 @@
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import { Article } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { useTextEditor } from "@/hooks/text-editor";
-import { useRemoveArticle, useSaveArticle } from "@/hooks/articles";
+import { useTextEditor } from "@/hooks/use-text-editor";
+import { useDialogue } from "@/hooks/use-dialogue";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import Container from "@/components/container";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import ImageUploader from "@/components/text-editor/menu-items/image-uploader";
-import HeadingMenuItem from "@/components/text-editor/menu-items/heading-menu-item";
-import YoutubeMenuItem from "@/components/text-editor/menu-items/youtube-menu-item";
-import SaveArticleButton from "@/components/text-editor/article/save-article-button";
-import HelpArticleButton from "@/components/text-editor/article/help-article-button";
-import DeleteArticleButton from "@/components/text-editor/article/delete-article-button";
-import TextEditorMenuItem from "@/components/text-editor/menu-items/text-editor-menu-item";
-import ArticleVisibilitySwitch from "@/components/text-editor/article/artcile-visibility-switch";
-import { ChevronsUpDown, LoaderCircle, Save } from "lucide-react";
+  Link,
+  Plus,
+  Save,
+  Trash2,
+  BookLock,
+  ImagePlus,
+  BookCheck,
+  TvMinimalPlay,
+} from "lucide-react";
+import {
+  Menubar,
+  MenubarMenu,
+  MenubarItem,
+  MenubarContent,
+  MenubarTrigger,
+  MenubarShortcut,
+  MenubarSeparator,
+} from "@/components/ui/menubar";
+import { MenubarProps } from "@radix-ui/react-menubar";
 
-const TextEditorMenu = () => {
+const TextEditorMenu: FC<MenubarProps> = (props) => {
+  const {
+    eventTarget,
+    addLinkDialogue,
+    uploadImageDialogue,
+    youtubeVideoDialogue,
+    deleteArticleDialogue,
+    articleVisibilityDialogue,
+  } = useDialogue();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const textEditor = useTextEditor();
-  const articleRemover = useRemoveArticle();
-  const articleSaver = useSaveArticle(textEditor.article?.id);
+  const { editor, article, onSave, setArticle, getArticle, finishArticle } =
+    useTextEditor();
 
   useEffect(() => {
-    if (articleSaver.error) {
+    if (eventTarget) {
+      const handleVisibilityChanged = (event: Event) => {
+        const customEvent = event as CustomEvent;
+        if (article) {
+          const updated = {
+            ...getArticle(),
+            public: customEvent.detail.public,
+          } as Article;
+
+          onSave(updated);
+          setArticle(updated);
+        }
+      };
+      eventTarget.addEventListener(
+        "visibility-changed",
+        handleVisibilityChanged
+      );
+      return () => {
+        eventTarget.removeEventListener(
+          "visibility-changed",
+          handleVisibilityChanged
+        );
+      };
+    }
+  }, [eventTarget]);
+
+  const saveChanges = async () => {
+    if (!editor) return;
+
+    if (!article) {
       toast({
         variant: "destructive",
         title: "Problem With Saving",
-        description: articleSaver.error,
+        description: "The article can not be saved.",
       });
+      return;
     }
-  }, [articleSaver.error, toast]);
 
-  useEffect(() => {
-    if (articleRemover.error) {
-      toast({
-        variant: "destructive",
-        title: "Problem With Deleting",
-        description: articleRemover.error,
-      });
-    } else if (articleRemover.error === null) {
-      textEditor.finishArticle();
-      navigate("/user/my-articles");
-    }
-  }, [articleRemover.error, toast, navigate]);
-
-  useEffect(() => {
-    if (articleSaver.id) {
-      const newArticle = {
-        ...textEditor.article,
-        id: articleSaver.id,
-      } as Article;
-      textEditor.setArticle(newArticle);
-    }
-  }, [articleSaver.id]);
-
-  const saveChanges = async () => {
-    const title = textEditor.article?.title;
-    const content = textEditor.editor?.getHTML();
+    const title = article.title;
+    const content = JSON.stringify(editor.getJSON());
 
     if (!title || title.length < 1 || title.length > 25) {
       toast({
@@ -79,119 +94,116 @@ const TextEditorMenu = () => {
         description: "Contents of your article musn't be empty.",
       });
     } else {
-      const newArticle = {
-        ...textEditor.article,
-        content: textEditor.editor?.getHTML(),
-      } as Article;
-
-      if (newArticle) {
-        await articleSaver.save(newArticle);
+      const updated = { ...article, content } as Article;
+      if (updated) {
+        onSave(updated);
+      } else {
         toast({
-          variant: "success",
-          title: "Changes Applied",
+          variant: "destructive",
+          title: "Problem With Saving",
           description:
-            "All the changes You've made have been applied to the article.",
+            "An unexpected error has occurred while trying to save the article. Please, try again later.",
         });
       }
     }
   };
 
-  const deleteArticle = async () => {
-    const id = textEditor.article?.id;
-    if (id) await articleRemover.remove(id);
-  };
-
-  const changeVisibility = async () => {
-    const previousArticle = textEditor.article;
-    if (previousArticle) {
-      const newArticle = {
-        ...(previousArticle as Article),
-        public: !previousArticle.public,
-      };
-
-      textEditor.setArticle(newArticle);
-    }
+  const newWindow = () => {
+    finishArticle();
+    navigate(".", { replace: true, state: { article: undefined } });
+    window.location.reload();
   };
 
   return (
-    <Collapsible className="my-4 p-2 border border-gray-200 fixed w-[50rem] z-10 bg-muted rounded-md transform transition-all duration-300">
-      <Container className="flex">
-        <CollapsibleTrigger asChild>
-          <Button variant="ghost" className="w-9 h-auto p-2 mr-2">
-            <ChevronsUpDown className="text-muted-foreground" />
-          </Button>
-        </CollapsibleTrigger>
-        <Separator orientation="vertical" className="h-100" />
-        <Container className="flex flex-col w-full">
-          <Container className="flex items-center gap-2 ml-1 pr-2">
-            <TextEditorMenuItem variant="paragraph" />
-            <TextEditorMenuItem variant="bold" />
-            <TextEditorMenuItem variant="underline" />
-            <TextEditorMenuItem variant="italic" />
-            <TextEditorMenuItem variant="bullet-list" />
-            <TextEditorMenuItem variant="ordered-list" />
-            <TextEditorMenuItem variant="task-list" />
-            <TextEditorMenuItem variant="code-block" />
-            <TextEditorMenuItem variant="block-quote" />
-            <TextEditorMenuItem variant="horizontal-rule" />
-            <TextEditorMenuItem variant="hard-break" />
-            <HeadingMenuItem />
-            <SaveArticleButton
-              onClick={saveChanges}
-              disabled={articleSaver.isLoading || articleRemover.isLoading}
-            >
-              {articleSaver.isLoading ? (
-                <LoaderCircle className="animate-spin" />
+    <Menubar {...props}>
+      <MenubarMenu>
+        <MenubarTrigger className="cursor-pointer">Article</MenubarTrigger>
+        <MenubarContent className="font-funnel">
+          <MenubarItem
+            onClick={newWindow}
+            className="cursor-pointer transition-all duration-300"
+          >
+            New Article
+            <MenubarShortcut>
+              <Plus size={14} />
+            </MenubarShortcut>
+          </MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem
+            onClick={saveChanges}
+            className="cursor-pointer transition-all duration-300"
+          >
+            Save Article
+            <MenubarShortcut>
+              <Save size={14} />
+            </MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem
+            disabled={!article?.id}
+            onClick={articleVisibilityDialogue}
+            className="cursor-pointer transition-all duration-300"
+          >
+            {article?.public ? "Public" : "Private"}
+            <MenubarShortcut>
+              {article?.public ? (
+                <BookCheck size={14} />
               ) : (
-                <Save />
+                <BookLock size={14} />
               )}
-            </SaveArticleButton>
-            <DeleteArticleButton
-              onDeleteArticle={deleteArticle}
-              disabled={
-                articleSaver.isLoading ||
-                articleRemover.isLoading ||
-                !textEditor.article?.id
-              }
-            />
-          </Container>
-          <CollapsibleContent className="flex flex-col pl-1 pt-1 pr-2">
-            <Container className="flex gap-2">
-              <TextEditorMenuItem variant="insert-table" />
-              <TextEditorMenuItem variant="delete-table" />
-              <TextEditorMenuItem variant="insert-column-before" />
-              <TextEditorMenuItem variant="insert-column-after" />
-              <TextEditorMenuItem variant="delete-column" />
-              <TextEditorMenuItem variant="insert-row-before" />
-              <TextEditorMenuItem variant="insert-row-after" />
-              <TextEditorMenuItem variant="delete-row" />
-              <TextEditorMenuItem variant="merge-table-cells" />
-              <TextEditorMenuItem variant="split-table-cell" />
-              <TextEditorMenuItem variant="toggle-header-column" />
-              <TextEditorMenuItem variant="toggle-header-row" />
-              <TextEditorMenuItem variant="toggle-header-cell" />
-              <TextEditorMenuItem variant="go-to-next-cell" />
-              <Container className="w-full" />
-              <ArticleVisibilitySwitch
-                onChangeVisibility={changeVisibility}
-                disabled={
-                  articleSaver.isLoading ||
-                  articleRemover.isLoading ||
-                  !textEditor.article?.id
-                }
-              />
-              <HelpArticleButton />
-            </Container>
-            <Container className="flex gap-2">
-              <TextEditorMenuItem variant="set-link" />
-              <TextEditorMenuItem variant="unset-link" />
-              <ImageUploader />
-              <YoutubeMenuItem />
-            </Container>
-          </CollapsibleContent>
-        </Container>
-      </Container>
-    </Collapsible>
+            </MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem
+            disabled={!article?.id}
+            onClick={deleteArticleDialogue}
+            className="text-destructive cursor-pointer transition-all duration-300 hover:text-destructive"
+          >
+            Delete Article
+            <MenubarShortcut className="text-destructive">
+              <Trash2 size={14} />
+            </MenubarShortcut>
+          </MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger className="cursor-pointer">Add</MenubarTrigger>
+        <MenubarContent className="font-funnel">
+          <MenubarItem
+            disabled={
+              !editor?.can().setLink({ href: "https://www.example.com" })
+            }
+            onSelect={addLinkDialogue}
+            className="cursor-pointer transition-all duration-300"
+          >
+            Link
+            <MenubarShortcut>
+              <Link size={14} />
+            </MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem
+            disabled={!editor?.can().insertContent({ type: "image-extension" })}
+            onSelect={uploadImageDialogue}
+            className="cursor-pointer transition-all duration-300"
+          >
+            Image
+            <MenubarShortcut>
+              <ImagePlus size={14} />
+            </MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem
+            disabled={
+              !editor?.can().insertContent({ type: "youtube-extension" })
+            }
+            onSelect={youtubeVideoDialogue}
+            className="cursor-pointer transition-all duration-300"
+          >
+            Youtbe
+            <MenubarShortcut>
+              <TvMinimalPlay size={14} />
+            </MenubarShortcut>
+          </MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+    </Menubar>
   );
 };
 
