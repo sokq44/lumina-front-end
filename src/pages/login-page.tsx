@@ -12,7 +12,8 @@ import Authorized from "@/components/wraps/authorized";
 import ThemeSwitch from "@/components/ui/theme-switch";
 import SlidingLink from "@/components/ui/sliding-link";
 import GoBackArrow from "@/components/ui/go-back-arrow";
-import { Circle, LoaderCircle, LogIn } from "lucide-react";
+import { LoaderCircle, LogIn } from "lucide-react";
+import Img from "@/components/ui/image";
 
 const LoginPage = () => {
   const { login, isLoading, error } = useUserAuthenticator();
@@ -62,9 +63,13 @@ const LoginPage = () => {
         <GoBackArrow to="/" position="top-left" />
         <ThemeSwitch position="top-right" />
         <Container className="flex w-full h-[28rem] md:w-[38rem] lg:w-[42rem] xl:w-[48rem]">
-          <Container className="flex flex-col gap-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
-            {/* Logo Placeholder */}
-            <Circle strokeWidth="1px" fill="" size={84} />
+          <Container className="flex flex-col gap-y-2 items-center justify-center w-full px-4 md:bg-card md:w-2/3 md:border md:border-border md:shadow-md rounded-s-2xl">
+            <Container className="flex items-center justify-center gap-x-2 mb-2">
+              <Img src="logo.png" className="w-6" />
+              <span className="text-2xl text-[var(--logo)] font-bold">
+                Lumina
+              </span>
+            </Container>
 
             <span className="text-center font-medium text-muted-foreground mb-2 px-4">
               Welcome back! Please enter your credentials to access your
@@ -92,13 +97,10 @@ const LoginPage = () => {
               <Button
                 variant={isLoading ? "formSubmitAwaiting" : "formSubmit"}
                 type="submit"
-                className="w-full text-secondary transition-all duration-300"
+                className="w-full bg-[var(--logo)] text-white transition-all duration-300 hover:bg-zinc-700"
               >
                 {isLoading ? (
-                  <LoaderCircle
-                    size={24}
-                    className="animate-spin text-secondary"
-                  />
+                  <LoaderCircle size={24} className="animate-spin text-white" />
                 ) : (
                   "Log In to Your Account"
                 )}
@@ -119,8 +121,8 @@ const LoginPage = () => {
               </SlidingLink>
             </Container>
           </Container>
-          <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
-            <LogIn size={48} className="text-card" />
+          <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-[var(--logo)] md:shadow-md bg-[var(--logo)] rounded-e-2xl">
+            <LogIn size={48} className="text-white" />
           </Container>
         </Container>
       </Container>

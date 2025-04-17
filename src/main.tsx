@@ -27,18 +27,6 @@ import DialogueProvider from "@/components/providers/dialogue-provider";
 
 import "@/index.css";
 
-/**
- * <=== GENERAL ===>
- *
- * @todo logo design
- *
- * @todo play with the colours of the app a little bit (find the best theme)
- *
- * @todo improve layouts of the page informing that email was sent when changing password or verifying
- *
- * <===============>
- */
-
 const router = createBrowserRouter([
   {
     path: "/",
