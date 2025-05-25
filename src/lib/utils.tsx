@@ -85,7 +85,8 @@ export function getEmptyArticle(): Article {
     user: "",
     title: "",
     banner: "",
-    content: "",
+    content:
+      '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Contents of your article"}]}]}',
     user_image: "",
     public: false,
     created_at: new Date(),

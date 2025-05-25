@@ -41,17 +41,6 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
     }
   }, [eventTarget]);
 
-  useEffect(() => {
-    if (article && editor) {
-      if (article.content) {
-        editor.commands.setContent(JSON.parse(article.content));
-      }
-      if (titleRef.current instanceof HTMLInputElement) {
-        titleRef.current.value = article.title;
-      }
-    }
-  }, [article]);
-
   const changeTitle = () => {
     if (titleRef.current) {
       const updated = {
@@ -88,6 +77,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           type="text"
           maxLength={25}
           placeholder="Title"
+          value={article?.title}
           onChange={changeTitle}
           className="text-5xl font-bold bg-transparent w-full border-none px-0 py-1 h-auto rounded-none"
         />
@@ -106,12 +96,9 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
       </Container>
       <EditorToolbar>
         <EditorContent
-          onClick={() => editor?.commands.focus()}
           editor={editor || null}
-          style={{
-            outline: "none",
-          }}
-          className="min-h-svh w-full mx-auto hover:cursor-text focuse:outline-none focus-visible:outline-none focus:border-none focus-visible:border-none"
+          style={{ outline: "none" }}
+          className="min-h-svh w-full mx-auto hover:cursor-text focus:outline-none focus-visible:outline-none focus:border-none focus-visible:border-none"
         />
       </EditorToolbar>
     </Container>

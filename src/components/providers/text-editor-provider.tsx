@@ -23,12 +23,20 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
 }) => {
   const [currentArticle, setCurrentArticle] = useState<Article | undefined>(
     () => {
-      if (article) return article;
+      if (article) {
+        editor?.commands.setContent(JSON.parse(article.content));
+        return article;
+      }
 
       const raw = localStorage.getItem("curr_article");
-      return !raw || raw === "undefined"
-        ? undefined
-        : (JSON.parse(raw) as Article);
+      const parsed =
+        !raw || raw === "undefined"
+          ? getEmptyArticle()
+          : (JSON.parse(raw) as Article);
+
+      editor?.commands.setContent(JSON.parse(parsed.content));
+
+      return parsed;
     }
   );
 
@@ -41,6 +49,7 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
     if (raw) {
       const parsed = JSON.parse(raw) as Article;
       if (parsed) {
+        if (!parsed.title) parsed.title = "";
         return parsed;
       }
     }
@@ -50,7 +59,7 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
   const updateContent = (props: unknown) => {
     const accessableProps = props as { editor: Editor };
     const content = JSON.stringify(accessableProps.editor.getJSON());
-    const updated = { ...currentArticle, content } as Article;
+    const updated = { ...getCurrentArticle(), content } as Article;
     setCurrentArticle(updated);
   };
 
@@ -65,6 +74,8 @@ const TextEditorProvider: FC<TextEditorProviderProps> = ({
   }, []);
 
   useEffect(() => {
+    if (!currentArticle) return;
+
     onModify(currentArticle);
     localStorage.setItem("curr_article", JSON.stringify(currentArticle));
   }, [currentArticle]);

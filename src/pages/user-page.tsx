@@ -37,7 +37,7 @@ export default function UserPage() {
         <More>
           <SidebarProvider>
             <UserSidebar items={updatedMenuItems} onItemClick={onItemClick} />
-            <SidebarTrigger className="fixed top-0 z-50 m-2 w-10 h-10 rounded-md text-primary cursor-pointer transition-all duration-300 hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15" />
+            <SidebarTrigger className="fixed top-0 z-50 m-2 w-10 h-10 rounded-md text-primary bg-gray-200 transition-all duration-300 cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15" />
             <Container className="h-screen w-screen">
               <ThemeSwitch position="top-right" />
               <Container className="flex w-full h-full bg-background">
