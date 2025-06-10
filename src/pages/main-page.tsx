@@ -4,7 +4,7 @@ import ThemeSwitch from "@/components/ui/theme-switch";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Link } from "react-router-dom";
 import Img from "@/components/ui/image";
-import { Info } from "lucide-react";
+import { Construction } from "lucide-react";
 import SlidingLink from "@/components/ui/sliding-link";
 
 const MainPage: FC = () => {
@@ -21,12 +21,12 @@ const MainPage: FC = () => {
               </span>
             </Container>
             <Container className="flex items-center content-center px-6 py-4 border-2 rounded-md">
-              <Info size={48} className="text-[var(--logo)]" />
+              <Construction size={48} className="text-[var(--logo)]" />
             </Container>
           </Container>
           <Container className="text-lg w-[32rem] border-2 px-6 py-4 rounded-md">
-            Hello there, we're building a place where ideas flow, words matter, and every
-            writer feels at home.
+            Hello there, we're building a place where ideas flow, words matter,
+            and every writer feels at home.
             <br />
             Sorry, the app is still under construction, but you're welcome to
             explore, create, and help us grow. Your feedback is incredibly
@@ -63,27 +63,44 @@ const MainPage: FC = () => {
       </More>
       <Less>
         <ThemeSwitch position="top-right" />
-        <Container className="flex flex-col gap-4 items-center justify-center h-screen">
-          <span className="text-4xl font-bold">No Main Page Yet</span>
-          <Container className="w-full p-2 grid grid-cols-2 grid-rows-2 gap-2">
-            <Link
-              to="/article"
-              state={{
-                article: { id: "4a48eff2-e8ec-4841-943f-e6ee0352ecfe" },
-              }}
-              className="mt-4 w-full flex items-center justify-center col-span-2 bg-muted rounded-md py-2 transition-all duration-300 hover:bg-muted-foreground/50"
-            >
-              Showcase
-            </Link>
+        <Container className="flex flex-col gap-4 justify-center px-4 py-16">
+          <Container className="w-full flex items-center justify-center gap-x-4 border-2 py-2 rounded-md">
+            <Img src="logo.png" className="w-8" />
+            <span className="text-5xl text-[var(--logo)] font-semibold">
+              Lumina
+            </span>
+          </Container>
+          <Container className="text-md w-full border-2 px-6 py-4 rounded-md">
+            Hello there, we're building a place where ideas flow, words matter,
+            and every writer feels at home.
+            <br />
+            Sorry, the app is still under construction, but you're welcome to
+            explore, create, and help us grow. Your feedback is incredibly
+            valuable. Try it out, see what works (and what doesn't), and let us
+            know. Every bug you find helps us make things better. <br />
+            For now, if you run into any errors or issues, please send them via
+            email at
+            <span>
+              {" "}
+              <SlidingLink
+                to="mailto:sokq44@gmail.com"
+                className="text-blue-500"
+              >
+                sokq44@gmail.com
+              </SlidingLink>
+            </span>
+            . Thanks for being here with us from the start!
+          </Container>
+          <Container className="flex flex-col gap-y-4 w-full">
             <Link
               to={"/register"}
-              className="w-full h-min py-2 flex items-center justify-center bg-foreground text-secondary rounded-md transition-all duration-300 hover:bg-foreground/90"
+              className="w-full flex items-center justify-center bg-transparent border-2 rounded-md py-2 transition-all duration-300 hover:bg-foreground/10"
             >
               Sign Up
             </Link>
             <Link
               to={"/login"}
-              className="w-full h-min py-2 flex items-center justify-center bg-foreground text-secondary rounded-md transition-all duration-300 hover:bg-foreground/90"
+              className="w-full flex items-center justify-center bg-transparent border-2 rounded-md py-2 transition-all duration-300 hover:bg-foreground/10"
             >
               Sign In
             </Link>

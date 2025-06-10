@@ -2,10 +2,10 @@ import axios from "axios";
 
 export const client = axios.create({
   // prod
-  // baseURL: "https://api.illumina-me.org",
+  baseURL: "https://api.illumina-me.org",
 
   // dev
-  baseURL: "http://localhost:3000",
+  // baseURL: "http://localhost:3000",
 
   withCredentials: true,
 });
