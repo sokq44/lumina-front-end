@@ -5,6 +5,7 @@ import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Link } from "react-router-dom";
 import Img from "@/components/ui/image";
 import { Info } from "lucide-react";
+import SlidingLink from "@/components/ui/sliding-link";
 
 const MainPage: FC = () => {
   return (
@@ -24,14 +25,25 @@ const MainPage: FC = () => {
             </Container>
           </Container>
           <Container className="text-lg w-[32rem] border-2 px-6 py-4 rounded-md">
-            We're building a place where ideas flow, words matter, and every
+            Hello there, we're building a place where ideas flow, words matter, and every
             writer feels at home.
             <br />
             Sorry, the app is still under construction, but you're welcome to
             explore, create, and help us grow. Your feedback is incredibly
             valuable. Try it out, see what works (and what doesn't), and let us
-            know. Every bug you find helps us make things better. Thanks for
-            being here with us from the start!
+            know. Every bug you find helps us make things better. <br />
+            For now, if you run into any errors or issues, please send them via
+            email at
+            <span>
+              {" "}
+              <SlidingLink
+                to="mailto:sokq44@gmail.com"
+                className="text-blue-500"
+              >
+                sokq44@gmail.com
+              </SlidingLink>
+            </span>
+            . Thanks for being here with us from the start!
           </Container>
           <Container className="flex gap-x-8 w-[32rem]">
             <Link
