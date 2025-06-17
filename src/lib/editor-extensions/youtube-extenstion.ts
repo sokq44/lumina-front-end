@@ -52,7 +52,6 @@ export function insertYoutube(
   editor: Editor,
   attrs: YoutubeExtensionAttributes
 ) {
-  console.log(attrs);
   editor
     .chain()
     .focus()

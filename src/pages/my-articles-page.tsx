@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { PenLine } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { PenLine, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useArticlesGetter } from "@/hooks/api/articles";
 import { Button } from "@/components/ui/button";
@@ -8,10 +8,11 @@ import Container from "@/components/ui/container";
 import ArticleCard from "@/components/ui/article-card";
 import LoadingScreen from "@/components/wraps/loading-screen";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const MyArticlesPage = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const { articles, error, isLoading } = useArticlesGetter();
 
   useEffect(() => {
@@ -35,50 +36,58 @@ const MyArticlesPage = () => {
   return (
     <MediaQuery>
       <More>
-        <Container className="flex flex-col items-center justify-center gap-y-8 w-full h-full">
-          {articles && articles.length > 0 ? (
-            <Container className="grid grid-cols-4 gap-x-12 gap-y-8 items-center px-4 2xl:grid-cols-5">
-              <Link
-                to={"/writing"}
-                state={{ article: undefined }}
-                className="h-full"
+        {articles && articles.length > 0 ? (
+          <Container className="flex flex-col">
+            <Container className="w-full h-32 px-12 flex items-end justify-center gap-x-2 mb-8">
+              <Container className="w-full flex items-center justify-center">
+                <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
+                <Input
+                  placeholder="Search..."
+                  className="border-l-0 border-muted rounded-none rounded-tr-md rounded-br-md"
+                />
+              </Container>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  navigate("/writing", { state: { article: undefined } })
+                }
               >
-                <Card className="h-full flex flex-col items-center justify-center bg-card-foreground text-card border-0 transition-all duration-300 cursor-pointer hover:bg-card hover:text-card-foreground hover:outline hover:outline-1">
-                  <CardTitle className="text-5xl font-bold">Create</CardTitle>
-                  <CardDescription className="flex items-center text-inherit">
-                    <PenLine size={12} className="mr-1" />
-                    Write a new article
-                  </CardDescription>
-                </Card>
-              </Link>
+                <PenLine size={12} className="mr-1" />
+                <span>Write a new article</span>
+              </Button>
+            </Container>
+            <Container className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mx-12 justify-center">
               {articles.map((article, index) => (
                 <Link
                   to={"/writing"}
                   state={{ article: article }}
                   key={`article ${index}`}
                 >
-                  <ArticleCard article={article} className="max-w-[20rem]" />
+                  <ArticleCard
+                    article={article}
+                    className="max-w-[20rem] mx-auto"
+                  />
                 </Link>
               ))}
             </Container>
-          ) : (
-            <Container className="flex flex-col gap-y-2">
-              <span className="font-semibold text-muted-foreground text-lg">
-                You haven't written anything yet.
-              </span>
-              <Link
-                to={"/writing"}
-                state={{ article: undefined }}
-                className="w-auto"
-              >
-                <Button className="flex items-center gap-1 w-full">
-                  <span>Let's change that</span>
-                  <PenLine size={16} className="mt-1" />
-                </Button>
-              </Link>
-            </Container>
-          )}
-        </Container>
+          </Container>
+        ) : (
+          <Container className="flex flex-col gap-y-2">
+            <span className="font-semibold text-muted-foreground text-lg">
+              You haven't written anything yet.
+            </span>
+            <Link
+              to={"/writing"}
+              state={{ article: undefined }}
+              className="w-auto"
+            >
+              <Button className="flex items-center gap-1 w-full">
+                <span>Let's change that</span>
+                <PenLine size={16} className="mt-1" />
+              </Button>
+            </Link>
+          </Container>
+        )}
       </More>
       <Less>
         {articles && articles.length > 0 ? (

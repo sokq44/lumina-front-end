@@ -6,6 +6,8 @@ import Container from "@/components/ui/container";
 import ArticleCard from "@/components/ui/article-card";
 import LoadingScreen from "@/components/wraps/loading-screen";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const SuggestedArticlesPage = () => {
   const { toast } = useToast();
@@ -32,12 +34,21 @@ const SuggestedArticlesPage = () => {
   return (
     <MediaQuery>
       <More>
-        <Container className="h-min grid grid-cols-4 gap-x-12 gap-y-8 m-auto px-4 2xl:grid-cols-5">
+        <Container className="w-full h-32 px-12 flex items-end justify-center gap-x-2 mb-8">
+          <Container className="w-full flex items-center justify-center">
+            <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
+            <Input
+              placeholder="Search..."
+              className="border-l-0 border-muted rounded-none rounded-tr-md rounded-br-md"
+            />
+          </Container>
+        </Container>
+        <Container className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mx-12 justify-center">
           {articles?.map((article, index) => (
             <Link key={`article ${index}`} to="/article" state={{ article }}>
               <ArticleCard
                 article={article}
-                className="max-w-[20rem] shadow-md"
+                className="max-w-[20rem] shadow-md mx-auto"
               />
             </Link>
           ))}

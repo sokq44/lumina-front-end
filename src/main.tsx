@@ -8,6 +8,11 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import "@/index.css";
 
+/**
+ * @todo Create a dialogue telling the user how to use the text editor.
+ * @todo Updated layouts for sugested and my articles pages for mobile devices.
+ */
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <main className="font-funnel">

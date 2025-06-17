@@ -11,7 +11,7 @@ interface ResizableProps {
   onStopDragging?: () => void;
 }
 
-const spectrum = [250, 325, 400, 475, 550, 625, 700, 775, 850];
+const spectrum = [250, 325, 400, 475, 550, 625, 700, 775];
 
 const Resizable: FC<ResizableProps> = ({
   children,

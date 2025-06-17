@@ -23,7 +23,6 @@ const TextEditor: FC<TextEditorProps> = ({
 }) => {
   const editor = useEditor({
     extensions: extensions,
-    content: "<p>Contents of your article...<p><br />",
   });
 
   if (!editor) {
@@ -39,7 +38,7 @@ const TextEditor: FC<TextEditorProps> = ({
       onRemove={onRemove}
     >
       <DialogueProvider>
-        <Container className="w-[50rem] flex flex-col h-full mx-4 mt-6">
+        <Container className="w-[54rem] flex flex-col h-full mx-4 mt-6">
           <TextEditorMenu className="fixed top-4 left-1/2 transform -translate-x-1/2 w-[48rem] z-50 text-foreground bg-zinc-200 border-zinc-300 dark:bg-zinc-800 dark:border-zinc-600" />
           <TextEditorContent className="mt-16" />
         </Container>

@@ -16,9 +16,10 @@ client.interceptors.response.use(
 );
 
 export type User = {
-  username: string;
+  id?: string;
   email: string;
   image: string;
+  username: string;
 };
 
 export type Article = {
@@ -27,7 +28,15 @@ export type Article = {
   title: string;
   banner: string;
   content: string;
-  user_image: string;
   public: boolean;
   created_at: Date;
+  user_image: string;
+};
+
+export type Comment = {
+  id: string;
+  user: User;
+  content: string;
+  created_at: Date;
+  last_modified: Date;
 };

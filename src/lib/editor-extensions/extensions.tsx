@@ -17,6 +17,7 @@ import CodeBlock from "@tiptap/extension-code-block";
 import HardBreak from "@tiptap/extension-hard-break";
 import BlockQuote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
+import Placeholder from "@tiptap/extension-placeholder";
 import TableHeader from "@tiptap/extension-table-header";
 import OrderedList from "@tiptap/extension-ordered-list";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
@@ -63,4 +64,5 @@ export const extensions: Extensions = [
     resizable: true,
   }),
   Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
+  Placeholder.configure({ placeholder: "Write something..." }),
 ];

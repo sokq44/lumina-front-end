@@ -5,6 +5,7 @@ export const DialogueContext = createContext<{
   logoutDialogue?: () => void;
   addLinkDialogue?: () => void;
   uploadImageDialogue?: () => void;
+  helpWritingDialogue?: () => void;
   youtubeVideoDialogue?: () => void;
   changeBannerDialogue?: () => void;
   deleteArticleDialogue?: () => void;

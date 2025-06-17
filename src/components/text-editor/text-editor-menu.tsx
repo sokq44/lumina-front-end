@@ -30,6 +30,7 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
     eventTarget,
     addLinkDialogue,
     uploadImageDialogue,
+    helpWritingDialogue,
     youtubeVideoDialogue,
     deleteArticleDialogue,
     articleVisibilityDialogue,
@@ -202,6 +203,14 @@ const TextEditorMenu: FC<MenubarProps> = (props) => {
             </MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger
+          className="cursor-pointer"
+          onClick={helpWritingDialogue}
+        >
+          Help
+        </MenubarTrigger>
       </MenubarMenu>
     </Menubar>
   );

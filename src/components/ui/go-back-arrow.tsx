@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 interface GoBackArrowProps {
   to?: string;
   position?: "top-left" | "top-right";
+  onClick?: () => void;
 }
 
-const GoBackArrow: FC<GoBackArrowProps> = ({ to, position }) => {
+const GoBackArrow: FC<GoBackArrowProps> = ({ to, position, onClick }) => {
   const navigate = useNavigate();
 
   let finalClassName =
@@ -32,6 +33,7 @@ const GoBackArrow: FC<GoBackArrowProps> = ({ to, position }) => {
       size="icon"
       className={finalClassName}
       onClick={() => {
+        if (onClick) onClick();
         if (to) navigate(to);
         else navigate(-1);
       }}

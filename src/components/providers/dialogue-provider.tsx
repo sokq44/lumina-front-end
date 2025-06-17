@@ -4,6 +4,7 @@ import LogoutDialogue from "@/components/dialogues/logout-dialogoue";
 import AddLinkDialogue from "@/components/dialogues/add-link-dialogue";
 import UploadImageDialogue from "@/components/dialogues/upload-image-dialog";
 import AddYTVideoDialogue from "@/components/dialogues/add-yt-video-dialogue";
+import HelpWritingDialogue from "@/components/dialogues/help-writing-dialogue";
 import ChangeBannerDialogue from "@/components/dialogues/change-banner-dialogue";
 import DeleteArticleDialogue from "@/components/dialogues/delete-article-dialogue";
 import ProfilePictureDialogue from "@/components/dialogues/profile-picture-dialogue";
@@ -23,6 +24,7 @@ const DialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
         logoutDialogue: () => dispatch("logout-dialogue"),
         addLinkDialogue: () => dispatch("add-link-dialogue"),
         uploadImageDialogue: () => dispatch("upload-image-dialogue"),
+        helpWritingDialogue: () => dispatch("help-writing-dialogue"),
         youtubeVideoDialogue: () => dispatch("add-yt-video-dialogue"),
         changeBannerDialogue: () => dispatch("change-banner-dialogue"),
         deleteArticleDialogue: () => dispatch("delete-article-dialogue"),
@@ -35,6 +37,7 @@ const DialogueProvider: FC<{ children: ReactNode }> = ({ children }) => {
       <AddLinkDialogue />
       <AddYTVideoDialogue />
       <UploadImageDialogue />
+      <HelpWritingDialogue />
       <ChangeBannerDialogue />
       <DeleteArticleDialogue />
       <ProfilePictureDialogue />

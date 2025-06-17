@@ -96,15 +96,15 @@ export default function WritingPage() {
     }
   }, [articleSaver.id]);
 
-  const onSave = (newArticle: Article | undefined) => {
+  const onSave = (newArticle?: Article) => {
     if (newArticle) articleSaver.save(newArticle);
   };
 
-  const onModify = (newArticle: Article | undefined) => {
+  const onModify = (newArticle?: Article) => {
     if (newArticle) newArticleRef.current = newArticle;
   };
 
-  const onRemove = (article: Article | undefined) => {
+  const onRemove = (article?: Article) => {
     if (article) articleRemover.remove(article.id);
   };
 
@@ -166,7 +166,7 @@ export default function WritingPage() {
         <Button
           onClick={quit}
           variant="ghost"
-          className="fixed top-0 left-0 z-[100] m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15"
+          className="fixed top-0 left-0 z-[10] m-2 p-2 rounded-md text-primary bg-gray-200 transition-all duration-300 cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15"
         >
           <CornerUpLeft size={24} />
         </Button>

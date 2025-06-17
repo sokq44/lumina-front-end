@@ -1,5 +1,6 @@
 import { Children, FC, isValidElement, ReactNode } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import Container from "../ui/container";
 
 interface MediaQueryProps {
   children: ReactNode;
@@ -22,7 +23,11 @@ const MediaQuery: FC<MediaQueryProps> = ({ children }) => {
   return matches ? more : less;
 };
 
-const More: FC<MoreLessProps> = ({ children }) => <>{children}</>;
-const Less: FC<MoreLessProps> = ({ children }) => <>{children}</>;
+const More: FC<MoreLessProps> = ({ children }) => (
+  <Container className="w-screen h-screen">{children}</Container>
+);
+const Less: FC<MoreLessProps> = ({ children }) => (
+  <Container className="w-screen h-screen">{children}</Container>
+);
 
 export { MediaQuery, More, Less };
