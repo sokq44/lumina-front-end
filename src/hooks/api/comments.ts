@@ -1,8 +1,13 @@
-import { client } from "@/lib/api";
+import { Comment, client } from "@/lib/api";
 import { grabErrorMessage } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
-export function useCommentsGetter(id: string) {
+export function useCommentsGetter(id: string): {
+  get: () => Promise<void>;
+  isLoading: boolean;
+  error: string | null | undefined;
+  comments: Comment[] | undefined;
+} {
   const [error, setError] = useState<string | null | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [comments, setComments] = useState<Comment[] | undefined>(undefined);
@@ -22,7 +27,7 @@ export function useCommentsGetter(id: string) {
         `/comments/article/all?articleId=${idRef.current}`
       );
       setError(null);
-      setComments(response.data);
+      setComments(response.data as Comment[]);
     } catch (err) {
       const message = grabErrorMessage(err);
       setError(message);

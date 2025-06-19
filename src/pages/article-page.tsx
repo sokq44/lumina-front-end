@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 import { generateHTML } from "@tiptap/react";
 import { Link, useLocation } from "react-router-dom";
@@ -17,6 +17,14 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useCommentCreator, useCommentsGetter } from "@/hooks/api/comments";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import CommentTile from "@/components/article/comment-tile";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
+import { BookType, MessageSquareText } from "lucide-react";
 
 const ArticlePage = () => {
   const { toast } = useToast();
@@ -24,6 +32,8 @@ const ArticlePage = () => {
   const articleGetter = useArticleGetter(state.article.id);
   const commentsGetter = useCommentsGetter(state.article.id);
   const commentCreator = useCommentCreator(state.article.id);
+
+  const [bottomSection, setBottomSection] = useState<number>(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -128,17 +138,63 @@ const ArticlePage = () => {
                 </span>
               </Container>
             </Container>
-            <Container className="flex gap-x-2">
-              <Input ref={inputRef} type="text" placeholder="Comment" />
-              <Button onClick={comment}>Comment</Button>
-            </Container>
-            <Container>
-              <pre className="max-h-96 overflow-auto whitespace-pre-wrap break-words">
-                {JSON.stringify(commentsGetter.comments, null, 2)}
-              </pre>
-            </Container>
             <hr />
-            <Container className="mt-4">{getContent()}</Container>
+            <Container>{getContent()}</Container>
+            <Container className="flex items-center justify-center gap-x-3 mt-2">
+              <hr className="w-100" />
+              <span className="text-muted-foreground font-bold">
+                Written by {articleGetter.article?.user}
+              </span>
+              <hr className="w-100" />
+            </Container>
+            <NavigationMenu className="mx-auto mt-12">
+              <NavigationMenuList className="border rounded-md py-3 px-4">
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild>
+                    <Button variant="ghost" onClick={() => setBottomSection(0)}>
+                      <Container className="flex items-center gap-x-1 text-muted-foreground">
+                        <MessageSquareText />
+                        <span className="text-md font-bold">Comments</span>
+                      </Container>
+                    </Button>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <Container className="w-[1px] h-full bg-muted-foreground"></Container>
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild>
+                    <Button variant="ghost" onClick={() => setBottomSection(1)}>
+                      <Container className="flex items-center gap-x-1 text-muted-foreground">
+                        <BookType />
+                        <span className="font-bold">Similar Topics</span>
+                      </Container>
+                    </Button>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+            <Container className="min-h-[48rem] mb-12">
+              {bottomSection === 0 && (
+                <>
+                  <Container className="flex gap-x-2 mb-5">
+                    <Input ref={inputRef} type="text" placeholder="Comment" />
+                    <Button onClick={comment}>Comment</Button>
+                  </Container>
+                  <Container>
+                    {commentsGetter.comments &&
+                      commentsGetter.comments.map((comment) => (
+                        <Container key={comment.id} className="mb-4">
+                          <CommentTile comment={comment} />
+                        </Container>
+                      ))}
+                  </Container>
+                </>
+              )}
+              {bottomSection === 1 && (
+                <Container className="w-full text-center mt-4">
+                  We're sorry, but this feature doesn't exist yet. :(
+                </Container>
+              )}
+            </Container>
           </Container>
         </Container>
       </More>
