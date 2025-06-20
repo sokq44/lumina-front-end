@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { generateHTML } from "@tiptap/react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { extensions } from "@/lib/editor-extensions/extensions";
 import { extensionToElement, formatDate, getArticleContent } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -24,18 +24,26 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { BookType, MessageSquareText } from "lucide-react";
+import {
+  BookType,
+  LoaderCircle,
+  MessageSquareDashed,
+  MessageSquareText,
+  Send,
+} from "lucide-react";
+import { useUserGetter } from "@/hooks/api/user";
+import Informative from "@/components/ui/informative";
 
 const ArticlePage = () => {
+  const { id } = useParams();
   const { toast } = useToast();
-  const { state } = useLocation();
-  const articleGetter = useArticleGetter(state.article.id);
-  const commentsGetter = useCommentsGetter(state.article.id);
-  const commentCreator = useCommentCreator(state.article.id);
+  const userGetter = useUserGetter();
+  const articleGetter = useArticleGetter(id);
+  const commentsGetter = useCommentsGetter(id);
+  const commentCreator = useCommentCreator(id);
 
+  const [content, setContent] = useState<string>("");
   const [bottomSection, setBottomSection] = useState<number>(0);
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (articleGetter.error) {
@@ -63,14 +71,6 @@ const ArticlePage = () => {
     }
   }, [commentCreator.error, toast]);
 
-  useEffect(() => {
-    console.log("Comments:", commentsGetter.comments);
-  }, [commentsGetter.comments]);
-
-  useEffect(() => {
-    console.log("Error:", commentsGetter.error);
-  }, [commentsGetter.error]);
-
   const getContent = () => {
     if (articleGetter.article) {
       const html = generateHTML(
@@ -81,15 +81,24 @@ const ArticlePage = () => {
     }
   };
 
-  const comment = async () => {
-    if (inputRef.current) {
-      const content = inputRef.current.value;
-      await commentCreator.create({
-        article_id: state.article.id,
-        comment: { content },
+  const comment = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!id) return;
+
+    if (content.length <= 0 || content.length > 255) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Comment",
+        description: "Your comment has be at most 255 characters long.",
       });
-      await commentsGetter.get();
+      return;
     }
+
+    setContent("");
+
+    await commentCreator.create(id, content);
+    await commentsGetter.get();
   };
 
   if (articleGetter.isLoading) {
@@ -151,7 +160,13 @@ const ArticlePage = () => {
               <NavigationMenuList className="border rounded-md py-3 px-4">
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
-                    <Button variant="ghost" onClick={() => setBottomSection(0)}>
+                    <Button
+                      variant="ghost"
+                      onClick={async () => {
+                        await commentsGetter.get();
+                        setBottomSection(0);
+                      }}
+                    >
                       <Container className="flex items-center gap-x-1 text-muted-foreground">
                         <MessageSquareText />
                         <span className="text-md font-bold">Comments</span>
@@ -175,23 +190,90 @@ const ArticlePage = () => {
             <Container className="min-h-[48rem] mb-12">
               {bottomSection === 0 && (
                 <>
-                  <Container className="flex gap-x-2 mb-5">
-                    <Input ref={inputRef} type="text" placeholder="Comment" />
-                    <Button onClick={comment}>Comment</Button>
-                  </Container>
-                  <Container>
-                    {commentsGetter.comments &&
-                      commentsGetter.comments.map((comment) => (
-                        <Container key={comment.id} className="mb-4">
-                          <CommentTile comment={comment} />
+                  {userGetter.error === null && commentsGetter.comments ? (
+                    <>
+                      {commentsGetter.isLoading && (
+                        <Container className="flex items-center justify-center text-muted-foreground font-medium">
+                          <LoaderCircle size={18} className="animate-spin" />
+                          <span>Retrieving comments...</span>
                         </Container>
-                      ))}
-                  </Container>
+                      )}
+                      <form
+                        onSubmit={comment}
+                        className="flex items-center jsutify-center gap-x-2 mb-5"
+                      >
+                        <Input
+                          type="text"
+                          value={content}
+                          placeholder="What are your thoughts?"
+                          onChange={(e) => setContent(e.target.value)}
+                        />
+                        <Informative
+                          label={
+                            commentCreator.isLoading ? "Loading..." : "Comment"
+                          }
+                        >
+                          <Button
+                            type="submit"
+                            disabled={
+                              commentCreator.isLoading || content.length <= 0
+                            }
+                            variant="secondary"
+                            className="p-0 w-10 h-10"
+                          >
+                            {commentCreator.isLoading ? (
+                              <LoaderCircle
+                                size={16}
+                                className="animate-spin"
+                              />
+                            ) : (
+                              <Send size={16} />
+                            )}
+                          </Button>
+                        </Informative>
+                      </form>
+                      {commentsGetter.comments.length > 0 && (
+                        <>
+                          <Container>
+                            {commentsGetter.comments &&
+                              commentsGetter.comments.map((comment) => (
+                                <Container key={comment.id} className="mb-4">
+                                  <CommentTile
+                                    variant={
+                                      userGetter.user?.id === comment.user.id
+                                        ? "mine"
+                                        : "foreign"
+                                    }
+                                    comment={comment}
+                                    onCommentRemoved={commentsGetter.get}
+                                    onCommentModified={commentsGetter.get}
+                                  />
+                                </Container>
+                              ))}
+                          </Container>
+                        </>
+                      )}
+                      {commentsGetter.comments.length <= 0 && (
+                        <Container className="flex items-center justify-center gap-x-1 text-muted-foreground">
+                          <span className="text-lg text-medium">
+                            There are no comments for this article yet.
+                          </span>
+                          <MessageSquareDashed size={24} />
+                        </Container>
+                      )}
+                    </>
+                  ) : (
+                    <Container className="mt-4 text-center text-red-500">
+                      Sorry, but there has been an error while trying to
+                      retrieve comments for this article. Please, try again
+                      later.
+                    </Container>
+                  )}
                 </>
               )}
               {bottomSection === 1 && (
                 <Container className="w-full text-center mt-4">
-                  We're sorry, but this feature doesn't exist yet. :(
+                  Sorry, but this feature doesn't exist yet. :(
                 </Container>
               )}
             </Container>

@@ -45,7 +45,7 @@ const SuggestedArticlesPage = () => {
         </Container>
         <Container className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mx-12 justify-center">
           {articles?.map((article, index) => (
-            <Link key={`article ${index}`} to="/article" state={{ article }}>
+            <Link key={`article ${index}`} to={`/article/${article.id}`}>
               <ArticleCard
                 article={article}
                 className="max-w-[20rem] shadow-md mx-auto"
@@ -57,7 +57,11 @@ const SuggestedArticlesPage = () => {
       <Less>
         <Container className="w-full flex flex-col items-center gap-y-8 px-2">
           {articles?.map((article, index) => (
-            <Link key={`article ${index}`} to="/article" state={{ article }}>
+            <Link
+              key={`article ${index}`}
+              to={`/article/${article.id}`}
+              state={{ article }}
+            >
               <ArticleCard article={article} className="w-full shadow-md" />
             </Link>
           ))}

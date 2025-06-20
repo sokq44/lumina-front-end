@@ -2,7 +2,7 @@ import { Comment, client } from "@/lib/api";
 import { grabErrorMessage } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
-export function useCommentsGetter(id: string): {
+export function useCommentsGetter(id?: string): {
   get: () => Promise<void>;
   isLoading: boolean;
   error: string | null | undefined;
@@ -39,20 +39,24 @@ export function useCommentsGetter(id: string): {
   return { get, isLoading, error, comments };
 }
 
-export function useCommentCreator(id: string) {
+export function useCommentCreator(id?: string): {
+  create: (articleId: string, content: string) => Promise<void>;
+  isLoading: boolean;
+  error: string | null | undefined;
+} {
   const [error, setError] = useState<string | null | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const create = async (comment: {
-    article_id: string;
-    comment: { content: string };
-  }) => {
+  const create = async (articleId: string, content: string) => {
     if (!id) return;
 
     setIsLoading(true);
 
     try {
-      await client.post("/comments/article/create", comment);
+      await client.post("/comments/article/create", {
+        article_id: articleId,
+        comment: { content },
+      });
       setError(null);
     } catch (err) {
       const message = grabErrorMessage(err);
@@ -63,4 +67,57 @@ export function useCommentCreator(id: string) {
   };
 
   return { create, isLoading, error };
+}
+
+export function useCommentModifier(): {
+  modify: (commentId: string, newContent: string) => Promise<void>;
+  error: string | null | undefined;
+  isLoading: boolean;
+} {
+  const [error, setError] = useState<string | null | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const modify = async (commentId: string, newContent: string) => {
+    setIsLoading(true);
+
+    try {
+      await client.patch("/comments/article/update", {
+        comment_id: commentId,
+        content: newContent,
+      });
+      setError(null);
+    } catch (err) {
+      const message = grabErrorMessage(err);
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { modify, error, isLoading };
+}
+
+export function useCommentRemover(): {
+  remove: (commentId: string) => Promise<void>;
+  error: string | null | undefined;
+  isLoading: boolean;
+} {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null | undefined>(undefined);
+
+  const remove = async (commentId: string) => {
+    setIsLoading(true);
+
+    try {
+      await client.delete(`/comments/article/delete?id=${commentId}`);
+      setError(null);
+    } catch (err) {
+      const message = grabErrorMessage(err);
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { remove, error, isLoading };
 }

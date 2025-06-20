@@ -106,7 +106,7 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/article",
+    path: "/article/:id",
     element: <ArticlePage />,
     errorElement: <ErrorPage />,
   },
