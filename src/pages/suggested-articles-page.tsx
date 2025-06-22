@@ -34,28 +34,37 @@ const SuggestedArticlesPage = () => {
   return (
     <MediaQuery>
       <More>
-        <Container className="w-full h-32 px-12 flex items-end justify-center gap-x-2 mb-8">
-          <Container className="w-full flex items-center justify-center">
+        <Container className="w-screen h-screen">
+          <Container className="w-full h-32 px-12 flex items-end justify-center gap-x-2 mb-8">
+            <Container className="w-full flex items-center justify-center">
+              <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
+              <Input
+                placeholder="Search..."
+                className="border-l-0 border-muted rounded-none rounded-tr-md rounded-br-md"
+              />
+            </Container>
+          </Container>
+          <Container className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mx-12 justify-center">
+            {articles?.map((article, index) => (
+              <Link key={`article ${index}`} to={`/article/${article.id}`}>
+                <ArticleCard
+                  article={article}
+                  className="max-w-[20rem] shadow-md mx-auto"
+                />
+              </Link>
+            ))}
+          </Container>
+        </Container>
+      </More>
+      <Less>
+        <Container className="w-screen h-screen flex flex-col gap-y-4 px-4">
+          <Container className="w-full flex items-center justify-center mb-2">
             <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
             <Input
               placeholder="Search..."
               className="border-l-0 border-muted rounded-none rounded-tr-md rounded-br-md"
             />
           </Container>
-        </Container>
-        <Container className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mx-12 justify-center">
-          {articles?.map((article, index) => (
-            <Link key={`article ${index}`} to={`/article/${article.id}`}>
-              <ArticleCard
-                article={article}
-                className="max-w-[20rem] shadow-md mx-auto"
-              />
-            </Link>
-          ))}
-        </Container>
-      </More>
-      <Less>
-        <Container className="w-full flex flex-col items-center gap-y-8 px-2">
           {articles?.map((article, index) => (
             <Link
               key={`article ${index}`}

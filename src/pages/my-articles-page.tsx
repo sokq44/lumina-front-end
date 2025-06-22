@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { PenLine, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useArticlesGetter } from "@/hooks/api/articles";
+import { Input } from "@/components/ui/input";
+import { PenLine, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
+import { Link, useNavigate } from "react-router-dom";
 import ArticleCard from "@/components/ui/article-card";
+import { useArticlesGetter } from "@/hooks/api/articles";
 import LoadingScreen from "@/components/wraps/loading-screen";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
-import { Input } from "@/components/ui/input";
 
 const MyArticlesPage = () => {
   const { toast } = useToast();
@@ -37,7 +37,7 @@ const MyArticlesPage = () => {
     <MediaQuery>
       <More>
         {articles && articles.length > 0 ? (
-          <Container className="flex flex-col">
+          <Container className="w-screen h-screen flex flex-col">
             <Container className="w-full h-32 px-12 flex items-end justify-center gap-x-2 mb-8">
               <Container className="w-full flex items-center justify-center">
                 <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
@@ -90,35 +90,24 @@ const MyArticlesPage = () => {
         )}
       </More>
       <Less>
-        {articles && articles.length > 0 ? (
-          <Container className="w-full h-full flex flex-col items-center gap-y-4 px-2">
-            {articles.map((article, index) => (
-              <Link
-                to={"/user/writing"}
-                state={{ article: article }}
-                key={`article ${index}`}
-              >
-                <ArticleCard article={article} />
-              </Link>
-            ))}
+        <Container className="w-screen h-screen flex flex-col gap-y-4 px-4">
+          <Container className="w-full flex items-center justify-center mb-2">
+            <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
+            <Input
+              placeholder="Search..."
+              className="border-l-0 border-muted rounded-none rounded-tr-md rounded-br-md"
+            />
           </Container>
-        ) : (
-          <Container className="h-full flex flex-col justify-center gap-y-2 px-2 ">
-            <span className="font-semibold text-muted-foreground text-lg text-center">
-              You haven't written anything yet.
-            </span>
+          {articles?.map((article, index) => (
             <Link
-              to={"/user/writing"}
-              state={{ article: undefined }}
-              className="w-auto"
+              key={`article ${index}`}
+              to={`/article/${article.id}`}
+              state={{ article }}
             >
-              <Button className="flex items-center gap-1 w-full">
-                <span>Let's change that</span>
-                <PenLine size={16} className="mt-1" />
-              </Button>
+              <ArticleCard article={article} className="w-full shadow-md" />
             </Link>
-          </Container>
-        )}
+          ))}
+        </Container>
       </Less>
     </MediaQuery>
   );

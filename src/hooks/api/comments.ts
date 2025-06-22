@@ -39,7 +39,7 @@ export function useCommentsGetter(id?: string): {
   return { get, isLoading, error, comments };
 }
 
-export function useCommentCreator(id?: string): {
+export function useCommentCreator(): {
   create: (articleId: string, content: string) => Promise<void>;
   isLoading: boolean;
   error: string | null | undefined;
@@ -48,8 +48,6 @@ export function useCommentCreator(id?: string): {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const create = async (articleId: string, content: string) => {
-    if (!id) return;
-
     setIsLoading(true);
 
     try {

@@ -48,11 +48,12 @@ export default function UserPage() {
         </More>
         <Less>
           <Drawer>
-            <DrawerContent className="flex flex-col gap-y-10 px-4 items-center justify-center my-8 font-funnel">
+            <DrawerContent className="flex flex-col gap-y-3 px-4 items-center justify-center my-8 font-funnel">
               {updatedMenuItems.map((item) => (
                 <Button
+                  variant="ghost"
                   key={item.title}
-                  className="flex"
+                  className="flex w-full"
                   onClick={() => onItemClick(item)}
                 >
                   <item.icon className="mr-2" />
@@ -61,7 +62,7 @@ export default function UserPage() {
               ))}
               <Button
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                className="flex items-center justify-center gap-x-4 h-12 w-full p-4 transition-bg duration-300"
+                className="flex items-center justify-center gap-x-4 w-full transition-bg duration-300"
               >
                 <SunMoon size={24} />
                 <span className="text-base">Toggle Theme</span>

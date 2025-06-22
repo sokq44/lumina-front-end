@@ -129,7 +129,7 @@ const ProfilePage = () => {
 
   return (
     <Container className="h-full w-full flex flex-col gap-4 items-center lg:justify-center">
-      <Card className="w-full h-auto p-8 border-none shadow-none mt-8 lg:mt-0">
+      <Card className="w-full h-auto p-8 border-none shadow-none mt-8 bg-body lg:mt-0">
         <Container className="w-full flex flex-col items-center gap-y-4">
           <Avatar className="w-32 h-auto shadow-md">
             <AvatarImage src={currentUser?.image} />
