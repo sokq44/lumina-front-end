@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useSuggestedArticlesGetter } from "@/hooks/api/articles";
@@ -11,7 +11,9 @@ import { Input } from "@/components/ui/input";
 
 const SuggestedArticlesPage = () => {
   const { toast } = useToast();
-  const { articles, isLoading, error } = useSuggestedArticlesGetter();
+  const { get, articles, isLoading, error } = useSuggestedArticlesGetter();
+
+  const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (error) {
@@ -23,13 +25,12 @@ const SuggestedArticlesPage = () => {
     }
   }, [error, toast]);
 
-  if (isLoading) {
-    return (
-      <Container className="w-screen h-screen">
-        <LoadingScreen>Retrieving Articles...</LoadingScreen>
-      </Container>
-    );
-  }
+  const search = () => {
+    if (searchRef.current) {
+      const q = searchRef.current.value.toLowerCase();
+      get(q, 50);
+    }
+  };
 
   return (
     <MediaQuery>
@@ -39,21 +40,33 @@ const SuggestedArticlesPage = () => {
             <Container className="w-full flex items-center justify-center">
               <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
               <Input
+                ref={searchRef}
+                onChange={search}
                 placeholder="Search..."
                 className="border-l-0 border-muted rounded-none rounded-tr-md rounded-br-md"
               />
             </Container>
           </Container>
-          <Container className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mx-12 justify-center">
-            {articles?.map((article, index) => (
-              <Link key={`article ${index}`} to={`/article/${article.id}`}>
-                <ArticleCard
-                  article={article}
-                  className="max-w-[20rem] shadow-md mx-auto"
-                />
-              </Link>
-            ))}
-          </Container>
+          {isLoading ? (
+            <LoadingScreen className="h-auto mt-32">
+              Retrieving Articles...
+            </LoadingScreen>
+          ) : (
+            <Container className="grid md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 mx-12">
+              {articles?.map((article, index) => (
+                <Link
+                  key={`article ${index}`}
+                  to={`/article/${article.id}`}
+                  className=""
+                >
+                  <ArticleCard
+                    article={article}
+                    className="shadow-md mx-auto"
+                  />
+                </Link>
+              ))}
+            </Container>
+          )}
         </Container>
       </More>
       <Less>

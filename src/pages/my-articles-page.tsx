@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { PenLine, Search } from "lucide-react";
@@ -13,7 +13,9 @@ import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 const MyArticlesPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { articles, error, isLoading } = useArticlesGetter();
+  const { get, articles, error, isLoading } = useArticlesGetter();
+
+  const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (error) {
@@ -25,39 +27,44 @@ const MyArticlesPage = () => {
     }
   }, [error]);
 
-  if (isLoading) {
-    return (
-      <Container className="w-screen h-screen">
-        <LoadingScreen>Retrieving Articles...</LoadingScreen>
-      </Container>
-    );
-  }
+  const search = () => {
+    if (searchRef.current) {
+      const q = searchRef.current.value.toLowerCase();
+      get(q, 50);
+    }
+  };
 
   return (
     <MediaQuery>
       <More>
-        {articles && articles.length > 0 ? (
-          <Container className="w-screen h-screen flex flex-col">
-            <Container className="w-full h-32 px-12 flex items-end justify-center gap-x-2 mb-8">
-              <Container className="w-full flex items-center justify-center">
-                <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
-                <Input
-                  placeholder="Search..."
-                  className="border-l-0 border-muted rounded-none rounded-tr-md rounded-br-md"
-                />
-              </Container>
-              <Button
-                variant="secondary"
-                onClick={() =>
-                  navigate("/writing", { state: { article: undefined } })
-                }
-              >
-                <PenLine size={12} className="mr-1" />
-                <span>Write a new article</span>
-              </Button>
+        <Container className="w-screen h-screen flex flex-col">
+          <Container className="w-full h-32 px-12 flex items-end justify-center gap-x-2 mb-8">
+            <Container className="w-full flex items-center justify-center">
+              <Search className="text-muted-foreground border border-muted h-10 w-10 px-2 rounded-tl-md rounded-bl-md bg-muted" />
+              <Input
+                ref={searchRef}
+                onChange={search}
+                placeholder="Search..."
+                className="border-l-0 border-muted rounded-none rounded-tr-md rounded-br-md"
+              />
             </Container>
-            <Container className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mx-12 justify-center">
-              {articles.map((article, index) => (
+            <Button
+              variant="secondary"
+              onClick={() =>
+                navigate("/writing", { state: { article: undefined } })
+              }
+            >
+              <PenLine size={12} className="mr-1" />
+              <span>Write a new article</span>
+            </Button>
+          </Container>
+          {isLoading ? (
+            <LoadingScreen className="h-auto mt-32">
+              Retrieving Articles...
+            </LoadingScreen>
+          ) : (
+            <Container className="grid md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 mx-12">
+              {articles?.map((article, index) => (
                 <Link
                   to={"/writing"}
                   state={{ article: article }}
@@ -70,24 +77,8 @@ const MyArticlesPage = () => {
                 </Link>
               ))}
             </Container>
-          </Container>
-        ) : (
-          <Container className="flex flex-col gap-y-2">
-            <span className="font-semibold text-muted-foreground text-lg">
-              You haven't written anything yet.
-            </span>
-            <Link
-              to={"/writing"}
-              state={{ article: undefined }}
-              className="w-auto"
-            >
-              <Button className="flex items-center gap-1 w-full">
-                <span>Let's change that</span>
-                <PenLine size={16} className="mt-1" />
-              </Button>
-            </Link>
-          </Container>
-        )}
+          )}
+        </Container>
       </More>
       <Less>
         <Container className="w-screen h-screen flex flex-col gap-y-4 px-4">

@@ -10,6 +10,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import Container from "../ui/container";
 
 const HelpWritingDialogue = () => {
   const { eventTarget } = useDialogue();
@@ -33,7 +34,9 @@ const HelpWritingDialogue = () => {
         <DialogHeader>
           <DialogTitle>How to Write?</DialogTitle>
           <DialogDescription>
-            This is a the user guide for writing true masterpieces.
+            <Container className="flex">
+              <p className="text-lg">Under construction...</p>
+            </Container>
           </DialogDescription>
         </DialogHeader>
         <DialogClose asChild>
