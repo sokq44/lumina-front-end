@@ -25,25 +25,36 @@ const MainPage: FC = () => {
             </Container>
           </Container>
           <Container className="text-lg w-[32rem] border-2 px-6 py-4 rounded-md">
-            Hello there, we're building a place where ideas flow, words matter,
+            Hello there, I'm building a place where ideas flow, words matter,
             and every writer feels at home.
             <br />
-            Sorry, the app is still under construction, but you're welcome to
-            explore, create, and help us grow. Your feedback is incredibly
-            valuable. Try it out, see what works (and what doesn't), and let us
-            know. Every bug you find helps us make things better. <br />
-            For now, if you run into any errors or issues, please send them via
-            email at
+            The app is still under construction, but you're welcome to explore,
+            create, and help the application grow. Your feedback is incredibly
+            valuable. Try it out, see what works (and what doesn't), and let me
+            know. Every bug you find helps make things better. <br />
+            If you run into any errors or issues, please describe them in a
+            github issue
+            <span>
+              {" "}
+              <SlidingLink
+                target="_blank"
+                to="https://github.com/sokq44/lumina-front-end/issues/new"
+                className="text-blue-500"
+              >
+                here
+              </SlidingLink>
+            </span>{" "}
+            or send them directly to me through{" "}
             <span>
               {" "}
               <SlidingLink
                 to="mailto:sokq44@gmail.com"
                 className="text-blue-500"
               >
-                sokq44@gmail.com
+                email
               </SlidingLink>
             </span>
-            . Thanks for being here with us from the start!
+            . Thanks for being here from the start!
           </Container>
           <Container className="flex gap-x-8 w-[32rem]">
             <Link

@@ -109,13 +109,13 @@ const LoginPage = () => {
             <Container className="w-full flex flex-col items-center gap-y-2 px-8 mt-2 md:flex-row md:gap-x-4 md:mt-4 md:justify-center">
               <SlidingLink
                 to="/register"
-                className="w-full px-2 py-[10px] text-sm  bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+                className="w-full px-2 py-[10px] text-[var(--logo)] text-sm  bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
               >
                 Create an Account
               </SlidingLink>
               <SlidingLink
                 to="/password"
-                className="w-full px-2 py-[10px] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+                className="w-full px-2 py-[10px] text-[var(--logo)] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
               >
                 Reset Your Password
               </SlidingLink>
