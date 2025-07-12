@@ -14,7 +14,13 @@ import { useUserGetter, useUserModifier } from "@/hooks/api/user";
 import { ModifyUserForm, modifyUserFormSchema } from "@/lib/schemas";
 import { ImageUp, LoaderCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormItem,
+  FormField,
+  FormControl,
+  FormDescription,
+} from "@/components/ui/form";
 
 const ProfilePage = () => {
   const { toast } = useToast();
@@ -191,16 +197,20 @@ const ProfilePage = () => {
                       type="text"
                       placeholder="..."
                       autoComplete="off"
-                      disabled={!modifying || isLoading}
+                      disabled
                       {...field}
                     />
                   </FormControl>
+                  <FormDescription>
+                    Email Address can only be changed in the Account section
+                  </FormDescription>
                 </FormItem>
               )}
             />
             <Container className="flex w-full space-x-2">
               {modifying && (
                 <Button
+                  type="button"
                   variant="secondary"
                   disabled={isLoading}
                   onClick={onCancelModifying}

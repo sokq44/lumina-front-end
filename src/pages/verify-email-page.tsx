@@ -48,8 +48,8 @@ const VerifyEmailPage = () => {
             </MediaQuery>
           </span>
         </Container>
-        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
-          <Mail size={48} className="text-card" />
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:shadow-md bg-[var(--logo)] rounded-e-2xl">
+          <Mail size={48} className="text-white" />
         </Container>
       </Container>
     </Container>

@@ -48,8 +48,8 @@ export default function LogoutDialogue() {
           "There has been an undexpected error while trying to log you out.",
       });
     } else if (error === null) {
-      closeRef.current?.click();
       navigate("/login");
+      closeRef.current?.click();
     }
   }, [error]);
 

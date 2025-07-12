@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import MainPage from "@/pages/main-page";
 import UserPage from "@/pages/user-page";
 import LoginPage from "@/pages/login-page";
@@ -6,6 +6,7 @@ import ErrorPage from "@/pages/error-page";
 import ArticlePage from "@/pages/article-page";
 import ProfilePage from "@/pages/profile-page";
 import WritingPage from "@/pages/writing-page";
+import AccountPage from "@/pages/account-page";
 import SettingsPage from "@/pages/settings-page";
 import RegisterPage from "@/pages/register-page";
 import NotFoundPage from "@/pages/not-found-page";
@@ -15,7 +16,6 @@ import EmailVerifiedPage from "@/pages/email-verified-page";
 import PasswordChangePage from "@/pages/password-change-page";
 import SuggestedArticlesPage from "@/pages/suggested-articles-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
-import { Button } from "@/components/ui/button";
 import DialogueProvider from "@/components/providers/dialogue-provider";
 
 export const router = createBrowserRouter([
@@ -81,16 +81,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "account",
-        element: (
-          <Link to={"/password"}>
-            <Button
-              variant="secondary"
-              className="cursor-pointer transition-all duration-300"
-            >
-              Change your password
-            </Button>
-          </Link>
-        ),
+        element: <AccountPage />,
         errorElement: <ErrorPage />,
       },
     ],

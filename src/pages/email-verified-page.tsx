@@ -80,11 +80,11 @@ const EmailVerifiedPage = () => {
             )}
           </Container>
         </Container>
-        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:shadow-md bg-[var(--logo)] rounded-e-2xl">
           {errorMessage ? (
-            <MailX size={48} className="text-card" />
+            <MailX size={48} className="text-white" />
           ) : (
-            <MailCheck size={48} className="text-card" />
+            <MailCheck size={48} className="text-white" />
           )}
         </Container>
       </Container>

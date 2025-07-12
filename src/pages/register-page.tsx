@@ -130,7 +130,7 @@ const RegisterPage = () => {
             </Button>
             <SlidingLink
               to="/login"
-              className="w-full px-2 py-[10px] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
+              className="w-full px-2 py-[10px] text-[var(--logo)] text-sm bg-secondary rounded-md md:bg-transparent md:w-auto md:p-0 md:text-base md:font-normal md:rounded-none"
             >
               Already have an account?
             </SlidingLink>

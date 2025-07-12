@@ -89,7 +89,7 @@ const PasswordChangeInitPage = () => {
                 <Button
                   variant={isLoading ? "formSubmitAwaiting" : "formSubmit"}
                   type="submit"
-                  className="w-full text-secondary transition-all duration-300"
+                  className="w-full text-white bg-[var(--logo)] transition-all duration-300 hover:bg-zinc-700"
                 >
                   {isLoading ? (
                     <LoaderCircle size={24} className="animate-spin" />
@@ -101,8 +101,8 @@ const PasswordChangeInitPage = () => {
             </>
           )}
         </Container>
-        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:border-card-foreground md:shadow-md bg-card-foreground rounded-e-2xl">
-          <MailQuestion size={48} className="text-card" />
+        <Container className="flex items-center justify-center w-0 md:w-1/3 md:border md:shadow-md bg-[var(--logo)] rounded-e-2xl">
+          <MailQuestion size={48} className="text-white" />
         </Container>
       </Container>
     </Container>
