@@ -121,7 +121,7 @@
   * {
     @apply border-border outline-ring/50;
   }
-  
+
   body {
     @apply bg-background text-foreground;
     font-family: "Funnel Sans";
@@ -139,7 +139,8 @@
     @apply ml-6 my-3 pl-4 border-l-[3px] border-l-gray-300 text-muted-foreground;
   }
 
-  ul, ol {
+  ul,
+  ol {
     @apply px-4 mt-5 mb-5 mr-4 ml-1.5;
 
     li p {
@@ -206,7 +207,8 @@
   table {
     @apply border-collapse m-0 overflow-hidden table-fixed w-full text-sm my-4;
 
-    td, th {
+    td,
+    th {
       @apply border border-muted-foreground box-border min-w-4 px-2.5 py-2 relative align-top;
     }
 
@@ -228,12 +230,19 @@
     @apply w-full h-auto my-4 rounded-lg;
   }
 
+  .tiptap p.is-editor-empty:first-child::before {
+    @apply text-muted-foreground;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
 
   .ProseMirror:focus {
     @apply outline-none;
   }
-  
-  .fade-in {
+
+  /* .fade-in {
     animation: fade-in 0.5s forwards;
   }
 
@@ -255,11 +264,11 @@
     from {
       opacity: 100;
     }
-    
+
     to {
       opacity: 0;
     }
-  }
+  } */
 }
 
 .ProseMirror:focus {

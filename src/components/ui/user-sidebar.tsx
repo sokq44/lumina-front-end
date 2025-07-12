@@ -2,13 +2,13 @@ import { FC, useEffect } from "react";
 import { MenuItem } from "@/lib/menu-items";
 import {
   Sidebar,
+  useSidebar,
   SidebarMenu,
   SidebarGroup,
   SidebarContent,
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarGroupContent,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import Container from "@/components/ui/container";
 import { Separator } from "@/components/ui/separator";

@@ -1,9 +1,8 @@
 import { FC, useEffect, useRef } from "react";
-import { cn, formatDate } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Article } from "@/lib/api";
 import { EditorContent } from "@tiptap/react";
 import { useTextEditor } from "@/hooks/use-text-editor";
-import { Link } from "react-router-dom";
 import Img from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
@@ -20,6 +19,19 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
   const titleRef = useRef<HTMLInputElement>(null);
   const bannerImgRef = useRef<HTMLImageElement>(null);
+  const editorContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (editorContentRef) {
+      const textbox = editorContentRef.current?.children[0] as HTMLDivElement;
+      if (textbox) {
+        textbox.setAttribute(
+          "class",
+          "tiptap min-h-40 border-none px-4 py-3 mt-0 focus-visible:outline-none focus:border-none focus-visible:border-none"
+        );
+      }
+    }
+  }, [editorContentRef]);
 
   useEffect(() => {
     if (eventTarget) {
@@ -41,17 +53,6 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
     }
   }, [eventTarget]);
 
-  useEffect(() => {
-    if (article && editor) {
-      if (article.content) {
-        editor.commands.setContent(JSON.parse(article.content));
-      }
-      if (titleRef.current instanceof HTMLInputElement) {
-        titleRef.current.value = article.title;
-      }
-    }
-  }, [article]);
-
   const changeTitle = () => {
     if (titleRef.current) {
       const updated = {
@@ -68,7 +69,7 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
 
   return (
     <Container className={cn("flex flex-col mt-4", className)}>
-      <Container className="flex flex-col mb-10">
+      <Container className="flex flex-col mb-4">
         <Container className="w-full h-[28rem] relative mb-8 group">
           <Img
             ref={bannerImgRef}
@@ -88,30 +89,18 @@ const TextEditorContent: FC<TextEditorContentProps> = ({ className }) => {
           type="text"
           maxLength={25}
           placeholder="Title"
+          value={article?.title}
           onChange={changeTitle}
-          className="text-5xl font-bold bg-transparent w-full border-none px-0 py-1 h-auto rounded-none"
+          className="text-5xl font-semibold bg-transparent w-full border-2 border-muted px-4 py-3 h-auto rounded-md"
         />
-        {article?.user && article?.created_at && (
-          <span className="text-sm text-muted-foreground">
-            Written by&nbsp;
-            <Link
-              to={`/user/${article.user}`}
-              className="sliding-link font-semibold"
-            >
-              @{article.user}
-            </Link>
-            &nbsp;on the {formatDate(article.created_at)}
-          </span>
-        )}
       </Container>
       <EditorToolbar>
         <EditorContent
-          onClick={() => editor?.commands.focus()}
+          ref={editorContentRef}
           editor={editor || null}
-          style={{
-            outline: "none",
-          }}
-          className="min-h-svh w-full mx-auto hover:cursor-text focuse:outline-none focus-visible:outline-none focus:border-none focus-visible:border-none"
+          style={{ outline: "none" }}
+          className="w-full border-2 border-muted rounded-md mb-40"
+          placeholder="testing"
         />
       </EditorToolbar>
     </Container>

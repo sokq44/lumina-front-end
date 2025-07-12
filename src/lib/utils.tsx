@@ -19,7 +19,7 @@ export function grabErrorMessage(error: unknown): string {
   return (error as AxiosError).response?.data as string;
 }
 
-export function formatDate(date: Date | undefined): string {
+export function formatDate(date?: Date): string {
   return date
     ? new Date(date).toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -27,6 +27,17 @@ export function formatDate(date: Date | undefined): string {
         year: "numeric",
       })
     : "";
+}
+
+export function formatDateTimeLocal(date?: Date) {
+  if (!date) return "";
+  return new Date(date).toLocaleString(navigator.language, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 export function getArticleContent(article: Article | null): JSONContent {
@@ -85,7 +96,7 @@ export function getEmptyArticle(): Article {
     user: "",
     title: "",
     banner: "",
-    content: "",
+    content: '{"type":"doc","content":[{"type":"paragraph"}]}',
     user_image: "",
     public: false,
     created_at: new Date(),

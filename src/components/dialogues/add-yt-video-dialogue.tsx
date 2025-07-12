@@ -1,4 +1,4 @@
-import { FormEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTextEditor } from "@/hooks/use-text-editor";
 import { useDialogue } from "@/hooks/use-dialogue";
 import {
@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { insertYoutube } from "@/lib/editor-extensions/youtube-extenstion";
+import Container from "../ui/container";
 
 const AddYTVideoDialogue = () => {
   const textEditor = useTextEditor();
@@ -36,9 +37,7 @@ const AddYTVideoDialogue = () => {
     };
   }, [dialogues.eventTarget]);
 
-  const handleLinkAddition: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-
+  const handleLinkAddition = () => {
     const value = inputRef.current?.value;
     if (value && textEditor.editor) {
       insertYoutube(textEditor.editor, { src: url });
@@ -55,7 +54,7 @@ const AddYTVideoDialogue = () => {
           <DialogTitle>Add a Youtube Video</DialogTitle>
           <DialogDescription>Enter the URL for the video.</DialogDescription>
         </DialogHeader>
-        <form className="flex gap-x-2" onSubmit={handleLinkAddition}>
+        <Container className="flex gap-x-2" onSubmit={handleLinkAddition}>
           <Input
             ref={inputRef}
             type="text"
@@ -66,12 +65,13 @@ const AddYTVideoDialogue = () => {
             <Button
               type="submit"
               disabled={!url}
+              onClick={handleLinkAddition}
               className="transition-all duration-300"
             >
               Add
             </Button>
           </DialogClose>
-        </form>
+        </Container>
       </DialogContent>
     </Dialog>
   );

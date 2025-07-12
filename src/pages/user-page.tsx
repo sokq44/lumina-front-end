@@ -37,7 +37,7 @@ export default function UserPage() {
         <More>
           <SidebarProvider>
             <UserSidebar items={updatedMenuItems} onItemClick={onItemClick} />
-            <SidebarTrigger className="fixed top-0 z-50 m-2 w-10 h-10 rounded-md text-primary cursor-pointer transition-all duration-300 hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15" />
+            <SidebarTrigger className="fixed top-0 z-50 m-2 w-10 h-10 rounded-md text-primary bg-gray-200 transition-all duration-300 cursor-pointer hover:bg-secondary dark:bg-gray-800 dark:hover:bg-primary/15" />
             <Container className="h-screen w-screen">
               <ThemeSwitch position="top-right" />
               <Container className="flex w-full h-full bg-background">
@@ -48,11 +48,12 @@ export default function UserPage() {
         </More>
         <Less>
           <Drawer>
-            <DrawerContent className="flex flex-col gap-y-10 px-4 items-center justify-center my-8 font-funnel">
+            <DrawerContent className="flex flex-col gap-y-3 px-4 items-center justify-center my-8 font-funnel">
               {updatedMenuItems.map((item) => (
                 <Button
+                  variant="ghost"
                   key={item.title}
-                  className="flex"
+                  className="flex w-full"
                   onClick={() => onItemClick(item)}
                 >
                   <item.icon className="mr-2" />
@@ -61,7 +62,7 @@ export default function UserPage() {
               ))}
               <Button
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                className="flex items-center justify-center gap-x-4 h-12 w-full p-4 transition-bg duration-300"
+                className="flex items-center justify-center gap-x-4 w-full transition-bg duration-300"
               >
                 <SunMoon size={24} />
                 <span className="text-base">Toggle Theme</span>

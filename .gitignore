@@ -61,5 +61,5 @@ package-lock.json
 *.AppleDouble
 *.LSOverride
 
-# Deployment
-deploy.sh
+# Build & Deployment
+Makefile

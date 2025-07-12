@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Article, client } from "@/lib/api";
 import { grabErrorMessage } from "@/lib/utils";
 
@@ -40,6 +40,7 @@ export function useArticleSaver(articleId?: string): {
 }
 
 export function useArticlesGetter(): {
+  get: (query: string, limit: number) => Promise<void>;
   articles: Article[] | null;
   isLoading: boolean;
   error: string | undefined | null;
@@ -48,12 +49,14 @@ export function useArticlesGetter(): {
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const get = async () => {
+  const get = async (query: string = "", limit: number = 50) => {
     setIsLoading(true);
     setError(undefined);
 
     try {
-      const response = await client.get("/articles/get-all");
+      const response = await client.get(
+        `/articles/all?q=${query}&limit=${limit}`
+      );
       if (response.status === 200) {
         setArticles(response.data as Article[]);
         setError(null);
@@ -70,45 +73,43 @@ export function useArticlesGetter(): {
     get();
   }, []);
 
-  return { articles, isLoading, error };
+  return { get, articles, isLoading, error };
 }
 
 export function useArticleGetter(articleId?: string): {
+  get: () => Promise<void>;
   article: Article | null;
   isLoading: boolean;
   error: string | undefined | null;
 } {
-  const canFetch = useRef<boolean>(true);
   const [article, setArticle] = useState<Article | null>(null);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const get = async () => {
-      setIsLoading(true);
-      setError(undefined);
+  const get = async () => {
+    if (!articleId) return;
 
-      try {
-        const response = await client.get(`/articles/get?article=${articleId}`);
-        if (response.status === 200) {
-          setArticle(response.data as Article);
-          setError(null);
-        }
-      } catch (e) {
-        const message = grabErrorMessage(e);
-        setError(message);
-      } finally {
-        setIsLoading(false);
+    setIsLoading(true);
+    setError(undefined);
+
+    try {
+      const response = await client.get(`/articles/get?article=${articleId}`);
+      if (response.status === 200) {
+        setArticle(response.data as Article);
+        setError(null);
       }
-    };
-
-    if (articleId && canFetch.current) {
-      get();
-      canFetch.current = false;
+    } catch (e) {
+      const message = grabErrorMessage(e);
+      setError(message);
+    } finally {
+      setIsLoading(false);
     }
-  }, [articleId]);
+  };
+  useEffect(() => {
+    get();
+  }, []);
 
-  return { article, isLoading, error };
+  return { get, article, isLoading, error };
 }
 
 export function useArticleRemover(): {
@@ -141,21 +142,23 @@ export function useArticleRemover(): {
 }
 
 export function useSuggestedArticlesGetter(): {
+  get: (query: string, limit: number) => Promise<void>;
   articles: Article[] | null;
   isLoading: boolean;
   error: string | undefined | null;
 } {
-  const canFetch = useRef<boolean>(true);
   const [articles, setArticles] = useState<Article[] | null>(null);
   const [error, setError] = useState<string | undefined | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const get = async () => {
+  const get = async (query: string = "", limit: number = 50) => {
     setIsLoading(true);
     setError(undefined);
 
     try {
-      const response = await client.get("/articles/get-suggested");
+      const response = await client.get(
+        `/articles/suggested?q=${query}&limit=${limit}`
+      );
 
       if (response.status === 200) {
         setArticles(response.data as Article[]);
@@ -170,11 +173,8 @@ export function useSuggestedArticlesGetter(): {
   };
 
   useEffect(() => {
-    if (canFetch) {
-      canFetch.current = false;
-      get();
-    }
+    get();
   }, []);
 
-  return { articles, isLoading, error };
+  return { get, articles, isLoading, error };
 }

@@ -58,7 +58,7 @@ export default function LogoutDialogue() {
       <DialogTrigger ref={triggerRef} />
       <DialogContent className="font-funnel">
         <DialogHeader>
-          <DialogTitle>Loggin Out</DialogTitle>
+          <DialogTitle>Logging Out</DialogTitle>
           <DialogDescription>
             Are you sure you want to log out?
           </DialogDescription>

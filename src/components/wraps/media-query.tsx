@@ -1,15 +1,11 @@
-import { Children, FC, isValidElement, ReactNode } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import { Children, FC, isValidElement, ReactNode } from "react";
 
-interface MediaQueryProps {
+interface Props {
   children: ReactNode;
 }
 
-interface MoreLessProps {
-  children: ReactNode;
-}
-
-const MediaQuery: FC<MediaQueryProps> = ({ children }) => {
+const MediaQuery: FC<Props> = ({ children }) => {
   const matches = useMediaQuery("(min-width:1024px)");
 
   const more = Children.toArray(children).find(
@@ -22,7 +18,7 @@ const MediaQuery: FC<MediaQueryProps> = ({ children }) => {
   return matches ? more : less;
 };
 
-const More: FC<MoreLessProps> = ({ children }) => <>{children}</>;
-const Less: FC<MoreLessProps> = ({ children }) => <>{children}</>;
+const More: FC<Props> = ({ children }) => <>{children}</>;
+const Less: FC<Props> = ({ children }) => <>{children}</>;
 
 export { MediaQuery, More, Less };
