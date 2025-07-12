@@ -1,4 +1,6 @@
-<div style="display: flex; align-items: center; justify-content:center; margin-top: 2rem; margin-bottom: 2rem; gap: 8px;"><img width="50" src="https://illumina-me.org/images/logo.png" /><span style="color: #484848; font-weight: bold; font-size: 6rem;">Lumina</span></div>
+<p align="center">
+  <img width="350" src="https://illumina-me.org/images/logo-text.png" alt="Lumina Logo">
+</p>
 
 ## About
 
