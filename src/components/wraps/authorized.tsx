@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect } from "react";
-import { useUserValidator } from "@/hooks/api/user";
 import Container from "@/components/ui/container";
+import { useUserValidator } from "@/hooks/api/auth";
 import LoadingScreen from "@/components/wraps/loading-screen";
 
 interface AuthorizedProps {

@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangePasswordForm, changePasswordFormSchema } from "@/lib/schemas";
 import {
   usePasswordChanger,
-  useSessionTerminator,
   usePasswordChangeValidator,
 } from "@/hooks/api/user";
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { FieldErrors, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import ThemeSwitch from "@/components/ui/theme-switch";
+import Container from "@/components/ui/container";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { KeyRound, LoaderCircle } from "lucide-react";
+import ThemeSwitch from "@/components/ui/theme-switch";
+import { FieldErrors, useForm } from "react-hook-form";
+import { useSessionTerminator } from "@/hooks/api/auth";
+import { useNavigate, useParams } from "react-router-dom";
+import { ChangePasswordForm, changePasswordFormSchema } from "@/lib/schemas";
 
 const PasswordChangePage = () => {
   const { toast } = useToast();

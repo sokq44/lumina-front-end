@@ -1,8 +1,3 @@
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSessionTerminator } from "@/hooks/api/user";
-import { useToast } from "@/hooks/use-toast";
-import { useDialogue } from "@/hooks/use-dialogue";
 import {
   Dialog,
   DialogTitle,
@@ -12,9 +7,14 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useEffect, useRef } from "react";
 import { LoaderCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
+import { useDialogue } from "@/hooks/use-dialogue";
+import { useSessionTerminator } from "@/hooks/api/auth";
 
 export default function LogoutDialogue() {
   const { toast } = useToast();

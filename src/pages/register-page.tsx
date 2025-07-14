@@ -1,18 +1,18 @@
+import Img from "@/components/ui/image";
 import { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterForm, registerFormSchema } from "@/lib/schemas";
-import { useUserRegistrar } from "@/hooks/api/user";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useForm, FieldErrors } from "react-hook-form";
-import { LoaderCircle, UserPlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
+import { useUserRegistrar } from "@/hooks/api/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle, UserPlus } from "lucide-react";
 import SlidingLink from "@/components/ui/sliding-link";
+import { useForm, FieldErrors } from "react-hook-form";
 import ThemeSwitch from "@/components/ui/theme-switch";
 import GoBackArrow from "@/components/ui/go-back-arrow";
-import Img from "@/components/ui/image";
+import { RegisterForm, registerFormSchema } from "@/lib/schemas";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
