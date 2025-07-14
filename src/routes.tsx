@@ -17,6 +17,8 @@ import PasswordChangePage from "@/pages/password-change-page";
 import SuggestedArticlesPage from "@/pages/suggested-articles-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
 import DialogueProvider from "@/components/providers/dialogue-provider";
+import EmailChangeInitPage from "./pages/email-change-init-page";
+import EmailChangedPage from "./pages/email-changed-page";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +44,16 @@ export const router = createBrowserRouter([
   {
     path: "/email",
     element: <VerifyEmailPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/email/change",
+    element: <EmailChangeInitPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/email/change/:token",
+    element: <EmailChangedPage />,
     errorElement: <ErrorPage />,
   },
   {
