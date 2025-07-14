@@ -13,7 +13,7 @@ const AccountPage = () => {
           Change your password
         </Button>
       </Link>
-      <Link to={""}>
+      <Link to={"/email/change"}>
         <Button
           variant="outline"
           className="w-full transition-all duration-300"

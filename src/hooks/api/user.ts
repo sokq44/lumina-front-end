@@ -2,130 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { client, User } from "@/lib/api";
 import { grabErrorMessage } from "@/lib/utils";
 
-export function useUserRegistrar(): {
-  register: (username: string, email: string, password: string) => void;
-  attempts: number;
-  isLoading: boolean;
-  error: string | undefined | null;
-} {
-  const [error, setError] = useState<string | undefined | null>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [attempts, setAttempts] = useState<number>(0);
-
-  const register = async (
-    username: string,
-    email: string,
-    password: string
-  ) => {
-    setIsLoading(true);
-
-    try {
-      await client.post("/user/register", {
-        username: username,
-        email: email,
-        password: password,
-      });
-      setError(null);
-    } catch (e) {
-      const message = grabErrorMessage(e);
-      setError(message);
-    } finally {
-      setAttempts((last) => last + 1);
-      setIsLoading(false);
-    }
-  };
-
-  return { register, attempts, isLoading, error };
-}
-
-export function useUserAuthenticator(): {
-  login: (email: string, password: string) => void;
-  isLoading: boolean;
-  error: string | undefined | null;
-} {
-  const [error, setError] = useState<string | undefined | null>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    setError(undefined);
-
-    try {
-      await client.post("/user/login", {
-        email: email,
-        password: password,
-      });
-      setError(null);
-    } catch (e) {
-      const message = grabErrorMessage(e);
-      setError(message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return { login, isLoading, error };
-}
-
-export function useUserValidator(): {
-  isLoggedIn: boolean | undefined;
-  isLoading: boolean;
-  error: string | undefined | null;
-} {
-  const canFetch = useRef<boolean>(true);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
-  const [error, setError] = useState<string | undefined | null>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const checkLoggedIn = async () => {
-      try {
-        const response = await client.get("/user/logged-in");
-        if (response.status === 200) setIsLoggedIn(true);
-      } catch (e) {
-        const message = grabErrorMessage(e);
-        setError(message);
-        setIsLoggedIn(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (canFetch.current) {
-      checkLoggedIn();
-      canFetch.current = false;
-    }
-  }, []);
-
-  return { isLoggedIn, isLoading, error };
-}
-
-export function useSessionTerminator(): {
-  logout: () => Promise<void>;
-  isLoading: boolean;
-  error: string | undefined | null;
-} {
-  const [error, setError] = useState<string | undefined | null>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const logout = async () => {
-    setIsLoading(true);
-    setError(undefined);
-
-    try {
-      const response = await client.delete("user/logout");
-      if (response.status === 200) setError(null);
-    } catch (e) {
-      const message = grabErrorMessage(e);
-      setError(message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return { logout, isLoading, error };
-}
-
 export function useUserVerifier(token: string | undefined): {
   isLoading: boolean;
   error: string | undefined | null;
@@ -139,7 +15,7 @@ export function useUserVerifier(token: string | undefined): {
       setIsLoading(true);
 
       try {
-        const response = await client.patch("/user/verify-email", { token });
+        const response = await client.patch("/user/email/verify", { token });
         if (response.status === 204) setError(null);
       } catch (e) {
         const message = grabErrorMessage(e);
@@ -161,7 +37,7 @@ export function useUserVerifier(token: string | undefined): {
 }
 
 export function usePasswordChangeInitializer(): {
-  init: (token: string) => void;
+  init: (email: string) => Promise<void>;
   attempts: number;
   isLoading: boolean;
   error: string | undefined | null;
@@ -174,7 +50,7 @@ export function usePasswordChangeInitializer(): {
     setIsLoading(true);
 
     try {
-      const response = await client.post("/user/password-change-init", {
+      const response = await client.post("/user/password/init", {
         email: email,
       });
       if (response.status === 201) setError(null);
@@ -204,7 +80,7 @@ export function usePasswordChanger(token: string | undefined): {
       setError(undefined);
 
       try {
-        const response = await client.patch("/user/change-password", {
+        const response = await client.patch("/user/password/change", {
           token: token,
           password: password,
         });
@@ -238,7 +114,7 @@ export function usePasswordChangeValidator(token: string | undefined): {
 
         try {
           const response = await client.get(
-            `/user/password-change-valid?token=${token}`
+            `/user/password/valid?token=${token}`
           );
           if (response.status === 200) {
             setValid(true);
@@ -274,7 +150,7 @@ export function useUserGetter(): {
     setError(undefined);
 
     try {
-      const response = await client.get("/user/get-user");
+      const response = await client.get("/user/get");
       setUser(response.data as User);
       setError(null);
     } catch (e) {
@@ -305,7 +181,7 @@ export function useUserModifier(): {
     setIsLoading(true);
 
     try {
-      const response = await client.patch("/user/modify-user", user);
+      const response = await client.patch("/user/update", user);
       if (response.status === 200) setError(null);
     } catch (e) {
       const message = grabErrorMessage(e);
@@ -316,4 +192,58 @@ export function useUserModifier(): {
   };
 
   return { modify, isLoading, error };
+}
+
+export function useEmailChangeInitializer(): {
+  init: (email: string) => Promise<void>;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const init = async (email: string) => {
+    try {
+      setIsLoading(true);
+      setError(undefined);
+
+      const response = await client.post("/user/email/init", {
+        new_email: email,
+      });
+      if (response.status === 201) setError(null);
+    } catch (e) {
+      setError(grabErrorMessage(e));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { init, isLoading, error };
+}
+
+export function useEmailChanger(): {
+  change: (token: string) => Promise<void>;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const change = async (token: string) => {
+    try {
+      setIsLoading(true);
+      setError(undefined);
+
+      await client.patch("/user/email/change", {
+        token,
+      });
+      setError(null);
+    } catch (e) {
+      setError(grabErrorMessage(e));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { change, isLoading, error };
 }

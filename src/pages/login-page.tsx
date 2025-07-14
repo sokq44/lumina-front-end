@@ -1,19 +1,19 @@
 import { useEffect } from "react";
-import { LoginForm, loginFormSchema } from "@/lib/schemas";
-import { useUserAuthenticator } from "@/hooks/api/user";
+import Img from "@/components/ui/image";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldErrors, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
+import { LoaderCircle, LogIn } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Authorized from "@/components/wraps/authorized";
+import { FieldErrors, useForm } from "react-hook-form";
 import ThemeSwitch from "@/components/ui/theme-switch";
 import SlidingLink from "@/components/ui/sliding-link";
 import GoBackArrow from "@/components/ui/go-back-arrow";
-import { LoaderCircle, LogIn } from "lucide-react";
-import Img from "@/components/ui/image";
+import { useUserAuthenticator } from "@/hooks/api/auth";
+import { LoginForm, loginFormSchema } from "@/lib/schemas";
 
 const LoginPage = () => {
   const { login, isLoading, error } = useUserAuthenticator();

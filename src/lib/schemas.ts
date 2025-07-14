@@ -40,6 +40,14 @@ export const passwordChangeInitSchema = z.object({
 });
 export type PasswordChangeInitForm = z.infer<typeof passwordChangeInitSchema>;
 
+export const emailChangeInitSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .min(1, { message: "This field is required" }),
+});
+export type EmailChangeInitForm = z.infer<typeof passwordChangeInitSchema>;
+
 export const changePasswordFormSchema = z
   .object({
     password: z.string().regex(passwordRegex, {

@@ -1,26 +1,23 @@
+import { EmailChangeInitForm, emailChangeInitSchema } from "@/lib/schemas";
 import { useEffect, useState } from "react";
-import {
-  PasswordChangeInitForm,
-  passwordChangeInitSchema,
-} from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { usePasswordChangeInitializer } from "@/hooks/api/user";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import Container from "@/components/ui/container";
-import { Button } from "@/components/ui/button";
 import ThemeSwitch from "@/components/ui/theme-switch";
 import GoBackArrow from "@/components/ui/go-back-arrow";
 import { LoaderCircle, MailQuestion } from "lucide-react";
+import { useEmailChangeInitializer } from "@/hooks/api/user";
 
-const PasswordChangeInitPage = () => {
+const EmailChangeInitPage = () => {
   const { toast } = useToast();
-  const { init, attempts, isLoading, error } = usePasswordChangeInitializer();
+  const { init, isLoading, error } = useEmailChangeInitializer();
   const [sentMessage, setSentMessage] = useState<string>("");
 
-  const form = useForm<PasswordChangeInitForm>({
-    resolver: zodResolver(passwordChangeInitSchema),
+  const form = useForm<EmailChangeInitForm>({
+    resolver: zodResolver(emailChangeInitSchema),
     defaultValues: {
       email: "",
     },
@@ -36,14 +33,14 @@ const PasswordChangeInitPage = () => {
       });
     } else if (error === null) {
       setSentMessage(
-        "We've sent password reset instructions to your email. Please check your inbox (and spam folder) and follow the link provided to reset your password."
+        "We've sent email change instructions to the new email address you've provided. Please check your inbox (and spam folder) and follow the link provided to change your email address."
       );
     }
-  }, [error, attempts, form, toast]);
+  }, [error]);
 
-  const onSubmit = async (v: PasswordChangeInitForm) => init(v.email);
+  const onSubmit = async (v: EmailChangeInitForm) => init(v.email);
 
-  const onError = async (errors: FieldErrors<PasswordChangeInitForm>) => {
+  const onError = async (errors: FieldErrors<EmailChangeInitForm>) => {
     const message: string = Object.entries(errors).map(
       (entry) => (entry[1].message as string) ?? entry
     )[0];
@@ -51,7 +48,7 @@ const PasswordChangeInitPage = () => {
     if (message) {
       toast({
         variant: "destructive",
-        title: "Problem With Reseting Password",
+        title: "Problem With Changing Email Address",
         description: message || "Please provide a valid email address.",
       });
     }
@@ -70,8 +67,8 @@ const PasswordChangeInitPage = () => {
           ) : (
             <>
               <span className="text-base text-center font-semibold text-muted-foreground mb-4 px-4">
-                Enter your email address, and we will send you instructions to
-                reset your password.
+                Enter your new email address, and we will send you instructions
+                to change the current one.
               </span>
 
               <form
@@ -82,19 +79,19 @@ const PasswordChangeInitPage = () => {
                 <Input
                   disabled={isLoading}
                   type="email"
-                  placeholder="Enter your email address"
+                  placeholder="Enter your new email address"
                   className="transition-all duration-300 focus-visible:ring-offset-1"
                   {...form.register("email")}
                 />
                 <Button
                   variant={isLoading ? "formSubmitAwaiting" : "formSubmit"}
                   type="submit"
-                  className="w-full text-white bg-[var(--logo)] transition-all duration-300 hover:bg-zinc-700"
+                  className="w-full text-white bg-[var(--logo)] PasswordChangeInitPagetransition-all duration-300 hover:bg-zinc-700"
                 >
                   {isLoading ? (
                     <LoaderCircle size={24} className="animate-spin" />
                   ) : (
-                    <span>Send Password Reset Instructions</span>
+                    <span>Send Email Address Change Instructions</span>
                   )}
                 </Button>
               </form>
@@ -109,4 +106,4 @@ const PasswordChangeInitPage = () => {
   );
 };
 
-export default PasswordChangeInitPage;
+export default EmailChangeInitPage;
