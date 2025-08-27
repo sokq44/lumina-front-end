@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import "@/index.css";
 
 /**
+ * @todo Fix the code widget on mobile devices.
  * @todo Create a dialogue telling the user how to use the text editor.
  * @todo Updated layouts for sugested and my articles pages for mobile devices.
  */

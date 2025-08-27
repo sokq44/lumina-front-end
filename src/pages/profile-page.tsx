@@ -1,247 +1,176 @@
-import { cn } from "@/lib/utils";
-import { User } from "@/lib/api";
-import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useDialogue } from "@/hooks/use-dialogue";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Container from "@/components/ui/container";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldErrors, useForm } from "react-hook-form";
-import { useUserGetter, useUserModifier } from "@/hooks/api/user";
-import { ModifyUserForm, modifyUserFormSchema } from "@/lib/schemas";
-import { ImageUp, LoaderCircle } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import {
-  Form,
-  FormItem,
-  FormField,
-  FormControl,
-  FormDescription,
-} from "@/components/ui/form";
+  BookType,
+  Calendar,
+  Facebook,
+  FileClock,
+  Github,
+  Heart,
+  Instagram,
+  PenLine,
+  Star,
+  Twitter,
+} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import GoBackArrow from "@/components/ui/go-back-arrow";
 
 const ProfilePage = () => {
-  const { toast } = useToast();
-  const userGetter = useUserGetter();
-  const userModifier = useUserModifier();
-  const { profilePictureDialogue, eventTarget } = useDialogue();
-
-  const [modifying, setModifying] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  const form = useForm<ModifyUserForm>({
-    resolver: zodResolver(modifyUserFormSchema),
-    defaultValues: {
-      username: "",
-      email: "",
-    },
-  });
-
-  useEffect(() => {
-    if (eventTarget) {
-      const changed = (event: Event) => {
-        setTimeout(() => {
-          const customEvent = event as CustomEvent;
-          setCurrentUser((prevUser) => {
-            if (prevUser) {
-              userModifier.modify({
-                ...prevUser,
-                image: customEvent.detail.picture,
-              } as User);
-              return {
-                ...prevUser,
-                image: customEvent.detail.picture,
-              };
-            }
-            return prevUser;
-          });
-        }, 0);
-      };
-      eventTarget.addEventListener("profile-picture-changed", changed);
-      return () => {
-        eventTarget.removeEventListener("profile-picture-changed", changed);
-      };
-    }
-  }, [eventTarget]);
-
-  useEffect(() => {
-    if (userGetter.error) {
-      toast({
-        variant: "destructive",
-        title: "Problem With Retrieving Data",
-        description: userGetter.error,
-      });
-    }
-  }, [userGetter.error, toast]);
-
-  useEffect(() => {
-    if (userModifier.error) {
-      toast({
-        variant: "destructive",
-        title: "Failed to Update Profile",
-        description: userModifier.error,
-      });
-    } else if (userModifier.error === null) {
-      toast({
-        variant: "success",
-        title: "Updated Successfully",
-        description: "Your profile has been updated successfully!",
-      });
-    }
-  }, [userModifier.error, toast]);
-
-  useEffect(() => {
-    if (userGetter.user) {
-      setCurrentUser(userGetter.user);
-      form.setValue("username", userGetter.user.username);
-      form.setValue("email", userGetter.user.email);
-    }
-  }, [userGetter.user]);
-
-  const onSubmit = async (values: ModifyUserForm) => {
-    if (modifying && currentUser) {
-      await userModifier.modify({
-        username: values.username,
-        email: values.email,
-        image: currentUser.image,
-      });
-    }
-
-    setModifying((prev) => !prev);
-  };
-
-  const onError = (errors: FieldErrors<ModifyUserForm>) => {
-    const message: string = Object.entries(errors).map(
-      (entry) => (entry[1].message as string) ?? entry
-    )[0];
-
-    if (message) {
-      toast({
-        variant: "destructive",
-        title: "Failed to Update Profile",
-        description: message,
-      });
-    }
-  };
-
-  const onCancelModifying = async () => {
-    setModifying(false);
-    setCurrentUser(userGetter.user);
-  };
-
-  const isLoading = userModifier.isLoading || userGetter.isLoading;
+  const navigate = useNavigate();
 
   return (
-    <Container className="h-full w-full flex flex-col gap-4 items-center lg:justify-center">
-      <Card className="w-full h-auto p-8 border-none shadow-none mt-8 bg-body lg:mt-0">
-        <Container className="w-full flex flex-col items-center gap-y-4">
-          <Avatar className="w-32 h-auto shadow-md">
-            <AvatarImage src={currentUser?.image} />
-            <AvatarFallback className="w-32 h-32 bg-muted">
-              <LoaderCircle
-                size={24}
-                className="animate-spin text-muted-foreground"
-              />
-            </AvatarFallback>
-          </Avatar>
-          <Button
-            variant="secondary"
-            disabled={isLoading}
-            onClick={profilePictureDialogue}
-            className={cn(
-              modifying ? "visible" : "hidden",
-              " gap-x-2 p-3 cursor-pointer transition-all duration-300"
-            )}
-          >
-            <ImageUp />
-            <span>Change Profile Picture</span>
-          </Button>
+    <Container className="w-[70rem] mx-auto">
+      <ThemeSwitch position="top-right" />
+      <GoBackArrow position="top-left" />
+      <Container className="flex gap-x-2 mb-24 mt-12">
+        <Avatar className="w-28 h-28">
+          <AvatarFallback>UP</AvatarFallback>
+          <AvatarImage src="/public/default-profile-picture.png"></AvatarImage>
+        </Avatar>
+        <Container className="flex flex-col">
+          <span className="text-4xl font-bold mb-2">Username</span>
+          <Container className="flex gap-x-1 mb-2">
+            <Badge variant="outline">Hometown</Badge>
+            <Badge variant="outline">Wrting since ...</Badge>
+          </Container>
+          <Container className="flex gap-x-1">
+            <Button
+              variant="outline"
+              onClick={() => navigate("#")}
+              className="flex text-muted-foreground gap-x-1 px-3 rounded-xl"
+            >
+              <Github className="w-5 h-5" /> Github
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigate("#")}
+              className="flex text-muted-foreground gap-x-1 px-3 rounded-xl"
+            >
+              <Facebook className="w-5 h-5" />
+              Facebook
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigate("#")}
+              className="flex text-muted-foreground gap-x-1 px-3 rounded-xl"
+            >
+              <Instagram className="w-5 h-5" /> Instagram
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigate("#")}
+              className="flex text-muted-foreground gap-x-1 px-3 rounded-xl"
+            >
+              <Twitter className="w-5 h-5" /> Twitter
+            </Button>
+          </Container>
         </Container>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="flex flex-col items-center gap-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem className="w-full transition-all duration-300">
-                  <Label htmlFor="username">Username</Label>
-                  <FormControl>
-                    <Input
-                      id="username"
-                      variant="login"
-                      type="text"
-                      placeholder="..."
-                      autoComplete="off"
-                      disabled={!modifying || isLoading}
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="w-full transition-all duration-300">
-                  <Label htmlFor="email">Email Address</Label>
-                  <FormControl>
-                    <Input
-                      id="email"
-                      variant="login"
-                      type="text"
-                      placeholder="..."
-                      autoComplete="off"
-                      disabled
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Email Address can only be changed in the Account section
-                  </FormDescription>
-                </FormItem>
-              )}
-            />
-            <Container className="flex w-full space-x-2">
-              {modifying && (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  disabled={isLoading}
-                  onClick={onCancelModifying}
-                  className="w-full cursor-pointer transition-all duration-300"
-                >
-                  Cancel
-                </Button>
-              )}
-              <Button
-                disabled={isLoading}
-                type="submit"
-                variant={modifying ? "default" : "secondary"}
-                className="w-full cursor-pointer transition-all duration-300"
-              >
-                {modifying ? (
-                  userModifier.isLoading ? (
-                    <LoaderCircle
-                      size={24}
-                      className="animate-spin text-muted-foreground"
-                    />
-                  ) : (
-                    "Save Changes"
-                  )
-                ) : (
-                  "Update Your Profile"
-                )}
-              </Button>
+      </Container>
+      <Container className="h-full flex gap-x-4">
+        <Container className="flex flex-col">
+          <Container className="border rounded-lg p-4 mb-4">
+            <Container className="flex items-center content-center gap-x-2 mb-1">
+              <PenLine className="w-5 h-5" />
+              <span className="text-xl font-bold">About Me</span>
             </Container>
-          </form>
-        </Form>
-      </Card>
+            <p className="text-muted-foreground">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+          </Container>
+          <Container className="w-full border rounded-lg p-4 mb-4">
+            <Container className="flex items-center gap-x-2 mb-1">
+              <FileClock className="w-5 h-5" />
+              <span className="text-xl font-bold">Writing Journey</span>
+            </Container>
+            <Container className="w-full flex items-center justify-center my-8 gap-x-12">
+              <Container className="flex flex-col items-center content-center gap-y-1">
+                <span className="text-4xl font-bold">123</span>
+                <span className="text-muted-foreground">
+                  Articles Published
+                </span>
+              </Container>
+              <Container className="flex flex-col items-center content-center gap-y-1">
+                <span className="text-4xl font-bold">1.2M</span>
+                <span className="text-muted-foreground">Words Written</span>
+              </Container>
+              <Container className="flex flex-col items-center content-center gap-y-1">
+                <span className="text-4xl font-bold">89K</span>
+                <span className="text-muted-foreground">Total Reads</span>
+              </Container>
+              <Container className="flex flex-col items-center content-center gap-y-1">
+                <span className="text-4xl font-bold">4.6</span>
+                <span className="text-muted-foreground">Average Rating</span>
+              </Container>
+            </Container>
+          </Container>
+          <Container className="border rounded-lg p-4">
+            <Container className="flex items-center gap-x-2 mb-4">
+              <FileClock className="w-5 h-5" />
+              <span className="text-xl font-bold">Recent Articles</span>
+            </Container>
+            <Container className="flex flex-col gap-y-3">
+              {[1, 1, 1].map(() => (
+                <Container className="pl-2 flex gap-x-3">
+                  <Container className="w-1 min-h-24 bg-muted text-muted"></Container>
+                  <Container className="flex flex-col gap-y-1">
+                    <span className="text-xl">Title</span>
+                    <span className="w-[46rem] text-muted-foreground truncate">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor incididunt ut labore et dolore magna
+                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                      ullamco laboris.
+                    </span>
+                    <Container className="flex items-center gap-x-4">
+                      <Container className="flex items-center justify-center gap-x-1 text-muted-foreground">
+                        <Calendar className="w-5 h-5" /> 12.12.2025
+                      </Container>
+                      <Container className="flex items-center justify-center gap-x-1 text-muted-foreground">
+                        123 views
+                      </Container>
+                      <Container className="flex items-center justify-center gap-x-1 text-muted-foreground">
+                        <Star className="w-5 h-5 text-yellow-500" /> 30
+                      </Container>
+                    </Container>
+                  </Container>
+                </Container>
+              ))}
+            </Container>
+          </Container>
+        </Container>
+        <Container className="flex flex-col gap-y-3">
+          <Container className="h-2/3 border rounded-lg p-4">
+            <Container className="flex items-center content-center gap-x-2 mb-1">
+              <BookType className="w-5 h-5" />
+              <span className="text-xl font-bold">Favorite Topics</span>
+            </Container>
+            <p className="text-muted-foreground">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+            </p>
+          </Container>
+          <Container className="h-1/3 border rounded-lg p-4 mb-4">
+            <Container className="flex items-center content-center gap-x-2 mb-1">
+              <Heart className="w-5 h-5" />
+              <span className="text-xl font-bold">Currently Reading</span>
+            </Container>
+            <p className="text-muted-foreground">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+            </p>
+          </Container>
+        </Container>
+      </Container>
     </Container>
   );
 };

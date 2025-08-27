@@ -79,7 +79,7 @@ const ArticlePage = () => {
                   Written by{" "}
                   <Link
                     className="sliding-link font-semibold"
-                    to={`/user/${articleGetter.article?.user}`}
+                    to={`/profile/${articleGetter.article?.user}`}
                   >
                     @{articleGetter.article?.user}
                   </Link>{" "}

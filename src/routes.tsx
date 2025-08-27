@@ -4,21 +4,22 @@ import UserPage from "@/pages/user-page";
 import LoginPage from "@/pages/login-page";
 import ErrorPage from "@/pages/error-page";
 import ArticlePage from "@/pages/article-page";
-import ProfilePage from "@/pages/profile-page";
 import WritingPage from "@/pages/writing-page";
-import AccountPage from "@/pages/account-page";
+import ProfilePage from "@/pages/profile-page";
 import SettingsPage from "@/pages/settings-page";
 import RegisterPage from "@/pages/register-page";
 import NotFoundPage from "@/pages/not-found-page";
 import MyArticlesPage from "@/pages/my-articles-page";
 import VerifyEmailPage from "@/pages/verify-email-page";
+import EmailChangedPage from "@/pages/email-changed-page";
 import EmailVerifiedPage from "@/pages/email-verified-page";
 import PasswordChangePage from "@/pages/password-change-page";
+import SettingsAccountPage from "@/pages/settings-account-page";
+import SettingsProfilePage from "@/pages/settings-profile-page";
+import EmailChangeInitPage from "@/pages/email-change-init-page";
 import SuggestedArticlesPage from "@/pages/suggested-articles-page";
 import PasswordChangeInitPage from "@/pages/password-change-init-page";
 import DialogueProvider from "@/components/providers/dialogue-provider";
-import EmailChangeInitPage from "./pages/email-change-init-page";
-import EmailChangedPage from "./pages/email-changed-page";
 
 export const router = createBrowserRouter([
   {
@@ -78,6 +79,14 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    path: "/profile/:id",
+    element: (
+      <DialogueProvider>
+        <ProfilePage />
+      </DialogueProvider>
+    ),
+  },
+  {
     path: "/settings",
     element: <SettingsPage />,
     errorElement: <ErrorPage />,
@@ -86,14 +95,14 @@ export const router = createBrowserRouter([
         path: "profile",
         element: (
           <DialogueProvider>
-            <ProfilePage />
+            <SettingsProfilePage />
           </DialogueProvider>
         ),
         errorElement: <ErrorPage />,
       },
       {
         path: "account",
-        element: <AccountPage />,
+        element: <SettingsAccountPage />,
         errorElement: <ErrorPage />,
       },
     ],

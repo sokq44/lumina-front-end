@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 
-const AccountPage = () => {
+const SettingsAccountPage = () => {
   return (
     <Container className="flex flex-col gap-y-4">
       <Link to={"/password"}>
@@ -25,4 +25,4 @@ const AccountPage = () => {
   );
 };
 
-export default AccountPage;
+export default SettingsAccountPage;
