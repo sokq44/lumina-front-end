@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { client, User } from "@/lib/api";
+import { client, Profile, User } from "@/lib/api";
 import { grabErrorMessage } from "@/lib/utils";
 
 export function useUserVerifier(token: string | undefined): {
@@ -246,4 +246,33 @@ export function useEmailChanger(): {
   };
 
   return { change, isLoading, error };
+}
+
+export function useProfileGetter(): {
+  profile: Profile | null;
+  getProfile: (id: string) => void;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const getProfile = async (user: string) => {
+    setIsLoading(true);
+    setError(undefined);
+
+    try {
+      const response = await client.get(`/user/profile/get?user=${user}`);
+      setProfile(response.data as Profile);
+      setError(null);
+    } catch (e) {
+      const message = grabErrorMessage(e);
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { profile, getProfile, isLoading, error };
 }

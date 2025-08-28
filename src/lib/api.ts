@@ -15,11 +15,31 @@ client.interceptors.response.use(
   (error) => Promise.reject(error)
 );
 
-export type User = {
-  id?: string;
+export type Profile = {
+  bio: string;
   email: string;
   image: string;
   username: string;
+  favourites: string;
+  created_at: Date;
+  articles_count: number;
+  words_count: number;
+  reads_count: number;
+  avg_rating: number;
+  book: {
+    title: string;
+    description: string;
+    cover_url: string;
+  };
+  socials: {
+    type: string;
+    label: string;
+    value: string;
+  };
+};
+
+export type User = {
+  id?: string;
 };
 
 export type Article = {

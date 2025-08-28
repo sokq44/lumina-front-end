@@ -1,25 +1,50 @@
-import { Badge } from "@/components/ui/badge";
-import Container from "@/components/ui/container";
-import ThemeSwitch from "@/components/ui/theme-switch";
 import {
+  Star,
+  Heart,
+  Github,
+  PenLine,
+  Twitter,
   BookType,
   Calendar,
   Facebook,
   FileClock,
-  Github,
-  Heart,
   Instagram,
-  PenLine,
-  Star,
-  Twitter,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import Container from "@/components/ui/container";
+import { useProfileGetter } from "@/hooks/api/user";
+import ThemeSwitch from "@/components/ui/theme-switch";
 import GoBackArrow from "@/components/ui/go-back-arrow";
+import { useNavigate, useParams } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatDate, formatDateTimeLocal } from "@/lib/utils";
 
 const ProfilePage = () => {
+  const { user } = useParams();
+  const { toast } = useToast();
   const navigate = useNavigate();
+  const { profile, getProfile, ...profileGetter } = useProfileGetter();
+
+  useEffect(() => {
+    if (user) getProfile(user);
+  }, [user]);
+
+  useEffect(() => {
+    if (profileGetter.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Retrieving Profile",
+        description: profileGetter.error,
+      });
+    }
+  }, [profileGetter.error]);
+
+  useEffect(() => {
+    if (profile) console.log(profile);
+  }, [profile]);
 
   return (
     <Container className="w-[70rem] mx-auto">
@@ -28,13 +53,17 @@ const ProfilePage = () => {
       <Container className="flex gap-x-2 mb-24 mt-12">
         <Avatar className="w-28 h-28">
           <AvatarFallback>UP</AvatarFallback>
-          <AvatarImage src="/default-profile-picture.png"></AvatarImage>
+          <AvatarImage
+            src={profile?.image ?? "/default-profile-picture.png"}
+          ></AvatarImage>
         </Avatar>
         <Container className="flex flex-col">
-          <span className="text-4xl font-bold mb-2">Username</span>
+          <span className="text-4xl font-bold mb-2">{profile?.username}</span>
           <Container className="flex gap-x-1 mb-2">
-            <Badge variant="outline">Hometown</Badge>
-            <Badge variant="outline">Wrting since ...</Badge>
+            <Badge variant="outline">Comes from ...</Badge>
+            <Badge variant="outline">
+              Joined on the&nbsp;{formatDate(profile?.created_at)}
+            </Badge>
           </Container>
           <Container className="flex gap-x-1">
             <Button
@@ -93,21 +122,29 @@ const ProfilePage = () => {
             </Container>
             <Container className="w-full flex items-center justify-center my-8 gap-x-12">
               <Container className="flex flex-col items-center content-center gap-y-1">
-                <span className="text-4xl font-bold">123</span>
+                <span className="text-4xl font-bold">
+                  {profile?.articles_count}
+                </span>
                 <span className="text-muted-foreground">
                   Articles Published
                 </span>
               </Container>
               <Container className="flex flex-col items-center content-center gap-y-1">
-                <span className="text-4xl font-bold">1.2M</span>
+                <span className="text-4xl font-bold">
+                  {profile?.words_count}
+                </span>
                 <span className="text-muted-foreground">Words Written</span>
               </Container>
               <Container className="flex flex-col items-center content-center gap-y-1">
-                <span className="text-4xl font-bold">89K</span>
+                <span className="text-4xl font-bold">
+                  {profile?.reads_count}
+                </span>
                 <span className="text-muted-foreground">Total Reads</span>
               </Container>
               <Container className="flex flex-col items-center content-center gap-y-1">
-                <span className="text-4xl font-bold">4.6</span>
+                <span className="text-4xl font-bold">
+                  {profile?.avg_rating}
+                </span>
                 <span className="text-muted-foreground">Average Rating</span>
               </Container>
             </Container>
@@ -118,8 +155,8 @@ const ProfilePage = () => {
               <span className="text-xl font-bold">Recent Articles</span>
             </Container>
             <Container className="flex flex-col gap-y-3">
-              {[1, 1, 1].map(() => (
-                <Container className="pl-2 flex gap-x-3">
+              {[1, 1, 1].map((_, i) => (
+                <Container key={i} className="pl-2 flex gap-x-3">
                   <Container className="w-1 min-h-24 bg-muted text-muted"></Container>
                   <Container className="flex flex-col gap-y-1">
                     <span className="text-xl">Title</span>

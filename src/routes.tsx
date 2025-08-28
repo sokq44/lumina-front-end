@@ -79,7 +79,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/profile/:id",
+    path: "/profile/:user",
     element: (
       <DialogueProvider>
         <ProfilePage />
