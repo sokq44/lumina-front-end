@@ -81,6 +81,7 @@ export function useArticleGetter(articleId?: string): {
   article: Article | null;
   isLoading: boolean;
   error: string | undefined | null;
+  setArticle: React.Dispatch<React.SetStateAction<Article | null>>;
 } {
   const [article, setArticle] = useState<Article | null>(null);
   const [error, setError] = useState<string | undefined | null>(undefined);
@@ -109,7 +110,7 @@ export function useArticleGetter(articleId?: string): {
     get();
   }, []);
 
-  return { get, article, isLoading, error };
+  return { get, article, isLoading, error, setArticle };
 }
 
 export function useArticleRemover(): {
@@ -177,4 +178,72 @@ export function useSuggestedArticlesGetter(): {
   }, []);
 
   return { get, articles, isLoading, error };
+}
+
+export function useArticleReader(articleId?: string): {
+  read: () => Promise<void>;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const read = async (newId?: string) => {
+    setIsLoading(true);
+    setError(undefined);
+
+    let article_id;
+    if (newId) article_id = newId;
+    else if (articleId) article_id = articleId;
+    else {
+      setIsLoading(false);
+      setError("An error occurred while processing your request.");
+      return;
+    }
+
+    try {
+      const response = await client.patch("/articles/read", { article_id });
+      if (response.status === 204) setError(null);
+    } catch (e) {
+      const message = grabErrorMessage(e);
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    read();
+  }, []);
+
+  return { read, isLoading, error };
+}
+
+export function useArticleRater(): {
+  rate: (article_id: string, rating: number) => Promise<void>;
+  isLoading: boolean;
+  error: string | undefined | null;
+} {
+  const [error, setError] = useState<string | undefined | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const rate = async (article_id: string, rating: number) => {
+    setIsLoading(true);
+    setError(undefined);
+
+    try {
+      const response = await client.patch("/articles/rate", {
+        article_id,
+        rating,
+      });
+      if (response.status === 204) setError(null);
+    } catch (e) {
+      const message = grabErrorMessage(e);
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { rate, isLoading, error };
 }

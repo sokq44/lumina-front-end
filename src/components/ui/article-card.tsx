@@ -1,6 +1,3 @@
-import { FC, HTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
-import { Article } from "@/lib/api";
 import {
   Card,
   CardTitle,
@@ -8,15 +5,27 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { Article } from "@/lib/api";
 import Img from "@/components/ui/image";
+import { FC, HTMLAttributes } from "react";
+import Container from "@/components/ui/container";
 import Informative from "@/components/ui/informative";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Eye, MessageCircle, Star } from "lucide-react";
 
 interface ArticleCardProps extends HTMLAttributes<HTMLDivElement> {
   article: Article;
 }
 
 const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
+  const getAvgRating = () => {
+    if (article.ratings.length === 0) return 0;
+    let sum = 0;
+    for (const rating of article.ratings) sum += rating;
+    return sum / article.ratings.length;
+  };
+
   return (
     <Informative label={article.title}>
       <Card
@@ -36,6 +45,20 @@ const ArticleCard: FC<ArticleCardProps> = ({ article, className }) => {
             </Avatar>
             @{article.user}
           </CardDescription>
+          <Container className="flex items-center gap-x-4 text-muted-foreground">
+            <Container className="flex items-center gap-x-1 text-green-300">
+              <Eye className="w-5 h-5" />
+              <span>{article.reads}</span>
+            </Container>
+            <Container className="flex items-center gap-x-1 text-blue-300">
+              <MessageCircle className="w-4 h-4" />
+              <span>{article.comments}</span>
+            </Container>
+            <Container className="flex items-center gap-x-1 text-yellow-300">
+              <Star className="w-4 h-4" />
+              <span>{`${getAvgRating()} (${article.ratings.length})`}</span>
+            </Container>
+          </Container>
         </CardHeader>
         <CardContent className="px-4">
           <Img

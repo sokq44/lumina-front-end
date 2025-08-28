@@ -2,10 +2,10 @@ import axios from "axios";
 
 export const client = axios.create({
   // prod
-  baseURL: "https://api.illumina-me.org",
+  // baseURL: "https://api.illumina-me.org",
 
   // dev
-  // baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:3000",
 
   withCredentials: true,
 });
@@ -31,6 +31,10 @@ export type Article = {
   public: boolean;
   created_at: Date;
   user_image: string;
+  reads: number;
+  comments: number;
+  ratings: number[];
+  my_rating: number;
 };
 
 export type Comment = {

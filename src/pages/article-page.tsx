@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import Img from "@/components/ui/image";
 import { generateHTML } from "@tiptap/react";
@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import Container from "@/components/ui/container";
 import { Link, useParams } from "react-router-dom";
 import ThemeSwitch from "@/components/ui/theme-switch";
-import { useArticleGetter } from "@/hooks/api/articles";
+import { useArticleGetter, useArticleRater } from "@/hooks/api/articles";
 import GoBackArrow from "@/components/ui/go-back-arrow";
 import LoadingScreen from "@/components/wraps/loading-screen";
 import { extensions } from "@/lib/editor-extensions/extensions";
@@ -15,11 +15,19 @@ import BottomSection from "@/components/article/bottom-section";
 import { Less, MediaQuery, More } from "@/components/wraps/media-query";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { extensionToElement, formatDate, getArticleContent } from "@/lib/utils";
+import { Eye, LoaderCircle, MessageCircle } from "lucide-react";
+import { CommentRatings } from "@/components/ui/ratings";
+import { useUserValidator } from "@/hooks/api/auth";
 
 const ArticlePage = () => {
   const { id } = useParams();
   const { toast } = useToast();
+  const articleRater = useArticleRater();
   const articleGetter = useArticleGetter(id);
+  const { isLoggedIn, ...userValidator } = useUserValidator();
+
+  const [ratings, setRatings] = useState<number[]>([]);
+  const [avgRating, setAvgRating] = useState<number>(0);
 
   useEffect(() => {
     if (articleGetter.error) {
@@ -29,7 +37,47 @@ const ArticlePage = () => {
         description: articleGetter.error,
       });
     }
-  }, [articleGetter.error, toast]);
+  }, [articleGetter.error]);
+
+  useEffect(() => {
+    if (articleRater.error) {
+      toast({
+        variant: "destructive",
+        title: "Problem With Rating Article",
+        description: articleRater.error,
+      });
+    }
+  }, [articleRater.error]);
+
+  useEffect(() => {
+    if (articleGetter.article) setRatings(articleGetter.article.ratings);
+  }, [articleGetter.article]);
+
+  useEffect(() => {
+    if (ratings.length >= 1) {
+      let sum = 0;
+      for (const rating of ratings) sum += rating;
+      setAvgRating(sum / ratings.length);
+    } else {
+      setAvgRating(0);
+    }
+  }, [ratings]);
+
+  const changeRating = async (rating: number) => {
+    if (!articleGetter.article) return;
+    await articleRater.rate(articleGetter.article.id, rating);
+
+    const temp = [...articleGetter.article.ratings];
+    const myRating = articleGetter.article.my_rating;
+    if (myRating === -1) {
+      temp.push(rating);
+    } else {
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i] == myRating) temp[i] = rating;
+      }
+    }
+    setRatings(temp);
+  };
 
   const getContent = () => {
     if (articleGetter.article) {
@@ -87,6 +135,46 @@ const ArticlePage = () => {
                 </span>
               </Container>
             </Container>
+            <Container className="flex gap-x-4 items-center">
+              <Container className="flex items-center justify-center gap-x-1 text-muted-foreground">
+                <MessageCircle className="w-5 h-5" />
+                <span>{articleGetter.article?.comments}</span>
+              </Container>
+              <Container className="flex items-center justify-center gap-x-1 text-muted-foreground">
+                <Eye className="w-5 h-5" />
+                <span>{articleGetter.article?.reads}</span>
+              </Container>
+              <Container className="flex items-center justify-center gap-x-1 ml-auto text-muted-foreground">
+                <Container className="flex items-center justify-center">
+                  Average Rating:
+                  {articleRater.isLoading ? (
+                    <LoaderCircle className="w-5 h-5 ml-1 animate-spin" />
+                  ) : (
+                    " " + avgRating + " (" + ratings.length + ")"
+                  )}
+                </Container>
+
+                {articleGetter.isLoading || userValidator.isLoading ? (
+                  <CommentRatings rating={0} variant="default" blocked />
+                ) : isLoggedIn ? (
+                  <CommentRatings
+                    rating={
+                      articleGetter.article!.my_rating >= 0
+                        ? articleGetter.article!.my_rating
+                        : 0
+                    }
+                    variant="yellow"
+                    onRatingChange={changeRating}
+                  />
+                ) : (
+                  <CommentRatings
+                    rating={avgRating}
+                    variant="default"
+                    blocked
+                  />
+                )}
+              </Container>
+            </Container>
             <hr />
             <Container>{getContent()}</Container>
             <Container className="flex items-center justify-center gap-x-3 mt-2">
@@ -125,7 +213,7 @@ const ArticlePage = () => {
                 Written by{" "}
                 <Link
                   className="sliding-link font-semibold"
-                  to={`/user/${articleGetter.article?.user}`}
+                  to={`/profile/${articleGetter.article?.user}`}
                 >
                   <Badge
                     variant="secondary"
@@ -136,6 +224,42 @@ const ArticlePage = () => {
                 </Link>{" "}
                 on the {formatDate(articleGetter.article?.created_at)}
               </span>
+            </Container>
+          </Container>
+          <Container className="flex flex-col gap-y-1">
+            <Container className="flex gap-x-4 items-center">
+              <Container className="flex items-center justify-center gap-x-1 text-muted-foreground">
+                <MessageCircle className="w-5 h-5" />
+                <span>{articleGetter.article?.comments}</span>
+              </Container>
+              <Container className="flex items-center justify-center gap-x-1 text-muted-foreground">
+                <Eye className="w-5 h-5" />
+                <span>{articleGetter.article?.reads}</span>
+              </Container>
+            </Container>
+            <Container className="flex gap-x-2">
+              <Container className="flex items-center justify-center">
+                <span className="text-muted-foreground">Average Rating:</span>
+                {articleRater.isLoading ? (
+                  <LoaderCircle className="w-5 h-5 ml-1 animate-spin text-muted-foreground" />
+                ) : (
+                  <span className="text-muted-foreground">
+                    &nbsp;{avgRating + " (" + ratings.length + ")"}
+                  </span>
+                )}
+              </Container>
+
+              {articleGetter.isLoading || userValidator.isLoading ? (
+                <CommentRatings rating={0} variant="default" blocked />
+              ) : isLoggedIn ? (
+                <CommentRatings
+                  rating={articleGetter.article!.my_rating}
+                  variant="yellow"
+                  onRatingChange={changeRating}
+                />
+              ) : (
+                <CommentRatings rating={avgRating} variant="default" blocked />
+              )}
             </Container>
           </Container>
           <hr />

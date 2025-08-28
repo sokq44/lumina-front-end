@@ -28,7 +28,7 @@ const ProfilePage = () => {
       <Container className="flex gap-x-2 mb-24 mt-12">
         <Avatar className="w-28 h-28">
           <AvatarFallback>UP</AvatarFallback>
-          <AvatarImage src="/public/default-profile-picture.png"></AvatarImage>
+          <AvatarImage src="/default-profile-picture.png"></AvatarImage>
         </Avatar>
         <Container className="flex flex-col">
           <span className="text-4xl font-bold mb-2">Username</span>

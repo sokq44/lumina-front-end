@@ -120,7 +120,7 @@ export const router = createBrowserRouter([
   {
     path: "/article/:id",
     element: <ArticlePage />,
-    errorElement: <ErrorPage />,
+    // errorElement: <ErrorPage />,
   },
   {
     path: "writing",

@@ -28,7 +28,7 @@ interface BottomSectionProps extends HTMLAttributes<HTMLDivElement> {
 
 const BottomSection: FC<BottomSectionProps> = ({ articleId, ...props }) => {
   const { toast } = useToast();
-  const { user, ...userGetter } = useUserGetter();
+  const { user } = useUserGetter();
   const { create, ...commentCreator } = useCommentCreator();
   const { comments, get, ...commentsGetter } = useCommentsGetter(articleId);
 
@@ -59,7 +59,7 @@ const BottomSection: FC<BottomSectionProps> = ({ articleId, ...props }) => {
     await get();
   };
 
-  const loggedIn = userGetter.error === null;
+  const loggedIn = user !== null;
   const commentsPresent = comments && comments.length > 0;
 
   return (
@@ -99,7 +99,7 @@ const BottomSection: FC<BottomSectionProps> = ({ articleId, ...props }) => {
         {/* If the 'comments' option was selected in the nav menu. */}
         {bottomSection === 0 && (
           <>
-            {userGetter.error && (
+            {!loggedIn && (
               <>
                 <Container className="flex items-center justify-center gap-x-2 text-muted-foreground">
                   <MessageCircleOff size={48} />
